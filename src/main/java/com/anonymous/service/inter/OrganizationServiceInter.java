@@ -16,4 +16,8 @@ public interface OrganizationServiceInter {
     List<Organization> findByPid(String pid);
 
     Organization findById(String id);
+
+    Organization edit(Organization organization);
+
+    boolean delete(String id);
 }

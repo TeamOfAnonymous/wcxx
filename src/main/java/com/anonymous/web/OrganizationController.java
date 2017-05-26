@@ -41,4 +41,18 @@ public class OrganizationController {
         return organizationService.findByPid(pid);
     }
 
+    @RequestMapping(value = "editOrganization", method = RequestMethod.POST)
+    @ApiOperation(value = "修改组织机构")
+    @ResponseBody
+    public Organization editOrganization(@RequestBody Organization organization) {
+        return organizationService.edit(organization);
+    }
+
+    @RequestMapping(value = "deletedOrganization", method = RequestMethod.GET)
+    @ApiOperation(value = "删除组织机构")
+    @ResponseBody
+    public boolean deletedOrganization(@RequestParam String id) {
+        return organizationService.delete(id);
+    }
+
 }
