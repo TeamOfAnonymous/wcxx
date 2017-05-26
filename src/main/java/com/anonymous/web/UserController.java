@@ -35,5 +35,19 @@ public class UserController {
         return userService.findByOrganization(organization_id);
     }
 
+    @RequestMapping(value = "editUser", method = RequestMethod.POST)
+    @ApiOperation(value = "修改用户人员信息")
+    @ResponseBody
+    public User editUser(@RequestBody User user) {
+        return userService.edit(user);
+    }
+
+    @RequestMapping(value = "getUser", method = RequestMethod.GET)
+    @ApiOperation(value = "通过id获取用户人员")
+    @ResponseBody
+    public User getUser(@RequestParam String id) {
+        return userService.getUser(id);
+    }
+
 
 }

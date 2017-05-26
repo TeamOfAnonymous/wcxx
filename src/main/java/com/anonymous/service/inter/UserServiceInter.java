@@ -11,4 +11,8 @@ public interface UserServiceInter {
     User add(User user);
 
     List<User> findByOrganization(String organization_id);
+
+    User edit(User user);
+
+    User getUser(String id);
 }

@@ -32,4 +32,14 @@ public class UserService implements UserServiceInter {
         Organization organization = organizationService.findById(organization_id);
         return userRepository.findByOrganization(organization);
     }
+
+    @Override
+    public User edit(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User getUser(String id) {
+        return userRepository.findOne(id);
+    }
 }
