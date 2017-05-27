@@ -1,5 +1,6 @@
 package com.anonymous.service;
 
+import com.anonymous.domain.PropagandaInformation;
 import com.anonymous.domain.PropagandaMaterialsContent;
 import com.anonymous.domain.PropagandaMaterialsProduced;
 import com.anonymous.repository.PropagandaMaterialsProducedRepository;
@@ -27,9 +28,17 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
      */
     private PropagandaMaterialsProducedRepository propagandaMaterialsProducedRepository;
 
-    public PropagandaMaterialsProducedService(@Autowired PropagandaMaterialsProducedRepository propagandaMaterialsProducedRepository ,@Autowired PropagandaMaterialsContentService propagandaMaterialsContentService){
+    /**
+     * 宣传信息 service
+     */
+    private PropagandaInformationService propagandaInformationService;
+
+    public PropagandaMaterialsProducedService(@Autowired PropagandaMaterialsProducedRepository propagandaMaterialsProducedRepository ,
+                                              @Autowired PropagandaMaterialsContentService propagandaMaterialsContentService,
+                                              @Autowired PropagandaInformationService propagandaInformationService){
         this.propagandaMaterialsContentService = propagandaMaterialsContentService;
         this.propagandaMaterialsProducedRepository = propagandaMaterialsProducedRepository;
+        this.propagandaInformationService = propagandaInformationService;
     }
 
     @Override
@@ -62,7 +71,9 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
         propagandaMaterialsProduced.setTotalCost(totalCost);
         // 给该申请设置 审批状态为0 : 0为草稿，1为待审批，2为审核中，3为执行中，4为已完成，5为已归档
         propagandaMaterialsProduced.setApprovalStatus(0);
-        //TODO 给该申请添加 所属宣传信息申请
+        //给该申请添加 所属宣传信息申请
+        PropagandaInformation propagandaInformation = propagandaInformationService.getById( propagandaInformationId );
+        propagandaMaterialsProduced.setPropagandaInformation(propagandaInformation);
 
         return propagandaMaterialsProducedRepository.save(propagandaMaterialsProduced);
     }
