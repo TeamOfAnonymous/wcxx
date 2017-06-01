@@ -2,6 +2,8 @@ package com.anonymous.service.inter;
 
 import com.anonymous.domain.PropagandaInformation;
 
+import java.util.List;
+
 /**
  * Description：宣传信息服务接口
  * Created by Peivxuan on 2017/5/26.
@@ -21,4 +23,6 @@ public interface PropagandaInformationServiceInter {
 	 * @return
 	 */
 	PropagandaInformation getById(String id);
+
+    List<PropagandaInformation> findByPropagandaInformationCategory(String id);
 }
