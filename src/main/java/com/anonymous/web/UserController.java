@@ -15,7 +15,7 @@ import java.util.List;
  * Created by WangZK on 2017/5/25.
  */
 @Controller
-@Api("用户人员管理")
+@Api(value = "用户人员管理", description = "提供用户人员的 增删改查 服务")
 public class UserController {
 
     @Autowired

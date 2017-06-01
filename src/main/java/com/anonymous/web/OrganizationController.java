@@ -14,7 +14,7 @@ import java.util.List;
  * Created by WangZK on 2017/5/25.
  */
 @Controller
-@Api("组织机构管理")
+@Api(value = "组织机构管理", description = "提供组织机构的 增删改查 服务")
 public class OrganizationController {
 
     @Autowired

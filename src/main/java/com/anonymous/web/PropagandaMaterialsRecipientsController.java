@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by WangZK on 2017/5/26.
  */
 @Controller
-@Api("宣传物资领用")
+@Api(value = "宣传物资领用申请", description = "提供宣传物资领用申请的 增删改查 服务")
 public class PropagandaMaterialsRecipientsController {
 
     @Autowired
