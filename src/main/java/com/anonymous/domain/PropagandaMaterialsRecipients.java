@@ -29,8 +29,6 @@ public class PropagandaMaterialsRecipients implements Serializable {
     @OneToMany(mappedBy = "propagandaMaterialsRecipients")
     private List<PropagandaMaterials> propagandaMaterials = new ArrayList<>();//宣传物资
 
-    @ManyToOne
-    private PropagandaInformation propagandaInformation;//所属宣传信息申请
 
     public PropagandaMaterialsRecipients() {
     }
@@ -91,11 +89,4 @@ public class PropagandaMaterialsRecipients implements Serializable {
         this.propagandaMaterials = propagandaMaterials;
     }
 
-    public PropagandaInformation getPropagandaInformation() {
-        return propagandaInformation;
-    }
-
-    public void setPropagandaInformation(PropagandaInformation propagandaInformation) {
-        this.propagandaInformation = propagandaInformation;
-    }
 }
