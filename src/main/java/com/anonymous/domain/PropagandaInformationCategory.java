@@ -1,11 +1,10 @@
 package com.anonymous.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by WangZK on 2017/5/26.
@@ -27,6 +26,9 @@ public class PropagandaInformationCategory implements Serializable {
 
     @ManyToOne
     private User creator;//创建人
+
+    @ManyToMany
+    private List<PropagandaInformation> propagandaInformations = new ArrayList<>();
 
     public PropagandaInformationCategory() {
     }

@@ -1,12 +1,11 @@
 package com.anonymous.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by WangZK on 2017/5/26.
@@ -30,8 +29,8 @@ public class PropagandaInformation implements Serializable {
     @ManyToOne
     private User applicant;//申请人
 
-    @ManyToOne
-    private PropagandaInformationCategory propagandaInformationCategory;//宣传信息类别
+    @ManyToMany(mappedBy = "propagandaInformations")
+    private List<PropagandaInformationCategory> propagandaInformationCategories = new ArrayList<>();//宣传信息类别
 
     public PropagandaInformation() {
     }
@@ -108,11 +107,11 @@ public class PropagandaInformation implements Serializable {
         this.applicant = applicant;
     }
 
-    public PropagandaInformationCategory getPropagandaInformationCategory() {
-        return propagandaInformationCategory;
+    public List<PropagandaInformationCategory> getPropagandaInformationCategories() {
+        return propagandaInformationCategories;
     }
 
-    public void setPropagandaInformationCategory(PropagandaInformationCategory propagandaInformationCategory) {
-        this.propagandaInformationCategory = propagandaInformationCategory;
+    public void setPropagandaInformationCategories(List<PropagandaInformationCategory> propagandaInformationCategories) {
+        this.propagandaInformationCategories = propagandaInformationCategories;
     }
 }
