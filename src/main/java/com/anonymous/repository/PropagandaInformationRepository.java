@@ -13,5 +13,5 @@ import java.util.List;
  */
 @Repository
 public interface PropagandaInformationRepository extends JpaRepository<PropagandaInformation, String> {
-    List<PropagandaInformation> findByPropagandaInformationCategory(PropagandaInformationCategory propagandaInformationCategory);
+    List<PropagandaInformation> findByPropagandaInformationCategories(PropagandaInformationCategory propagandaInformationCategory);
 }
