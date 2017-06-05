@@ -23,21 +23,22 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
 
     @Override
     public PropagandaMaterialsRecipients add(PropagandaMaterialsRecipients propagandaMaterialsRecipients) {
-        List<PropagandaMaterials> propagandaMaterials = propagandaMaterialsRecipients.getPropagandaMaterials();
-        propagandaMaterialsRecipients.setPropagandaMaterials(null);
+        List<PropagandaMaterials> propagandaMaterialss = propagandaMaterialsRecipients.getPropagandaMaterials();
+
+        propagandaMaterialsRecipients.setApprovalStatus(0);
         propagandaMaterialsRecipients = propagandaMaterialsRecipientsRepository.save(propagandaMaterialsRecipients);
 
-        for (PropagandaMaterials propagandaMaterials1 : propagandaMaterials) {
-            propagandaMaterials1.setPropagandaMaterialsRecipients(propagandaMaterialsRecipients);
-            propagandaMaterialsService.save(propagandaMaterials1);
+        for (PropagandaMaterials propagandaMaterials : propagandaMaterialss) {
+            propagandaMaterials.setPropagandaMaterialsRecipients(propagandaMaterialsRecipients);
+            propagandaMaterialsService.add(propagandaMaterials);
         }
 
-        return getPropagandaMaterialsRecipients(propagandaMaterialsRecipients.getId());
+        return propagandaMaterialsRecipients;
     }
 
     @Override
     public PropagandaMaterialsRecipients getPropagandaMaterialsRecipients(String id) {
-        return propagandaMaterialsRecipientsRepository.getOne(id);
+        return propagandaMaterialsRecipientsRepository.findOne(id);
     }
 
 
