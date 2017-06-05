@@ -17,7 +17,7 @@ public class PropagandaMaterialsService implements PropagandaMaterialsServiceInt
 
 
     @Override
-    public PropagandaMaterials save(PropagandaMaterials propagandaMaterials) {
+    public PropagandaMaterials add(PropagandaMaterials propagandaMaterials) {
         return propagandaMaterialsRepository.save(propagandaMaterials);
     }
 }

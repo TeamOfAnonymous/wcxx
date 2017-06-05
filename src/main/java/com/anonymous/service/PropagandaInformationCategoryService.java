@@ -46,7 +46,7 @@ public class PropagandaInformationCategoryService implements PropagandaInformati
         if (propagandaInformationCategories.size() > 0) {
             return false;
         } else {
-            List<PropagandaInformation> propagandaInformations = propagandaInformationService.findByPropagandaInformationCategory(id);
+            List<PropagandaInformation> propagandaInformations = propagandaInformationService.findByPropagandaInformationCategories(id);
             if (propagandaInformations.size() > 0) {
                 return false;
             }

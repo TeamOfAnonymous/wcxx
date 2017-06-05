@@ -73,7 +73,7 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
         propagandaMaterialsProduced.setApprovalStatus(0);
         //给该申请添加 所属宣传信息申请
         PropagandaInformation propagandaInformation = propagandaInformationService.getById( propagandaInformationId );
-        propagandaMaterialsProduced.setPropagandaInformation(propagandaInformation);
+        //propagandaMaterialsProduced.setPropagandaInformation(propagandaInformation);
 
         return propagandaMaterialsProducedRepository.save(propagandaMaterialsProduced);
     }
