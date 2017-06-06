@@ -47,7 +47,7 @@ public class PropagandaInformationCategoryController {
     @ApiOperation(value = "获取所有最顶层的宣传信息类别")
     @ResponseBody
     public List<PropagandaInformationCategory> getPropagandaInformationCategories() {
-        return propagandaInformationCategoryService.find();
+        return propagandaInformationCategoryService.findByPidIsNull();
     }
 
     @RequestMapping(value = "getPropagandaInformationCategoriesByPid", method = RequestMethod.GET)
