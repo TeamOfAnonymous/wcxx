@@ -2,6 +2,7 @@ package com.anonymous.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class PropagandaMaterialsRecipients implements Serializable {
     @GeneratedValue(generator = "UUID2_GENERATOR")
     private String id;//宣传物资领用id
 
-    private LocalDateTime applicationDate;//申请时间
+    private LocalDate applicationDate;//申请时间
     private String title;//标题
 
     private String remarks;//备注
@@ -41,11 +42,11 @@ public class PropagandaMaterialsRecipients implements Serializable {
         this.id = id;
     }
 
-    public LocalDateTime getApplicationDate() {
+    public LocalDate getApplicationDate() {
         return applicationDate;
     }
 
-    public void setApplicationDate(LocalDateTime applicationDate) {
+    public void setApplicationDate(LocalDate applicationDate) {
         this.applicationDate = applicationDate;
     }
 
