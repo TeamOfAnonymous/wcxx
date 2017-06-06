@@ -49,7 +49,15 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
 
     @Override
     public List<StatisticsUtil> getPropagandaMaterialsRecipientsByApplicationDate(LocalDate startDate, LocalDate endDate) {
-        List<PropagandaMaterialsRecipients> propagandaMaterialsRecipients = propagandaMaterialsRecipientsRepository.findByApplicationDate(startDate, endDate);
+        List<PropagandaMaterialsRecipients> propagandaMaterialsRecipients = new ArrayList<>();
+        if (startDate == null || "".equals(startDate)) {
+            propagandaMaterialsRecipients = propagandaMaterialsRecipientsRepository.findAll();
+        } else if (endDate == null || "".equals(endDate)) {
+            propagandaMaterialsRecipients = propagandaMaterialsRecipientsRepository.findByApplicationDate(startDate, LocalDate.now());
+        } else {
+            propagandaMaterialsRecipients = propagandaMaterialsRecipientsRepository.findByApplicationDate(startDate, endDate);
+        }
+
         Set<User> users = new HashSet<>();
         for (PropagandaMaterialsRecipients propagandaMaterialsRecipients1 : propagandaMaterialsRecipients) {
             users.add(propagandaMaterialsRecipients1.getApplicant());
@@ -58,7 +66,13 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
         for (User user : users) {
             StatisticsUtil statisticsUtil = new StatisticsUtil();
             statisticsUtil.setUser(user);
-            propagandaMaterialsRecipients = propagandaMaterialsRecipientsRepository.findByApplicantAndApplicationDate(user.getId(), startDate, endDate);
+            if (startDate == null || "".equals(startDate)) {
+                propagandaMaterialsRecipients = propagandaMaterialsRecipientsRepository.findByApplicant(user.getId());
+            } else if (endDate == null || "".equals(endDate)) {
+                propagandaMaterialsRecipients = propagandaMaterialsRecipientsRepository.findByApplicantAndApplicationDate(user.getId(), startDate, LocalDate.now());
+            } else {
+                propagandaMaterialsRecipients = propagandaMaterialsRecipientsRepository.findByApplicantAndApplicationDate(user.getId(), startDate, endDate);
+            }
             for (PropagandaMaterialsRecipients propagandaMaterialsRecipients1 : propagandaMaterialsRecipients) {
                 for (PropagandaMaterials propagandaMaterials : propagandaMaterialsRecipients1.getPropagandaMaterials()) {
                     if ("宣传手册".equals(propagandaMaterials.getName())) {
