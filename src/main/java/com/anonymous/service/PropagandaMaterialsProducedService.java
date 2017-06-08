@@ -245,7 +245,6 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
         // 遍历 申请者
         while( pmpsAndApplicants.hasNext() ){
 
-//            int book =  0 , advert = 0 , video = 0 , handbill = 0 , other = 0 ;
             int[] everyNum = new int[ PromotionalCategory.values().length ];
 
             // 取出一个 Map.Entry 里面 key:User value:List<PropagandaMaterialsProduced>
@@ -257,25 +256,6 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
             for(PropagandaMaterialsProduced pmp : pmpsOfApplicant){
                 // 遍历 宣传品内容
                 for(PropagandaMaterialsContent pmc : pmp.getPropagandaMaterialsContents()){
-//                    switch ( pmc.getPromotionalCategory() ){
-//                        case Book:
-//                            book += 1;
-//                            break;
-//                        case Advert:
-//                            advert += 1;
-//                            break;
-//                        case Video:
-//                            video += 1;
-//                            break;
-//                        case Handbill:
-//                            handbill += 1;
-//                            break;
-//                        case Other:
-//                            other += 1;
-//                            break;
-//                        default:
-//                            break;
-//                    }
                     everyNum[ pmc.getPromotionalCategory().ordinal() ] += 1;
                 }
             }
@@ -285,11 +265,6 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
             User applicant = (User) pmpsAndApplicant.getKey();
             userRow.add(applicant.getName());
             // 添加 对应的数据
-//            userRow.add(String.valueOf(book));
-//            userRow.add(String.valueOf(advert));
-//            userRow.add(String.valueOf(video));
-//            userRow.add(String.valueOf(handbill));
-//            userRow.add(String.valueOf(other));
             for(int current : everyNum){
                 userRow.add( String.valueOf(current) );
             }
