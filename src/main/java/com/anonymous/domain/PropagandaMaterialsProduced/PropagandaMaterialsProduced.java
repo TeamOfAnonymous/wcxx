@@ -1,6 +1,12 @@
-package com.anonymous.domain;
+package com.anonymous.domain.PropagandaMaterialsProduced;
+
+import com.anonymous.domain.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,25 +23,30 @@ public class PropagandaMaterialsProduced implements Serializable {
     @GeneratedValue(generator = "UUID2_GENERATOR")
     private String id;//宣传品（资料）制作 id
 
-    private LocalDateTime applicationDate;//申请时间
-    private String title;//标题
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+    private LocalDateTime applicationDate ;//申请时间
+
+    private String title ;//标题
 
     private float totalCost;//总费用
 
     @ManyToOne
     private User principal;//负责人
 
-    private String remarks;//备注
-    private Integer approvalStatus;//审批状态，0为草稿，1为待审批，2为审核中，3为执行中，4为已完成，5为已归档
+    private String remarks ;//备注
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private ApprovalStatus approvalStatus;//审批状态，0为草稿，1为待审批，2为审核中，3为执行中，4为已完成，5为已归档
 
     @ManyToOne
     private User applicant;//申请人
 
-    @OneToMany(mappedBy = "propagandaMaterialsProduced")
+    @OneToMany(mappedBy = "propagandaMaterialsProduced",fetch = FetchType.EAGER) // ,cascade = CascadeType.MERGE
     private List<PropagandaMaterialsContent> propagandaMaterialsContents = new ArrayList<>();//宣传品（资料）内容
 
-    @ManyToOne
-    private PropagandaInformation propagandaInformation;//所属宣传信息申请
+/*    @ManyToOne
+    private PropagandaInformation propagandaInformation;//所属宣传信息申请*/
 
     public PropagandaMaterialsProduced() {
     }
@@ -88,11 +99,11 @@ public class PropagandaMaterialsProduced implements Serializable {
         this.remarks = remarks;
     }
 
-    public Integer getApprovalStatus() {
+    public ApprovalStatus getApprovalStatus() {
         return approvalStatus;
     }
 
-    public void setApprovalStatus(Integer approvalStatus) {
+    public void setApprovalStatus(ApprovalStatus approvalStatus) {
         this.approvalStatus = approvalStatus;
     }
 
@@ -112,11 +123,26 @@ public class PropagandaMaterialsProduced implements Serializable {
         this.propagandaMaterialsContents = propagandaMaterialsContents;
     }
 
-    public PropagandaInformation getPropagandaInformation() {
+/*    public PropagandaInformation getPropagandaInformation() {
         return propagandaInformation;
     }
 
     public void setPropagandaInformation(PropagandaInformation propagandaInformation) {
         this.propagandaInformation = propagandaInformation;
+    }*/
+
+    @Override
+    public String toString() {
+        return "PropagandaMaterialsProduced{" +
+                "id='" + id + '\'' +
+                ", applicationDate=" + applicationDate +
+                ", title='" + title + '\'' +
+                ", totalCost=" + totalCost +
+                ", principal=" + principal +
+                ", remarks='" + remarks + '\'' +
+                ", approvalStatus=" + approvalStatus +
+                ", applicant=" + applicant +
+                ", propagandaMaterialsContents=" + propagandaMaterialsContents +
+                '}';
     }
 }
