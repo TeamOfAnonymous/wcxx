@@ -20,4 +20,9 @@ public class PropagandaMaterialsService implements PropagandaMaterialsServiceInt
     public PropagandaMaterials add(PropagandaMaterials propagandaMaterials) {
         return propagandaMaterialsRepository.save(propagandaMaterials);
     }
+
+    @Override
+    public void delete(PropagandaMaterials propagandaMaterials) {
+        propagandaMaterialsRepository.delete(propagandaMaterials);
+    }
 }

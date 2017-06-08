@@ -7,4 +7,6 @@ import com.anonymous.domain.PropagandaMaterials;
  */
 public interface PropagandaMaterialsServiceInter {
     PropagandaMaterials add(PropagandaMaterials propagandaMaterials);
+
+    void delete(PropagandaMaterials propagandaMaterials);
 }
