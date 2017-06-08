@@ -1,6 +1,7 @@
 package com.anonymous.service;
 
 import com.anonymous.domain.Organization;
+import com.anonymous.domain.PpgdaInfStatistics;
 import com.anonymous.domain.PropagandaInformation;
 import com.anonymous.domain.PropagandaInformationCategory;
 import com.anonymous.repository.PropagandaInformationRepository;
@@ -32,7 +33,9 @@ public class PropagandaInformationService implements PropagandaInformationServic
 	 */
 	@Override
 	public PropagandaInformation save(PropagandaInformation propagandaInformation) {
-		return propagandaInformationRepository.save(propagandaInformation);
+		PropagandaInformation back = propagandaInformationRepository.save(propagandaInformation);
+		PpgdaInfStatistics ppgdaInfStatistics = new PpgdaInfStatistics();
+		return null;
 	}
 
 	/**
