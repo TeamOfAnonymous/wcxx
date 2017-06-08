@@ -1,6 +1,11 @@
 package com.anonymous.service.inter;
 
-import com.anonymous.domain.PropagandaMaterialsProduced;
+import com.anonymous.domain.PropagandaMaterialsProduced.PropagandaMaterialsProduced;
+import com.anonymous.domain.PropagandaMaterialsProduced.query.PropagandaMaterialsProducedQuery;
+import com.anonymous.domain.PropagandaMaterialsProduced.query.PropagandaMaterialsProducedStatisticalQuery;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 /**
  * Created by huangMP on 2017/5/26.
@@ -10,7 +15,13 @@ public interface PropagandaMaterialsProducedServiceInter {
 
     PropagandaMaterialsProduced findById(String id) ;
 
-    PropagandaMaterialsProduced add(PropagandaMaterialsProduced propagandaMaterialsProduced ,String  propagandaInformationId) ;
+    PropagandaMaterialsProduced add(PropagandaMaterialsProduced p ) ;
+
+    PropagandaMaterialsProduced update(PropagandaMaterialsProduced p ) ;
 
     PropagandaMaterialsProduced apply(String id) ;
+
+    Page findByMultiExample(PropagandaMaterialsProducedQuery query) ;
+
+    List<List<String>> statisticalQuery(PropagandaMaterialsProducedStatisticalQuery query) ;
 }
