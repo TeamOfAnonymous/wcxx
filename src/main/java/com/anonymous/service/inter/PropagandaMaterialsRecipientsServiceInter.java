@@ -14,4 +14,6 @@ public interface PropagandaMaterialsRecipientsServiceInter {
     PropagandaMaterialsRecipients getPropagandaMaterialsRecipients(String id);
 
     List<List<String>> getPropagandaMaterialsRecipientsByApplicationDate(LocalDate startDate, LocalDate endDate);
+
+    void deletedPropagandaMaterialsRecipients(String id);
 }

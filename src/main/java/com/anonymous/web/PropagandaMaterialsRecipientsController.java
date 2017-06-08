@@ -36,8 +36,14 @@ public class PropagandaMaterialsRecipientsController {
         return propagandaMaterialsRecipientsService.getPropagandaMaterialsRecipients(id);
     }
 
+    @RequestMapping(value = "deletedPropagandaMaterialsRecipients", method = RequestMethod.GET)
+    @ApiOperation(value = "通过id删除宣传物资领用")
+    public void deletedPropagandaMaterialsRecipients(@RequestParam String id) {
+        propagandaMaterialsRecipientsService.deletedPropagandaMaterialsRecipients(id);
+    }
+
     @RequestMapping(value = "getPropagandaMaterialsRecipientsStatistics", method = RequestMethod.GET)
-    @ApiOperation(value = "通过id获取宣传物资领用")
+    @ApiOperation(value = "统计宣传物资领用")
     @ResponseBody
     public List<List<String>> getPropagandaMaterialsRecipientsStatistics(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
                                                                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {

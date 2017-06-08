@@ -101,6 +101,15 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
         return statisticsResult;
     }
 
+    @Override
+    public void deletedPropagandaMaterialsRecipients(String id) {
+        PropagandaMaterialsRecipients propagandaMaterialsRecipients = getPropagandaMaterialsRecipients(id);
+        for (PropagandaMaterials propagandaMaterials : propagandaMaterialsRecipients.getPropagandaMaterials()) {
+            propagandaMaterialsService.delete(propagandaMaterials);
+        }
+        propagandaMaterialsRecipientsRepository.delete(id);
+    }
+
     private List<String> initResult(String name) {
         List<String> result = new ArrayList<>();
         result.add(0, name);
