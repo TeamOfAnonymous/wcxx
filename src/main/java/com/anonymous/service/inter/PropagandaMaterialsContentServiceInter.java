@@ -1,6 +1,6 @@
 package com.anonymous.service.inter;
 
-import com.anonymous.domain.PropagandaMaterialsContent;
+import com.anonymous.domain.PropagandaMaterialsProduced.PropagandaMaterialsContent;
 
 /**
  * Created by huangMP on 2017/5/26.
@@ -10,5 +10,5 @@ public interface PropagandaMaterialsContentServiceInter {
 
     PropagandaMaterialsContent findById(String id) ;
 
-    PropagandaMaterialsContent add(PropagandaMaterialsContent propagandaMaterialsContent) ;
+    PropagandaMaterialsContent add(PropagandaMaterialsContent propagandaMaterialsContent ) ;
 }
