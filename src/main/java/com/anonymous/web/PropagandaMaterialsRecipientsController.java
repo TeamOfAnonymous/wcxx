@@ -50,4 +50,22 @@ public class PropagandaMaterialsRecipientsController {
         return propagandaMaterialsRecipientsService.getPropagandaMaterialsRecipientsByApplicationDate(startDate, endDate);
     }
 
+    @ApiOperation(value = "去到宣传物资统计页面")
+    @RequestMapping(value = "goPropagandaMaterialsRecipientsStatisticsHtml", method = RequestMethod.GET)
+    public String goPropagandaMaterialsRecipientsStatisticsHtml() {
+        return "propagandaMaterialsRecipientsStatisticsHtml";
+    }
+
+    @ApiOperation(value = "去到宣传物资申请页面")
+    @RequestMapping(value = "goAddPropagandaMaterialsRecipientsHtml", method = RequestMethod.GET)
+    public String goAddPropagandaMaterialsRecipientsHtml() {
+        return "addPropagandaMaterialsRecipientsHtml";
+    }
+
+    @ApiOperation(value = "去到宣传物资列表页面")
+    @RequestMapping(value = "goPropagandaMaterialsRecipientsListHtml", method = RequestMethod.GET)
+    public String goPropagandaMaterialsRecipientsListHtml() {
+        return "propagandaMaterialsRecipientsListHtml";
+    }
+
 }
