@@ -24,5 +24,5 @@ public interface PropagandaInformationServiceInter {
 	 */
 	PropagandaInformation getById(String id);
 
-    List<PropagandaInformation> findByPropagandaInformationCategory(String id);
+    List<PropagandaInformation> findByPropagandaInformationCategories(String id);
 }

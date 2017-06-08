@@ -16,4 +16,10 @@ public interface PropagandaInformationCategoryRepository extends JpaRepository<P
     List<PropagandaInformationCategory> findByPid(String pid);
 
     List<PropagandaInformationCategory> findByPidIsNull();
+
+    /**
+     * 通过Name字段模糊查询分类
+     */
+    List<PropagandaInformationCategory> findByNameLike(String indistinct);
+
 }

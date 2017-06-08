@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by WangZK on 2017/6/1.
@@ -46,7 +48,7 @@ public class PropagandaInformationCategoryService implements PropagandaInformati
         if (propagandaInformationCategories.size() > 0) {
             return false;
         } else {
-            List<PropagandaInformation> propagandaInformations = propagandaInformationService.findByPropagandaInformationCategory(id);
+            List<PropagandaInformation> propagandaInformations = propagandaInformationService.findByPropagandaInformationCategories(id);
             if (propagandaInformations.size() > 0) {
                 return false;
             }
@@ -61,12 +63,40 @@ public class PropagandaInformationCategoryService implements PropagandaInformati
     }
 
     @Override
-    public List<PropagandaInformationCategory> find() {
+    public List<PropagandaInformationCategory> findByPidIsNull() {
         return propagandaInformationCategoryRepository.findByPidIsNull();
     }
 
     @Override
     public List<PropagandaInformationCategory> findByPid(String pid) {
         return propagandaInformationCategoryRepository.findByPid(pid);
+    }
+
+    @Override
+    public Set<List<PropagandaInformationCategory>> findByIndistinctName(String indistinct) {
+        List<PropagandaInformationCategory> propagandaInformationCategoryList = propagandaInformationCategoryRepository.findByNameLike("%" + indistinct + "%");
+        return packageListToMap(propagandaInformationCategoryList);
+    }
+
+    @Override
+    public Set<List<PropagandaInformationCategory>> displayAll() {
+        List<PropagandaInformationCategory> fatherList = this.findByPidIsNull();
+        return packageListToMap(fatherList);
+    }
+
+
+
+    @Override
+    public Set<List<PropagandaInformationCategory>> packageListToMap(List<PropagandaInformationCategory> propagandaInformationCategories) {
+        for (PropagandaInformationCategory propagandaInformationCategory : propagandaInformationCategories) {
+            List<PropagandaInformationCategory> sonList = this.findByPid(propagandaInformationCategory.getId());
+            if (sonList.size() <= 0) {
+
+            } else {
+
+            }
+        }
+
+        return null;
     }
 }

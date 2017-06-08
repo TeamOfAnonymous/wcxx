@@ -47,9 +47,9 @@ public class PropagandaInformationService implements PropagandaInformationServic
 	}
 
 	@Override
-	public List<PropagandaInformation> findByPropagandaInformationCategory(String propagandaInformationCategory_id) {
+	public List<PropagandaInformation> findByPropagandaInformationCategories(String propagandaInformationCategory_id) {
 		PropagandaInformationCategory propagandaInformationCategory = propagandaInformationCategoryService.findById(propagandaInformationCategory_id);
-		return propagandaInformationRepository.findByPropagandaInformationCategory(propagandaInformationCategory);
+		return propagandaInformationRepository.findByPropagandaInformationCategories(propagandaInformationCategory);
 	}
 
 }

@@ -2,11 +2,16 @@ package com.anonymous.web;
 
 import com.anonymous.domain.PropagandaMaterialsRecipients;
 import com.anonymous.service.inter.PropagandaMaterialsRecipientsServiceInter;
+import com.anonymous.utils.StatisticsUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Created by WangZK on 2017/5/26.
@@ -31,4 +36,13 @@ public class PropagandaMaterialsRecipientsController {
     public PropagandaMaterialsRecipients getPropagandaMaterialsRecipients(@RequestParam String id) {
         return propagandaMaterialsRecipientsService.getPropagandaMaterialsRecipients(id);
     }
+
+    @RequestMapping(value = "getPropagandaMaterialsRecipientsStatistics", method = RequestMethod.GET)
+    @ApiOperation(value = "通过id获取宣传物资领用")
+    @ResponseBody
+    public List<StatisticsUtil> getPropagandaMaterialsRecipientsStatistics(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                                                                           @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+        return propagandaMaterialsRecipientsService.getPropagandaMaterialsRecipientsByApplicationDate(startDate, endDate);
+    }
+
 }
