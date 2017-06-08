@@ -1,11 +1,14 @@
-package com.anonymous.domain;
+package com.anonymous.domain.PropagandaMaterialsProduced;
 
+import com.anonymous.domain.PropagandaMaterialsProduced.PropagandaMaterialsProduced;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -20,9 +23,15 @@ public class PropagandaMaterialsContent implements Serializable {
     @GeneratedValue(generator = "UUID2_GENERATOR")
     private String id;//宣传品（资料）内容 id
 
-    private String promotionalCategory;//宣传品类别
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private PromotionalCategory promotionalCategory;//宣传品类别
+
     private String name;//宣传品名称
-    private String productionMethod;//制作方式
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private ProductionProducedMethod productionMethod;//制作方式
     private LocalDate requestCompletionTime;//要求完成时间
     private String specification;//规格
     private String unit;//单位
@@ -47,11 +56,11 @@ public class PropagandaMaterialsContent implements Serializable {
         this.id = id;
     }
 
-    public String getPromotionalCategory() {
+    public PromotionalCategory getPromotionalCategory() {
         return promotionalCategory;
     }
 
-    public void setPromotionalCategory(String promotionalCategory) {
+    public void setPromotionalCategory(PromotionalCategory promotionalCategory) {
         this.promotionalCategory = promotionalCategory;
     }
 
@@ -63,11 +72,11 @@ public class PropagandaMaterialsContent implements Serializable {
         this.name = name;
     }
 
-    public String getProductionMethod() {
+    public ProductionProducedMethod getProductionMethod() {
         return productionMethod;
     }
 
-    public void setProductionMethod(String productionMethod) {
+    public void setProductionMethod(ProductionProducedMethod productionMethod) {
         this.productionMethod = productionMethod;
     }
 
