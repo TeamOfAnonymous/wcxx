@@ -35,7 +35,6 @@ public class PpgdaInfStatistics {
 	/**
 	 * 各点总计
 	 */
-	@Transient
 	private Integer counts;
 
 	public String getId() {
