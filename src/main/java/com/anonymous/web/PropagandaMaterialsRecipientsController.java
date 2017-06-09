@@ -2,7 +2,6 @@ package com.anonymous.web;
 
 import com.anonymous.domain.PropagandaMaterialsRecipients;
 import com.anonymous.service.inter.PropagandaMaterialsRecipientsServiceInter;
-import com.anonymous.utils.StatisticsUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +36,36 @@ public class PropagandaMaterialsRecipientsController {
         return propagandaMaterialsRecipientsService.getPropagandaMaterialsRecipients(id);
     }
 
+    @RequestMapping(value = "deletedPropagandaMaterialsRecipients", method = RequestMethod.GET)
+    @ApiOperation(value = "通过id删除宣传物资领用")
+    public void deletedPropagandaMaterialsRecipients(@RequestParam String id) {
+        propagandaMaterialsRecipientsService.deletedPropagandaMaterialsRecipients(id);
+    }
+
     @RequestMapping(value = "getPropagandaMaterialsRecipientsStatistics", method = RequestMethod.GET)
-    @ApiOperation(value = "通过id获取宣传物资领用")
+    @ApiOperation(value = "统计宣传物资领用")
     @ResponseBody
-    public List<StatisticsUtil> getPropagandaMaterialsRecipientsStatistics(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+    public List<List<String>> getPropagandaMaterialsRecipientsStatistics(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
                                                                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
         return propagandaMaterialsRecipientsService.getPropagandaMaterialsRecipientsByApplicationDate(startDate, endDate);
+    }
+
+    @ApiOperation(value = "去到宣传物资统计页面")
+    @RequestMapping(value = "goPropagandaMaterialsRecipientsStatisticsHtml", method = RequestMethod.GET)
+    public String goPropagandaMaterialsRecipientsStatisticsHtml() {
+        return "propagandaMaterialsRecipientsStatisticsHtml";
+    }
+
+    @ApiOperation(value = "去到宣传物资申请页面")
+    @RequestMapping(value = "goAddPropagandaMaterialsRecipientsHtml", method = RequestMethod.GET)
+    public String goAddPropagandaMaterialsRecipientsHtml() {
+        return "addPropagandaMaterialsRecipientsHtml";
+    }
+
+    @ApiOperation(value = "去到宣传物资列表页面")
+    @RequestMapping(value = "goPropagandaMaterialsRecipientsListHtml", method = RequestMethod.GET)
+    public String goPropagandaMaterialsRecipientsListHtml() {
+        return "propagandaMaterialsRecipientsListHtml";
     }
 
 }

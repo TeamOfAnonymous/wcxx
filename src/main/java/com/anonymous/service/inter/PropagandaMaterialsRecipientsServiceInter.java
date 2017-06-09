@@ -1,7 +1,6 @@
 package com.anonymous.service.inter;
 
 import com.anonymous.domain.PropagandaMaterialsRecipients;
-import com.anonymous.utils.StatisticsUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,5 +13,7 @@ public interface PropagandaMaterialsRecipientsServiceInter {
 
     PropagandaMaterialsRecipients getPropagandaMaterialsRecipients(String id);
 
-    List<StatisticsUtil> getPropagandaMaterialsRecipientsByApplicationDate(LocalDate startDate, LocalDate endDate);
+    List<List<String>> getPropagandaMaterialsRecipientsByApplicationDate(LocalDate startDate, LocalDate endDate);
+
+    void deletedPropagandaMaterialsRecipients(String id);
 }
