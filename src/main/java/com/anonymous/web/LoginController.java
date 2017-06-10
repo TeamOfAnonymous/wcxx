@@ -19,4 +19,18 @@ public class LoginController {
         return "login";
     }
 
+    @GetMapping(value = "goHeader")
+    @ApiOperation(value = "去到页眉")
+    public String goHeader() {
+        return "header";
+    }
+
+    @GetMapping(value = "goWorkbench")
+    @ApiOperation(value = "去到我的工作台")
+    public String goWorkbench() {
+        return "workbench";
+    }
+
+
+
 }
