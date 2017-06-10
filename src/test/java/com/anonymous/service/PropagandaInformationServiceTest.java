@@ -51,9 +51,9 @@ public class PropagandaInformationServiceTest {
 		//创建一个宣传信息对象2
 		PropagandaInformation propagandaInformationTwo = new PropagandaInformation();
 		propagandaInformationOne.setTitle("第一个宣传信息对象");
-		propagandaInformationOne.setPropagandaInformationCategory(propagandaInformationCategories);
+		//propagandaInformationOne.setPropagandaInformationCategory(propagandaInformationCategories);
 		propagandaInformationTwo.setTitle("第二个宣传信息对象");
-		propagandaInformationTwo.setPropagandaInformationCategory(propagandaInformationCategories);
+		//propagandaInformationTwo.setPropagandaInformationCategory(propagandaInformationCategories);
 
 		propagandaInformationService.save(propagandaInformationOne);
 		propagandaInformationService.save(propagandaInformationTwo);

@@ -1,6 +1,7 @@
 package com.anonymous.service.inter;
 
-import com.anonymous.domain.PpgdaInfStatistics;
+
+import com.anonymous.service.PpgdaInfStatisticsService;
 
 import java.time.LocalDate;
 
@@ -13,6 +14,6 @@ public interface PpgdaInfStatisticsServiceInter {
 	/**
 	 * 获得统计数据
 	 */
-	PpgdaInfStatistics getStatisticsData(LocalDate startDate, LocalDate endDate);
+	PpgdaInfStatisticsService.StatisticsData getStatisticsData (LocalDate startDate, LocalDate endDate);
 
 }
