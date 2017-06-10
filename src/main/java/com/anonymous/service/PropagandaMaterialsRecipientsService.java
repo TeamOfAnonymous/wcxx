@@ -7,6 +7,10 @@ import com.anonymous.repository.PropagandaMaterialsRecipientsRepository;
 import com.anonymous.service.inter.PropagandaMaterialsRecipientsServiceInter;
 import com.anonymous.service.inter.PropagandaMaterialsServiceInter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -44,6 +48,18 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
     @Override
     public PropagandaMaterialsRecipients getPropagandaMaterialsRecipients(String id) {
         return propagandaMaterialsRecipientsRepository.findOne(id);
+    }
+
+    @Override
+    public Page<PropagandaMaterialsRecipients> getPropagandaMaterialsRecipientsForPage(Integer currentPage, Integer size, String title, String department, String applicant, Integer approvalStatus) {
+        Sort sort = new Sort(Sort.Direction.fromString("DESC"), "applicationDate");
+        Pageable pageable = new PageRequest(currentPage, size, sort);
+
+        if (approvalStatus == 100) {
+            return propagandaMaterialsRecipientsRepository.getPropagandaMaterialsRecipientsForPage(title, department, applicant, pageable);
+        } else {
+            return propagandaMaterialsRecipientsRepository.getPropagandaMaterialsRecipientsForPage(title, department, applicant, approvalStatus, pageable);
+        }
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.anonymous.service.inter.PropagandaMaterialsRecipientsServiceInter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -48,6 +49,18 @@ public class PropagandaMaterialsRecipientsController {
     public List<List<String>> getPropagandaMaterialsRecipientsStatistics(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
                                                                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
         return propagandaMaterialsRecipientsService.getPropagandaMaterialsRecipientsByApplicationDate(startDate, endDate);
+    }
+
+    @RequestMapping(value = "getPropagandaMaterialsRecipientsForPage", method = RequestMethod.GET)
+    @ApiOperation(value = "分页查找宣传物资领用")
+    @ResponseBody
+    public Page<PropagandaMaterialsRecipients> getPropagandaMaterialsRecipientsForPage(@RequestParam Integer currentPage,
+                                                                                       @RequestParam Integer size,
+                                                                                       @RequestParam String title,
+                                                                                       @RequestParam String department,
+                                                                                       @RequestParam String applicant,
+                                                                                       @RequestParam Integer approvalStatus) {
+        return propagandaMaterialsRecipientsService.getPropagandaMaterialsRecipientsForPage(currentPage, size, title, department, applicant, approvalStatus);
     }
 
     @ApiOperation(value = "去到宣传物资统计页面")

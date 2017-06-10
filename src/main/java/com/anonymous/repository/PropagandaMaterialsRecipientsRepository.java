@@ -1,7 +1,8 @@
 package com.anonymous.repository;
 
-import com.anonymous.domain.PropagandaMaterials;
 import com.anonymous.domain.PropagandaMaterialsRecipients;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -14,6 +15,13 @@ import java.util.List;
  */
 @Repository
 public interface PropagandaMaterialsRecipientsRepository extends JpaRepository<PropagandaMaterialsRecipients, String> {
+
+    @Query("from PropagandaMaterialsRecipients p where p.title like %?1% and p.applicant.organization.name like %?2% and p.applicant.name like %?3% and p.approvalStatus = ?4")
+    Page<PropagandaMaterialsRecipients> getPropagandaMaterialsRecipientsForPage(String title, String depatment, String applicant, int approvalStatus, Pageable pageable);
+
+    @Query("from PropagandaMaterialsRecipients p where p.title like %?1% and p.applicant.organization.name like %?2% and p.applicant.name like %?3%")
+    Page<PropagandaMaterialsRecipients> getPropagandaMaterialsRecipientsForPage(String title, String depatment, String applicant, Pageable pageable);
+
 
     @Query("from PropagandaMaterialsRecipients p where p.applicationDate between ?1 and ?2")
     List<PropagandaMaterialsRecipients> findByApplicationDate(LocalDate startDate, LocalDate endDate);
