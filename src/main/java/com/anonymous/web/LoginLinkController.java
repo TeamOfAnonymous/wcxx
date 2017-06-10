@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 @Api(value = "登录管理", description = "提供登录服务")
-public class LoginController {
+public class LoginLinkController {
 
     @GetMapping(value = "goLogin")
     @ApiOperation(value = "去到登录页面")
