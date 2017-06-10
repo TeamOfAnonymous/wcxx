@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description：宣传统计Repository
@@ -14,12 +15,12 @@ import java.util.List;
  */
 public interface PpgdaInfStatisticsRepository extends JpaRepository<PpgdaInfStatistics, String> {
 
-	@Query(value = "SELECT statistics.userId, statistics.mainCategoryId, COUNT(statistics.mainCategoryId) AS counts " +
-			"FROM PpgdaInfStatistics statistics WHERE statistics.createTime >= :startDate AND statistics.createTime <= :endDate " +
-			"GROUP BY userId, mainCategoryId")
+	@Query(value = "SELECT id, userId, mainCategoryId, createTime, COUNT(1) AS counts " +
+			"FROM PpgdaInfStatistics WHERE createTime >= ?1 AND createTime <= ?2 " +
+			"GROUP BY userId, mainCategoryId", nativeQuery = true)
 	List<PpgdaInfStatistics> statisticsByDate(
-			@Param(value = "startDate") LocalDate startDate,
-			@Param(value = "endDate")LocalDate endDate
+			LocalDate startDate,
+			LocalDate endDate
 	);
 
 }

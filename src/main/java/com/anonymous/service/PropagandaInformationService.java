@@ -34,8 +34,11 @@ public class PropagandaInformationService implements PropagandaInformationServic
 	@Override
 	public PropagandaInformation save(PropagandaInformation propagandaInformation) {
 		PropagandaInformation back = propagandaInformationRepository.save(propagandaInformation);
-		PpgdaInfStatistics ppgdaInfStatistics = new PpgdaInfStatistics();
-		return null;
+		//TODO 将back摘要保存到PpgdaInfStatistics中
+		//PpgdaInfStatistics ppgdaInfStatistics = new PpgdaInfStatistics();
+		//ppgdaInfStatistics.setUserId(back.getApplicant().getId());
+		//ppgdaInfStatistics.setMainCategoryId();
+		return back;
 	}
 
 	/**
