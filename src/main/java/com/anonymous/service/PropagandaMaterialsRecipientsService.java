@@ -14,10 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by WangZK on 2017/5/26.
@@ -72,7 +69,7 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
     }
 
     @Override
-    public List<List<String>> getPropagandaMaterialsRecipientsByApplicationDate(LocalDate startDate, LocalDate endDate) {
+    public Map<String, Object> getPropagandaMaterialsRecipientsByApplicationDate(LocalDate startDate, LocalDate endDate) {
         List<PropagandaMaterialsRecipients> propagandaMaterialsRecipients = new ArrayList<>();
         if (startDate == null || "".equals(startDate)) {
             propagandaMaterialsRecipients = propagandaMaterialsRecipientsRepository.findAll();
@@ -86,7 +83,10 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
         for (PropagandaMaterialsRecipients propagandaMaterialsRecipients1 : propagandaMaterialsRecipients) {
             users.add(propagandaMaterialsRecipients1.getApplicant());
         }
-        List<List<String>> statisticsResult = createHead();
+        List<List<String>> statisticsResult = new ArrayList<>();
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("heads",createHead());
 
         for (User user : users) {
             List<String> result = initResult(user.getName());
@@ -115,15 +115,16 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
             result.set(6, String.valueOf(Integer.parseInt(result.get(1)) + Integer.parseInt(result.get(2)) + Integer.parseInt(result.get(3)) + Integer.parseInt(result.get(4)) + Integer.parseInt(result.get(5))));
             statisticsResult.add(result);
         }
+        resultMap.put("contents",statisticsResult);
         List<String> totalResult = initResult("总计");
         for (int i = 1; i < totalResult.size(); i++) {
-            for (int j = 1; j < statisticsResult.size(); j++) {
+            for (int j = 0; j < statisticsResult.size(); j++) {
                 totalResult.set(i, String.valueOf(Integer.parseInt(totalResult.get(i)) + Integer.parseInt(statisticsResult.get(j).get(i))));
             }
         }
-        statisticsResult.add(totalResult);
+        resultMap.put("foots",totalResult);
 
-        return statisticsResult;
+        return resultMap;
     }
 
     @Override
@@ -147,8 +148,7 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
         return result;
     }
 
-    private List<List<String>> createHead() {
-        List<List<String>> statisticsResult = new ArrayList<>();
+    private List<String> createHead() {
         List<String> head = new ArrayList<>();
         head.add("申请人");
         head.add("宣传手册");
@@ -157,8 +157,7 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
         head.add("电影票");
         head.add("其他");
         head.add("总计");
-        statisticsResult.add(head);
-        return statisticsResult;
+        return head;
     }
 
 }

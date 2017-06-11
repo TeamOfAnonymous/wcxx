@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by WangZK on 2017/5/26.
@@ -46,8 +47,8 @@ public class PropagandaMaterialsRecipientsController {
     @RequestMapping(value = "getPropagandaMaterialsRecipientsStatistics", method = RequestMethod.GET)
     @ApiOperation(value = "统计宣传物资领用")
     @ResponseBody
-    public List<List<String>> getPropagandaMaterialsRecipientsStatistics(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-                                                                           @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+    public Map<String, Object> getPropagandaMaterialsRecipientsStatistics(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                                                                          @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
         return propagandaMaterialsRecipientsService.getPropagandaMaterialsRecipientsByApplicationDate(startDate, endDate);
     }
 
