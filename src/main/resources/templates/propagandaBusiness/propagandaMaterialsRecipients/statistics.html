@@ -39,147 +39,41 @@
             <span>统计时段&nbsp;:&nbsp;2014-01-01-2014-06-30</span>
             <span>统计人:XXX</span>
         </div>
-        <table class="table table-bordered table-hover">
-            <thead id="head">
-            <tr>
-                <th>No.</th>
-                <th>领用人</th>
-                <th>宣传手册</th>
-                <th>纪念胸章</th>
-                <th>样品吊坠</th>
-                <th>电影票</th>
-                <th>其它</th>
-                <th>总计</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>1</td>
-                <td>test</td>
-                <td>test</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>78</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>test</td>
-                <td>test</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>78</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>test</td>
-                <td>test</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>87</td>
-            </tr>
-            <tr>
-                <td>-</td>
-                <td>总计</td>
-                <td>12</td>
-                <td>11</td>
-                <td>51</td>
-                <td>54</td>
-                <td>45</td>
-                <td>78</td>
-            </tr>
-            </tbody>
+        <table class="table table-bordered table-hover" id="table">
         </table>
     </div>
 </div>
-<div id="content"></div>
-
-<script id="test" type="text/html">
-    <% for( i = 0; i < content.length; i++) { %>
-    <tr>
-        <td><%=content[i].id%></td>
-        <td><%=content[i].title%></td>
-        <td><%=content[i].approvalStatus%></td>
-        <td><%=content[i].applicant.name%></td>
-        <%for( j = 0; j < content[i].propagandaMaterials.length; j++) {%>
-        <td><%=content[i].propagandaMaterials[j].id%></td>
-        <td><%=content[i].propagandaMaterials[j].name%></td>
-        <td><%=content[i].propagandaMaterials[j].unit%></td>
-        <%}%>
-    </tr>
-    <%}%>
-</script>
-
-<script>
-    var data = {
-            content: [
-                {
-                    applicant: {
-                        name: "张三"
-                    },
-                    approvalStatus: 0,
-                    id: "111",
-                    propagandaMaterials: [
-                        {
-                            id: "111-111",
-                            name: "宣传手册",
-                            quantity: 0,
-                            remarks: "",
-                            unit: "册",
-                            useDirection: ""
-                        }, {
-                            id: "111-222",
-                            name: "宣传单",
-                            quantity: 0,
-                            remarks: "",
-                            unit: "张",
-                            useDirection: ""
-                        }
-                    ],
-                    remarks: "",
-                    title: "献血宣传"
-                }, {
-                    applicant: {
-                        name: "李四"
-                    }
-                    ,
-                    approvalStatus: 0,
-                    id: "111",
-                    propagandaMaterials: [
-                        {
-                            id: "111-111",
-                            name: "宣传手册",
-                            quantity: 0,
-                            remarks: "",
-                            unit: "册",
-                            useDirection: ""
-                        }, {
-                            id: "111-222",
-                            name: "宣传单",
-                            quantity: 0,
-                            remarks: "",
-                            unit: "张",
-                            useDirection: ""
-                        }
-                    ],
-                    remarks: "",
-                    title: "献血宣传"
-                }
-            ]
-        }
-    ;
-    var html = template('test', data);
-
-    document.getElementById("content").innerHTML = html;
-</script>
 <script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
 <script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../../../vendor/template-web-min.js"></script>
+<script id="data_table" type="text/html">
+    <thead>
+        <tr>
+            <td>No.</td>
+            {{each heads as head h}}
+                <td>{{head}}</td>
+            {{/each}}
+        </tr>
+    </thead>
+    <tbody>
+        {{each contents as content c}}
+        <tr>
+            <td>{{c+1}}</td>
+            {{each content as index i}}
+                <td>{{index}}</td>
+            {{/each}}
+        </tr>
+        {{/each}}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>-</td>
+            {{each foots as foot f}}
+            <td>{{foot}}</td>
+            {{/each}}
+        </tr>
+    </tfoot>
+</script>
 <script>
     $(function () {
         var date_ = new Date();
@@ -198,7 +92,8 @@
             data: data,
             dataType: "json",
             success: function (data) {
-                console.log(data)
+                var html = template('data_table', data);
+                document.getElementById('table').innerHTML = html;
             }
         });
     });
@@ -217,6 +112,8 @@
             dataType: "json",
             success: function (data) {
                 console.log(data)
+                var html = template('data_table', data);
+                document.getElementById('table').innerHTML = html;
             }
         });
     }
