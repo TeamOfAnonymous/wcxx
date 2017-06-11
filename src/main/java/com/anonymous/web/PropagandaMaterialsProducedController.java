@@ -70,7 +70,7 @@ public class PropagandaMaterialsProducedController {
     @ApiOperation(value = "业务查询 : 宣传品（资料）制作查询")
     @ResponseBody
     public Page propagandaMaterialsProducedQuery(@RequestBody PropagandaMaterialsProducedQuery query) {
-        return propagandaMaterialsProducedService.findByMultiExample(query);
+        return propagandaMaterialsProducedService.findByQuery(query);
     }
 
     /**
