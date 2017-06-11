@@ -31,6 +31,18 @@ public class LoginLinkController {
         return "workbench";
     }
 
+    @GetMapping(value = "goFlowChart")
+    @ApiOperation(value = "查看流程图")
+    public String goFlowChart() {
+        return "flowChart";
+    }
+
+    @GetMapping(value = "goSubmit")
+    @ApiOperation(value = "去到提交办理页面")
+    public String goSubmit() {
+        return "submit";
+    }
+
 
 
 }

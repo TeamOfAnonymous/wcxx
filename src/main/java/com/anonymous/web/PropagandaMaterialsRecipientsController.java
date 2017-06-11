@@ -57,10 +57,10 @@ public class PropagandaMaterialsRecipientsController {
     public Page<PropagandaMaterialsRecipients> getPropagandaMaterialsRecipientsForPage(@RequestParam Integer currentPage,
                                                                                        @RequestParam Integer size,
                                                                                        @RequestParam String title,
-                                                                                       @RequestParam String department,
                                                                                        @RequestParam String applicant,
+                                                                                       @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate applicationDate,
                                                                                        @RequestParam Integer approvalStatus) {
-        return propagandaMaterialsRecipientsService.getPropagandaMaterialsRecipientsForPage(currentPage, size, title, department, applicant, approvalStatus);
+        return propagandaMaterialsRecipientsService.getPropagandaMaterialsRecipientsForPage(currentPage, size, title, applicant, applicationDate, approvalStatus);
     }
 
 }
