@@ -87,25 +87,25 @@ public class PropagandaMaterialsProducedServiceTest {
 
         query.setPropagandaMaterialsProduced(p);
 
-        p.setTitle("itl");
         query.setMinTotalCost(0);
         query.setMaxTotalCost(100);
 
         query.setPage(0);
         query.setRows(100);
 
-        query.setProductionMethod(ProductionProducedMethod.ProducedInner);
+//        query.setProductionMethod(ProductionProducedMethod.ProducedInner);
 
         // 通过宣传品标题
         p.setTitle("tle");
 
         // 通过宣传品申请人姓名查找
         User user = new User();
-//        user.setName("钟");
+        //       user.setName("小");
+        user.setName("");
         p.setApplicant(user);
 
         // 通过 状态
-        p.setApprovalStatus(ApprovalStatus.Draft);
+//        p.setApprovalStatus(ApprovalStatus.Draft);
 
         System.out.println(query.toString());
 
@@ -118,11 +118,50 @@ public class PropagandaMaterialsProducedServiceTest {
         System.out.println("getSize " + page.getSize());
     }
 
+
+    @Test
+    public void testFindByQuery(){
+        PropagandaMaterialsProducedQuery query = new PropagandaMaterialsProducedQuery();
+        PropagandaMaterialsProduced p = new PropagandaMaterialsProduced();
+
+        query.setPropagandaMaterialsProduced(p);
+
+        query.setMinTotalCost(0);
+        query.setMaxTotalCost(100);
+
+        query.setPage(0);
+        query.setRows(100);
+
+//        query.setProductionMethod(ProductionProducedMethod.ProducedInner);
+
+        // 通过宣传品标题
+        p.setTitle("tle");
+
+        // 通过宣传品申请人姓名查找
+        User user = new User();
+ //       user.setName("小");
+        user.setName("");
+        p.setApplicant(user);
+
+        // 通过 状态
+//        p.setApprovalStatus(ApprovalStatus.Draft);
+
+        System.out.println(query.toString());
+
+        Page<PropagandaMaterialsProduced> page = propagandaMaterialsProducedService.findByQuery(query);
+
+        System.out.println("getTotalElements " + page.getTotalElements());
+        System.out.println("getTotalPages " + page.getTotalPages());
+        System.out.println("getNumberOfElements " + page.getNumberOfElements());
+        System.out.println("getNumber " + page.getNumber());
+        System.out.println("getSize " + page.getSize());
+    }
+
     @Test
     public void testFindStatisticalQuery(){
         PropagandaMaterialsProducedStatisticalQuery query = new PropagandaMaterialsProducedStatisticalQuery(
                 LocalDate.of( 2011, 10 , 4 ),
-                LocalDate.of( 2017, 6 , 10 )
+                LocalDate.of( 2019, 6 , 10 )
         );
         List<List<String>> resultTable = propagandaMaterialsProducedService.statisticalQuery(query);
 
