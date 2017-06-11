@@ -1,208 +1,219 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="UTF-8" />
-		<title>宣传物资领用申请列表</title>
-		<link rel="stylesheet" href="../../../vendor/bootstrap-3.3.7/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="../../../css/public.css" />
-		<link rel="stylesheet" href="../../../css/recipientsToApplyForList.css" />
-		<link rel="stylesheet" href="../../../vendor/jquery.my-message/css/jquery.my-message.1.1.css" />
-	</head>
+<head>
+    <meta charset="UTF-8"/>
+    <title>宣传物资领用申请列表</title>
+    <link rel="stylesheet" href="../../../vendor/bootstrap-3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../../css/public.css"/>
+    <link rel="stylesheet" href="../../../css/recipientsToApplyForList.css"/>
+    <link rel="stylesheet" href="../../../vendor/jquery.my-message/css/jquery.my-message.1.1.css"/>
+</head>
 
-	<body>
-		<div class="container-fluid setMinWidth recipients-to-apply-for-list">
-			<div class="handle-top">
-				<form class="form-inline">
-					<div class="form-group">
-						<label>标题:</label>
-						<input type="text" class="form-control input-sm" name="title" id="title"/>
-					</div>
-					<div class="form-group">
-						<label>申请人:</label>
-						<input type="text" class="form-control input-sm" name="applicant" id="applicant"/>
-					</div>
-					<div class="form-group">
-						<label>申请时间:</label>
-						<input type="date" class="form-control input-sm" name="applicationDate" id="applicationDate"/>
-					</div>
-					<div class="form-group">
-						<label>状态:</label>
-						<select name="approvalStatus" id="approvalStatus" class="form-control input-sm">
-							<option value="100">全部</option>
-							<option value="0">草稿</option>
-							<option value="1">待审批</option>
-							<option value="2">审核中</option>
-							<option value="2">执行中</option>
-							<option value="4">已完成</option>
-							<option value="5">已归档</option>
-						</select>
-					</div>
-					<button type="button" class="btn btn-default btn-sm" onclick="query()">
-						<span class="glyphicon glyphicon-search"></span>
-						查询
-					</button>
-					<button type="button" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-repeat"></span>
-						重置
-					</button>
-				</form>
-			</div>
-			<div class="handle-button-group">
-				<a href="/propagandaBusiness/propagandaMaterialsRecipients/goPropagandaMaterialsRecipientsApply" class="btn btn-default btn-sm">
-					<span class="glyphicon glyphicon-plus"></span> 新建
-				</a>
-				<a href="/propagandaBusiness/propagandaMaterialsRecipients/goPropagandaMaterialsRecipientsApply" class="btn btn-default btn-sm">
-					<span class="glyphicon glyphicon-file"></span> 归档
-				</a>
-				<button type="button" class="btn btn-default btn-sm">
-					<span class="glyphicon glyphicon-remove"></span>
-					删除
-				</button>
-			</div>
-			<div class="data-table">
-				<table class="table table-bordered table-hover checked-table">
-					<thead>
-						<tr>
-							<th><input type="checkbox" /></th>
-							<th>No.</th>
-							<th>标题</th>
-							<th>申请部门</th>
-							<th>申请人</th>
-							<th>申请时间</th>
-							<th>状态</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><input type="checkbox" /></td>
-							<td>1</td>
-							<td>test</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>
-								<span class="font-red">
-								待审批
-							</span>
-							</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" /></td>
-							<td>2</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>
-								<span>
-								执行中
-							</span>
-							</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" /></td>
-							<td>3</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>
-								<span>已归档</span>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="page">
-				<ul class="pagination pagination-sm">
-					<li class="disabled">
+<body>
+<div class="container-fluid setMinWidth recipients-to-apply-for-list">
+    <div class="handle-top">
+        <form class="form-inline">
+            <div class="form-group">
+                <label>标题:</label>
+                <input type="text" class="form-control input-sm" name="title" id="title"/>
+            </div>
+            <div class="form-group">
+                <label>申请人:</label>
+                <input type="text" class="form-control input-sm" name="applicant" id="applicant"/>
+            </div>
+            <div class="form-group">
+                <label>申请时间:</label>
+                <input type="date" class="form-control input-sm" name="applicationDate" id="applicationDate"/>
+            </div>
+            <div class="form-group">
+                <label>状态:</label>
+                <select name="approvalStatus" id="approvalStatus" class="form-control input-sm">
+                    <option value="100">全部</option>
+                    <option value="0">草稿</option>
+                    <option value="1">待审批</option>
+                    <option value="2">审核中</option>
+                    <option value="2">执行中</option>
+                    <option value="4">已完成</option>
+                    <option value="5">已归档</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-default btn-sm" onclick="query()">
+                <span class="glyphicon glyphicon-search"></span>
+                查询
+            </button>
+            <button type="button" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-repeat"></span>
+                重置
+            </button>
+        </form>
+    </div>
+    <div class="handle-button-group">
+        <a href="/propagandaBusiness/propagandaMaterialsRecipients/goPropagandaMaterialsRecipientsApply"
+           class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-plus"></span> 新建
+        </a>
+        <a href="/propagandaBusiness/propagandaMaterialsRecipients/goPropagandaMaterialsRecipientsApply"
+           class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-file"></span> 归档
+        </a>
+        <button type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-remove"></span>
+            删除
+        </button>
+    </div>
+    <div class="data-table">
+        <table class="table table-bordered table-hover checked-table" id="table">
+        </table>
+    </div>
+    <div class="page">
+        <ul class="pagination pagination-sm">
+            <li class="disabled">
 						<span href="#" aria-label="Previous">
 							<span aria-hidden="true">&laquo;</span>
 						</span>
-					</li>
-					<li class="active">
-						<span href="#">1</span>
-					</li>
-					<li>
-						<span href="#">2</span>
-					</li>
-					<li>
-						<span href="#">3</span>
-					</li>
-					<li>
-						<span href="#">4</span>
-					</li>
-					<li>
-						<span href="#">5</span>
-					</li>
-					<li>
-						<span href="#" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
-						</span>
-					</li>
-					<li class="li-page-handle">
-						转到第
-						<input type="text" class="form-control input-sm" /> 页
-						<button type="button" class="btn btn-default btn-sm">
-							GO
-						</button>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
-		<script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="../../../vendor/jquery.my-message/js/jquery.my-message.1.1.js" ></script>
-		<script type="text/javascript" src="../../../js/public.js" ></script>
-		<script>
-            $(function () {
-                var data = {
-                    "currentPage":"0",
-                    "size":"10",
-                    "title":"",
-                    "department":"",
-                    "applicant":"",
-                    "approvalStatus":"100"};
+            </li>
+            <li class="active">
+                <span href="#">1</span>
+            </li>
+            <li>
+                <span href="#">2</span>
+            </li>
+            <li>
+                <span href="#">3</span>
+            </li>
+            <li>
+                <span href="#">4</span>
+            </li>
+            <li>
+                <span href="#">5</span>
+            </li>
+            <li>
+                <span href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </span>
+            </li>
+            <li class="li-page-handle">
+                转到第
+                <input type="text" class="form-control input-sm"/> 页
+                <button type="button" class="btn btn-default btn-sm">
+                    GO
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
+<script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
+<script type="text/javascript" src="../../../vendor/template-web-min.js"></script>
+<script type="text/javascript" src="../../../js/public.js"></script>
+<script id="data_table" type="text/html">
+    <thead>
+    <tr>
+        <th><input type="checkbox"/></th>
+        <th>No.</th>
+        <th>标题</th>
+        <th>申请部门</th>
+        <th>申请人</th>
+        <th>申请时间</th>
+        <th>状态</th>
+    </tr>
+    </thead>
+    <tbody>
+        {{each content as index i}}
+            <tr>
+                <td><input type="checkbox"/></td>
+                <td>{{i+1}}</td>
+                <td>{{index.title}}</td>
+                <td>{{index.applicant.organization.name}}</td>
+                <td>{{index.applicant.name}}</td>
+                <td>{{index.applicationDate}}</td>
+                <td>
+                    {{if index.approvalStatus == 0}}
+                        <span class="font-red">
+                            草稿
+                        </span>
+                    {{else if index.approvalStatus == 1}}
+                        <span class="font-red">
+                            待审批
+                        </span>
+                    {{else if index.approvalStatus == 2}}
+                        <span class="font-red">
+                            审核中
+                        </span>
+                    {{else if index.approvalStatus == 3}}
+                        <span class="font-red">
+                            执行中
+                        </span>
+                    {{else if index.approvalStatus == 4}}
+                        <span class="font-red">
+                            已完成
+                        </span>
+                    {{else if index.approvalStatus == 5}}
+                        <span class="font-red">
+                            已归档
+                        </span>
+                    {{/if}}
+                </td>
+            </tr>
+        {{/each}}
+    </tbody>
+</script>
+<script>
+    $(function () {
+        var data = {
+            "currentPage": "0",
+            "size": "10",
+            "title": "",
+            "applicant": "",
+            "applicationDate": "",
+            "approvalStatus": "100"
+        };
 
-                $.ajax({
-                    type: "GET",
-                    url: "/getPropagandaMaterialsRecipientsForPage",
-                    data: data,
-                    dataType: "json",
-                    success: function(data){
-                        console.log(data)
-                    }
-                });
-            });
-
-            query = function () {
-				var title = $("#title").val();
-                var applicant = $("#applicant").val();
-                var applicationDate = $("#applicationDate").val();
-                var approvalStatus = $("#approvalStatus").val();
-
-                var data = {
-                    "currentPage":"0",
-                    "size":"10",
-                    "title":title,
-                    "applicant":applicant,
-                    "applicationDate":applicationDate,
-                    "approvalStatus":approvalStatus};
-
-                $.ajax({
-                    type: "GET",
-                    url: "/getPropagandaMaterialsRecipientsForPage",
-                    data: data,
-                    dataType: "json",
-                    success: function(data){
-                        console.log(data)
-                    }
-                });
+        $.ajax({
+            type: "GET",
+            url: "/getPropagandaMaterialsRecipientsForPage",
+            data: data,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                var html = template('data_table', data);
+                document.getElementById('table').innerHTML = html;
             }
+        });
+    });
+
+    query = function () {
+        var title = $("#title").val();
+        var applicant = $("#applicant").val();
+        var applicationDate = $("#applicationDate").val();
+        var approvalStatus = $("#approvalStatus").val();
+
+        var data = {
+            "currentPage": "0",
+            "size": "10",
+            "title": title,
+            "applicant": applicant,
+            "applicationDate": applicationDate,
+            "approvalStatus": approvalStatus
+        };
+
+        $.ajax({
+            type: "GET",
+            url: "/getPropagandaMaterialsRecipientsForPage",
+            data: data,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                var html = template('data_table', data);
+                document.getElementById('table').innerHTML = html;
+            }
+        });
+    }
 
 
-		</script>
-	</body>
+</script>
+</body>
 
 </html>
