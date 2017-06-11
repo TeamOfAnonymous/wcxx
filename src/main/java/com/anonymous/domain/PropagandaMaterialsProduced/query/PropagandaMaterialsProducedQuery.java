@@ -41,7 +41,6 @@ public class PropagandaMaterialsProducedQuery {
     private ProductionProducedMethod productionMethod;
 
     public PropagandaMaterialsProducedQuery(){
-
     }
 
     public PropagandaMaterialsProduced getPropagandaMaterialsProduced() {

@@ -37,10 +37,10 @@ public class PropagandaMaterialsProduced implements Serializable {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private ApprovalStatus approvalStatus;//审批状态，0为草稿，1为待审批，2为审核中，3为执行中，4为已完成，5为已归档
+    private ApprovalStatus approvalStatus;//审批状态
 
     @ManyToOne
-    private User applicant;//申请人
+    private User applicant;//申请人 TODO 应该添加 @NotNull
 
     @OneToMany(mappedBy = "propagandaMaterialsProduced",fetch = FetchType.EAGER) // ,cascade = CascadeType.MERGE
     private List<PropagandaMaterialsContent> propagandaMaterialsContents = new ArrayList<>();//宣传品（资料）内容
