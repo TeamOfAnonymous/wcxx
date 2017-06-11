@@ -1,104 +1,227 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="UTF-8" />
-		<title>宣传物资领用统计</title>
-		<link rel="stylesheet" href="../../../vendor/bootstrap-3.3.7/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="../../../css/public.css" />
-		<link rel="stylesheet" href="../../../css/recipientsOfStatistical.css" />
-	</head>
+<head>
+    <meta charset="UTF-8"/>
+    <title>宣传物资领用统计</title>
+    <link rel="stylesheet" href="../../../vendor/bootstrap-3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../../css/public.css"/>
+    <link rel="stylesheet" href="../../../css/recipientsOfStatistical.css"/>
+</head>
 
-	<body>
-		<div class="container-fluid setMinWidth recipients-of-statistical-table">
-			<div class="handle-top">
-				<form class="form-inline">
-					<div class="form-group">
-						<label>统计时段:</label>
-						<input type="date" class="form-control input-sm" /> -
-						<input type="date" class="form-control input-sm" />
-					</div>
-					<button type="button" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-search"></span>
-						查询
-					</button>
-					<button type="button" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-repeat"></span>
-						重置
-					</button>
-					<button type="button" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-download-alt"></span>
-						重置
-					</button>
-				</form>
-			</div>
+<body>
+<div class="container-fluid setMinWidth recipients-of-statistical-table">
+    <div class="handle-top">
+        <form class="form-inline">
+            <div class="form-group">
+                <label>统计时段:</label>
+                <input type="date" class="form-control input-sm" name="startDate" id="startDate"/> -
+                <input type="date" class="form-control input-sm" name="endDate" id="endDate"/>
+            </div>
+            <button type="button" class="btn btn-default btn-sm" onclick="queryDate()">
+                <span class="glyphicon glyphicon-search"></span>
+                查询
+            </button>
+            <button type="button" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-repeat"></span>
+                重置
+            </button>
+            <button type="button" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-download-alt"></span>
+                重置
+            </button>
+        </form>
+    </div>
 
-			<div class="data-table statistical-table">
-				<h3>宣传物资领用统计表</h3>
-				<div class="st-info">
-					<span>统计时段&nbsp;:&nbsp;2014-01-01-2014-06-30</span>
-					<span>统计人:XXX</span>
-				</div>
-				<table class="table table-bordered table-hover">
-					<thead>
-						<tr>
-							<th>No.</th>
-							<th>领用人</th>
-							<th>宣传手册</th>
-							<th>纪念胸章</th>
-							<th>样品吊坠</th>
-							<th>电影票</th>
-							<th>其它</th>
-							<th>总计</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>1</td>
-							<td>test</td>
-							<td>test</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>78</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>test</td>
-							<td>test</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>78</td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>test</td>
-							<td>test</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>87</td>
-						</tr>
-						<tr>
-							<td>-</td>
-							<td>总计</td>
-							<td>12</td>
-							<td>11</td>
-							<td>51</td>
-							<td>54</td>
-							<td>45</td>
-							<td>78</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
-		<script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-	</body>
+    <div class="data-table statistical-table">
+        <h3>宣传物资领用统计表</h3>
+        <div class="st-info">
+            <span>统计时段&nbsp;:&nbsp;2014-01-01-2014-06-30</span>
+            <span>统计人:XXX</span>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead id="head">
+            <tr>
+                <th>No.</th>
+                <th>领用人</th>
+                <th>宣传手册</th>
+                <th>纪念胸章</th>
+                <th>样品吊坠</th>
+                <th>电影票</th>
+                <th>其它</th>
+                <th>总计</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>test</td>
+                <td>test</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>78</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>test</td>
+                <td>test</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>78</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>test</td>
+                <td>test</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>87</td>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>总计</td>
+                <td>12</td>
+                <td>11</td>
+                <td>51</td>
+                <td>54</td>
+                <td>45</td>
+                <td>78</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="content"></div>
+
+<script id="test" type="text/html">
+    <% for( i = 0; i < content.length; i++) { %>
+    <tr>
+        <td><%=content[i].id%></td>
+        <td><%=content[i].title%></td>
+        <td><%=content[i].approvalStatus%></td>
+        <td><%=content[i].applicant.name%></td>
+        <%for( j = 0; j < content[i].propagandaMaterials.length; j++) {%>
+        <td><%=content[i].propagandaMaterials[j].id%></td>
+        <td><%=content[i].propagandaMaterials[j].name%></td>
+        <td><%=content[i].propagandaMaterials[j].unit%></td>
+        <%}%>
+    </tr>
+    <%}%>
+</script>
+
+<script>
+    var data = {
+            content: [
+                {
+                    applicant: {
+                        name: "张三"
+                    },
+                    approvalStatus: 0,
+                    id: "111",
+                    propagandaMaterials: [
+                        {
+                            id: "111-111",
+                            name: "宣传手册",
+                            quantity: 0,
+                            remarks: "",
+                            unit: "册",
+                            useDirection: ""
+                        }, {
+                            id: "111-222",
+                            name: "宣传单",
+                            quantity: 0,
+                            remarks: "",
+                            unit: "张",
+                            useDirection: ""
+                        }
+                    ],
+                    remarks: "",
+                    title: "献血宣传"
+                }, {
+                    applicant: {
+                        name: "李四"
+                    }
+                    ,
+                    approvalStatus: 0,
+                    id: "111",
+                    propagandaMaterials: [
+                        {
+                            id: "111-111",
+                            name: "宣传手册",
+                            quantity: 0,
+                            remarks: "",
+                            unit: "册",
+                            useDirection: ""
+                        }, {
+                            id: "111-222",
+                            name: "宣传单",
+                            quantity: 0,
+                            remarks: "",
+                            unit: "张",
+                            useDirection: ""
+                        }
+                    ],
+                    remarks: "",
+                    title: "献血宣传"
+                }
+            ]
+        }
+    ;
+    var html = template('test', data);
+
+    document.getElementById("content").innerHTML = html;
+</script>
+<script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
+<script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../vendor/template-web-min.js"></script>
+<script>
+    $(function () {
+        var date_ = new Date();
+        var year = date_.getFullYear();
+        var month = date_.getMonth() + 1;
+        month = month > 10 ? month : '0' + month.toString();
+        var startDate = year + '-' + month + '-01';
+        date_ = new Date(year, month, 0);
+        var endDate = year + '-' + month + '-' + date_.getDate();
+
+        var data = {"startDate": startDate, "endDate": endDate};
+
+        $.ajax({
+            type: "GET",
+            url: "/getPropagandaMaterialsRecipientsStatistics",
+            data: data,
+            dataType: "json",
+            success: function (data) {
+                console.log(data)
+            }
+        });
+    });
+
+    queryDate = function () {
+
+        var startDate = $("#startDate").val();
+        var endDate = $("#endDate").val();
+
+        var data = {"startDate": startDate, "endDate": endDate};
+
+        $.ajax({
+            type: "GET",
+            url: "/getPropagandaMaterialsRecipientsStatistics",
+            data: data,
+            dataType: "json",
+            success: function (data) {
+                console.log(data)
+            }
+        });
+    }
+
+</script>
+</body>
 
 </html>
