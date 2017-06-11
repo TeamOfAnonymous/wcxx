@@ -1,10 +1,11 @@
 package com.anonymous.service;
 
-import com.anonymous.domain.PropagandaInformationCategory;
 import com.anonymous.domain.PropagandaMaterialsProduced.*;
+import com.anonymous.domain.PropagandaMaterialsProduced.dto.PropagandaMaterialsProducedDto;
 import com.anonymous.domain.PropagandaMaterialsProduced.query.PropagandaMaterialsProducedStatisticalQuery;
 import com.anonymous.domain.User;
-import com.anonymous.repository.PropagandaMaterialsProducedRepository;
+import com.anonymous.repository.PropagandaMaterialsProduced.PropagandaMaterialsProducedRepository;
+import com.anonymous.repository.PropagandaMaterialsProduced.PropagandaMaterialsProducedRepositoryCustom;
 import com.anonymous.service.inter.PropagandaMaterialsProducedServiceInter;
 import com.anonymous.domain.PropagandaMaterialsProduced.query.PropagandaMaterialsProducedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,6 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.beans.Transient;
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -35,10 +34,17 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
      */
     private PropagandaMaterialsContentService propagandaMaterialsContentService;
 
+    /**
+     * 宣传品制作申请 Custom dao
+     */
+    private PropagandaMaterialsProducedRepositoryCustom propagandaMaterialsProducedRepositoryCustom ;
+
     public PropagandaMaterialsProducedService(@Autowired PropagandaMaterialsProducedRepository propagandaMaterialsProducedRepository ,
-                                              @Autowired PropagandaMaterialsContentService propagandaMaterialsContentService){
+                                              @Autowired PropagandaMaterialsContentService propagandaMaterialsContentService ,
+                                              @Autowired PropagandaMaterialsProducedRepositoryCustom propagandaMaterialsProducedRepositoryCustom){
         this.propagandaMaterialsProducedRepository = propagandaMaterialsProducedRepository;
         this.propagandaMaterialsContentService = propagandaMaterialsContentService;
+        this.propagandaMaterialsProducedRepositoryCustom = propagandaMaterialsProducedRepositoryCustom ;
     }
 
     @Override
@@ -96,7 +102,6 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
 
     /**
      * 提交申请
-     * TODO 方法参数 id 还是 PropagandaMaterialsProduced 待思考
      * @param id
      * @return
      */
@@ -114,6 +119,67 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
 
     /**
      * 业务查询 : 宣传品（资料）制作查询
+     * Criteria 实现
+     *  title 标题
+     *  applicantName 宣传品申请人姓名
+     *  productionMethod 制作方式
+     *  minTotalCost 总费用最小值
+     *  maxTotalCost 总费用最大值
+     *  approvalStatus 状态
+     * @param query
+     * @return List<PropagandaMaterialsProduced>
+     */
+    @Override
+    public Page findByQuery(PropagandaMaterialsProducedQuery query){
+
+        // 创建分页结构
+        Pageable pageable = new PageRequest( query.getPage(), query.getRows());
+        // 符合条件的总条数
+        long totalNum = propagandaMaterialsProducedRepositoryCustom.countByQuery(query);
+        // 当前页的起始下标
+        long startIndex = pageable.getOffset() ;
+        // 当前页的结束下标
+        long endIndex = startIndex + pageable.getPageSize() > totalNum ? totalNum : startIndex + pageable.getPageSize() ;
+
+        // 创建 返回的dtolist List<PropagandaMaterialsProducedDto>
+        List<PropagandaMaterialsProducedDto> dtos = new ArrayList<>();
+
+        // 得到 查询得到 List<PropagandaMaterialsProduced>
+        List<PropagandaMaterialsProduced> pmpList = (List) propagandaMaterialsProducedRepositoryCustom.findByQuery( query, (int) startIndex, (int) endIndex);
+
+        // 为 每一个 PropagandaMaterialsProducedDto 设置 pmcProductionMethod
+        for( PropagandaMaterialsProduced item : pmpList ){
+
+            // 创建一个 dto
+            PropagandaMaterialsProducedDto dtoItem = new PropagandaMaterialsProducedDto();
+
+            // 得到 宣传品内容 的所有制作方式 （去重复项）
+            Set pmcProductionMethodSets = new HashSet() ;
+            for( PropagandaMaterialsContent itemContent : item.getPropagandaMaterialsContents() ){
+                pmcProductionMethodSets.add(itemContent.getProductionMethod());
+            }
+
+            // 构造 dto 中的 pmcProductionMethod
+            for( Iterator pmcProductionMethodSetsI = pmcProductionMethodSets.iterator() ;
+                    pmcProductionMethodSetsI.hasNext() ; ){
+                ProductionProducedMethod itemMethod = (ProductionProducedMethod) pmcProductionMethodSetsI.next();
+                if( dtoItem.getPmcProductionMethod() == null || "".equals( dtoItem.getPmcProductionMethod().trim() ) ){
+                    dtoItem.setPmcProductionMethod( itemMethod.getName() ) ;
+                    continue;
+                }
+                dtoItem.setPmcProductionMethod( dtoItem.getPmcProductionMethod() + "、" + itemMethod.getName() ) ;
+            }
+            // 组合 PropagandaMaterialsProduced
+            dtoItem.setPmp(item);
+            dtos.add(dtoItem) ;
+        }
+
+        // 返回封装好的结果 Page
+        return new PageImpl( dtos , pageable , totalNum ) ;
+    }
+
+    /**
+     * 业务查询 : 宣传品（资料）制作查询
      * Example 实现
      *  title 标题
      *  applicantName 宣传品申请人姓名
@@ -125,6 +191,7 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
      */
     @Override
     public Page<PropagandaMaterialsProduced> findByMultiExample(PropagandaMaterialsProducedQuery query){
+
         // 定义排序规则
         String[] sortContent = {"applicationDate","totalCost"};
         Sort sort = new Sort( Sort.Direction.DESC, sortContent);
