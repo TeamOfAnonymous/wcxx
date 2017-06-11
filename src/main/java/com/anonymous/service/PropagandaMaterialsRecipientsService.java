@@ -51,14 +51,23 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
     }
 
     @Override
-    public Page<PropagandaMaterialsRecipients> getPropagandaMaterialsRecipientsForPage(Integer currentPage, Integer size, String title, String department, String applicant, Integer approvalStatus) {
+    public Page<PropagandaMaterialsRecipients> getPropagandaMaterialsRecipientsForPage(Integer currentPage, Integer size, String title, String applicant, LocalDate applicationDate, Integer approvalStatus) {
         Sort sort = new Sort(Sort.Direction.fromString("DESC"), "applicationDate");
         Pageable pageable = new PageRequest(currentPage, size, sort);
 
         if (approvalStatus == 100) {
-            return propagandaMaterialsRecipientsRepository.getPropagandaMaterialsRecipientsForPage(title, department, applicant, pageable);
+            if ("".equals(applicationDate) || applicationDate == null) {
+                return propagandaMaterialsRecipientsRepository.getPropagandaMaterialsRecipientsForPage(title, applicant, pageable);
+            } else {
+                return propagandaMaterialsRecipientsRepository.getPropagandaMaterialsRecipientsForPage(title, applicant, applicationDate, pageable);
+            }
         } else {
-            return propagandaMaterialsRecipientsRepository.getPropagandaMaterialsRecipientsForPage(title, department, applicant, approvalStatus, pageable);
+            if ("".equals(applicationDate) || applicationDate == null) {
+                return propagandaMaterialsRecipientsRepository.getPropagandaMaterialsRecipientsForPage(title, applicant, approvalStatus, pageable);
+            } else {
+                return propagandaMaterialsRecipientsRepository.getPropagandaMaterialsRecipientsForPage(title, applicant, applicationDate, approvalStatus, pageable);
+            }
+
         }
     }
 

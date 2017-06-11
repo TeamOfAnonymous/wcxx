@@ -14,7 +14,7 @@ public interface PropagandaMaterialsRecipientsServiceInter {
 
     PropagandaMaterialsRecipients getPropagandaMaterialsRecipients(String id);
 
-    Page<PropagandaMaterialsRecipients> getPropagandaMaterialsRecipientsForPage(Integer currentPage, Integer size, String title, String department, String applicant, Integer approvalStatus);
+    Page<PropagandaMaterialsRecipients> getPropagandaMaterialsRecipientsForPage(Integer currentPage, Integer size, String title, String applicant, LocalDate applicationDate, Integer approvalStatus);
 
     List<List<String>> getPropagandaMaterialsRecipientsByApplicationDate(LocalDate startDate, LocalDate endDate);
 
