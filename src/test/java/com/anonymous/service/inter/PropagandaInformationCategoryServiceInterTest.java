@@ -48,12 +48,12 @@ public class PropagandaInformationCategoryServiceInterTest {
 
     @Test
     public void findByIndistinctName() throws Exception {
-        List<PropagandaInformationCategory> categories = propagandaInformationCategoryService.findByIndistinctName("电视媒体");
-        System.out.println("电视媒体："+categories.get(0).getName());
-
-        categories = propagandaInformationCategoryService.findByIndistinctName("卫视");
-        System.out.println("卫视："+categories.get(0).getName());
-        System.out.println("卫视："+categories.get(1).getName());
+//        List<PropagandaInformationCategory> categories = propagandaInformationCategoryService.findByIndistinctName("电视媒体");
+//        System.out.println("电视媒体："+categories.get(0).getName());
+//
+//        categories = propagandaInformationCategoryService.findByIndistinctName("卫视");
+//        System.out.println("卫视："+categories.get(0).getName());
+//        System.out.println("卫视："+categories.get(1).getName());
     }
 
 }
