@@ -1,4 +1,4 @@
-package com.anonymous.repository;
+package com.anonymous.repository.PropagandaMaterialsProduced;
 
 import com.anonymous.domain.PropagandaMaterialsProduced.PropagandaMaterialsContent;
 import org.springframework.data.jpa.repository.JpaRepository;
