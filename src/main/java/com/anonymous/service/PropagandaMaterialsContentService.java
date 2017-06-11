@@ -1,8 +1,7 @@
 package com.anonymous.service;
 
 import com.anonymous.domain.PropagandaMaterialsProduced.PropagandaMaterialsContent;
-import com.anonymous.domain.PropagandaMaterialsProduced.PropagandaMaterialsProduced;
-import com.anonymous.repository.PropagandaMaterialsContentRepository;
+import com.anonymous.repository.PropagandaMaterialsProduced.PropagandaMaterialsContentRepository;
 import com.anonymous.service.inter.PropagandaMaterialsContentServiceInter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
