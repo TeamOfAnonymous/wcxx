@@ -79,7 +79,7 @@ public class PpgdaInfStatisticsService implements PpgdaInfStatisticsServiceInter
 				mainCategories.add(mainCategory);
 		}
 		//建立统计数据map
-		Map<String, List<Integer>> statisticsMap = new HashMap<>(users.size() + 1);
+		Map<String, List<Integer>> statisticsMap = new LinkedHashMap<>(users.size() + 1);
 		//建立列总计列表
 		List<Integer> columnSum = new ArrayList<>(mainCategories.size()+1);
 		//初始化列总计列表
@@ -120,6 +120,8 @@ public class PpgdaInfStatisticsService implements PpgdaInfStatisticsServiceInter
 		users.add("总数");
 		//添加总计表头
 		mainCategories.add("总数");
+		//添加发布人
+		mainCategories.add(0, "发布人");
 		//将行总数添加到统计map中
 		statisticsMap.put("总数", columnSum);
 

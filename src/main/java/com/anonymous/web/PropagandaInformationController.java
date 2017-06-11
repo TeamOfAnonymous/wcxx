@@ -1,12 +1,17 @@
 package com.anonymous.web;
 
 import com.anonymous.domain.PropagandaInformation;
+import com.anonymous.service.PpgdaInfStatisticsService;
+import com.anonymous.service.inter.PpgdaInfStatisticsServiceInter;
 import com.anonymous.service.inter.PropagandaInformationServiceInter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 /**
  * Description：enter your comment
@@ -18,6 +23,9 @@ public class PropagandaInformationController {
 
 	@Autowired
 	private PropagandaInformationServiceInter propagandaInformationService;
+
+	@Autowired
+	private PpgdaInfStatisticsServiceInter ppgdaInfStatisticsService;
 
 	@ResponseBody
 	@ApiOperation(value = "添加宣传信息")
@@ -33,4 +41,11 @@ public class PropagandaInformationController {
 		return  propagandaInformationService.getById(id);
 	}
 
+	@ResponseBody
+	@ApiOperation(value = "获取统计信息")
+	@RequestMapping(value = "getStatisticsData", method = RequestMethod.GET)
+	public PpgdaInfStatisticsService.StatisticsData getStatisticsData(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+	                                                                  @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+		return ppgdaInfStatisticsService.getStatisticsData(startDate, endDate);
+	}
 }

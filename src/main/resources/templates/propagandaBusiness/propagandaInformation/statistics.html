@@ -1,105 +1,124 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="UTF-8" />
-		<title>宣传信息发布统计</title>
-		<link rel="stylesheet" href="../../../vendor/bootstrap-3.3.7/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="../../../css/public.css" />
-		<link rel="stylesheet" href="../../../css/statisticalTable.css" />
-	</head>
+<head>
+    <meta charset="UTF-8"/>
+    <title>宣传信息发布统计</title>
+    <link rel="stylesheet" href="../../../vendor/bootstrap-3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../../css/public.css"/>
+    <link rel="stylesheet" href="../../../css/statisticalTable.css"/>
+</head>
 
-	<body>
-		<div class="container-fluid setMinWidth statistical-table">
-			<div class="handle-top">
-				<form class="form-inline">
-					<div class="form-group">
-						<label>统计时段:</label>
-						<input type="date" class="form-control input-sm" /> -
-						<input type="date" class="form-control input-sm" />
-					</div>
-					<button type="button" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-search"></span>
-						查询
-					</button>
-					<button type="button" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-repeat"></span>
-						重置
-					</button>
-					<button type="button" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-download-alt"></span>
-						重置
-					</button>
-				</form>
-			</div>
+<body>
+<div class="container-fluid setMinWidth statistical-table">
+    <div class="handle-top">
+        <form class="form-inline">
+            <div class="form-group">
+                <label>统计时段:</label>
+                <input type="date" class="form-control input-sm" id="startDate"/> -
+                <input type="date" class="form-control input-sm" id="endDate"/>
+            </div>
+            <button type="button" class="btn btn-default btn-sm" onclick="queryDate()">
+                <span class="glyphicon glyphicon-search"></span>
+                查询
+            </button>
+            <button type="button" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-repeat"></span>
+                重置
+            </button>
+            <button type="button" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-download-alt"></span>
+                重置
+            </button>
+        </form>
+    </div>
 
-			<div class="data-table statistical-table">
-				<h3>宣传信息发布统计表</h3>
-				<div class="st-info">
-					<span>统计时段&nbsp;:&nbsp;2014-01-01-2014-06-30</span>
-					<span>统计人:XXX</span>
-				</div>
-				<table class="table table-bordered table-hover">
-					<thead>
-						<tr>
-							<th>No.</th>
-							<th>类别</th>
-							<th>电视媒体类</th>
-							<th>电视海报类</th>
-							<th>新闻稿件类</th>
-							<th>微博微信类</th>
-							<th>其它</th>
-							<th>总计</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>1</td>
-							<td>test</td>
-							<td>test</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>78</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>test</td>
-							<td>test</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>78</td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>test</td>
-							<td>test</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>87</td>
-						</tr>
-						<tr>
-							<td>-</td>
-							<td>总计</td>
-							<td>12</td>
-							<td>11</td>
-							<td>51</td>
-							<td>54</td>
-							<td>45</td>
-							<td>78</td>
-						</tr>
-					</tbody>
+    <div class="data-table statistical-table">
+        <h3>宣传信息发布统计表</h3>
+        <div class="st-info">
+            <span>统计时段&nbsp;:&nbsp;2014-01-01-2014-06-30</span>
+            <span>统计人:XXX</span>
+        </div>
+        <table class="table table-bordered table-hover" id="statistics_table" >
+        </table>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
+<script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../vendor/template-web-min.js"></script>
+<script id="template_table" type="text/html">
+    {{set temp = 1}}
+    <thead>
+    <tr>
+        <td>No.</td>
+        {{each mainCategories as head h}}
+        <td>{{head}}</td>
+        {{/each}}
+    </tr>
+    </thead>
+    <tbody>
+    {{each statisticsMap as content c}}
+    <tr>
+        <td>{{temp++}}</td>
+        <td>{{c}}</td>
+        {{each content as index i}}
+        <td>{{index}}</td>
+        {{/each}}
+    </tr>
+    {{/each}}
+    </tbody>
+</script>
+<script>
+    $(function () {
+        var date_ = new Date();
+        var year = date_.getFullYear();
+        var month = date_.getMonth() + 1;
+        month = month > 10 ? month : '0' + month.toString();
+        var startDate = year + '-' + month + '-01';
+        date_ = new Date(year, month, 0);
+        var endDate = year + '-' + month + '-' + date_.getDate();
 
-				</table>
-			</div>
-		</div>
-		<script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
-		<script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-	</body>
+        var data = {"startDate": startDate, "endDate": endDate};
+        console.log(data);
+        $.ajax({
+            type: "GET",
+            url: "/getStatisticsData",
+            data: data,
+            dataType: "json",
+            success: function (data) {
+                var my_table = template('template_table', data)
+                document.getElementById('statistics_table').innerHTML = my_table;
+                console.log(data);
+            }
+        });
+    });
+
+    queryDate = function () {
+
+        var startDate = $("#startDate").val();
+        var endDate = $("#endDate").val();
+
+        var data = {"startDate": startDate, "endDate": endDate};
+        console.log(data);
+        if (data.startDate === "" || data.endDate === "") {
+           alert("请填入正确的日期！");
+           return;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/getStatisticsData",
+            data: data,
+            dataType: "json",
+            success: function (data) {
+                var my_table = template('template_table', data)
+                document.getElementById('statistics_table').innerHTML = my_table;
+                console.log(data);
+            }
+        });
+    }
+
+</script>
 
 </html>
