@@ -23,5 +23,7 @@ public interface PropagandaMaterialsProducedServiceInter {
 
     Page findByMultiExample(PropagandaMaterialsProducedQuery query) ;
 
+    Page findByQuery(PropagandaMaterialsProducedQuery query) ;
+
     List<List<String>> statisticalQuery(PropagandaMaterialsProducedStatisticalQuery query) ;
 }
