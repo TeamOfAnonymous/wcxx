@@ -121,4 +121,42 @@ public class PropagandaBusinessLinkController {
     public String goPropagandaMaterialsRecipientsStatisticsForm() {
         return "propagandaBusiness/statistics/propagandaMaterialsRecipientsStatisticsForm";
     }
+
+    @GetMapping(value = "propagandaWorkProgram/goPropagandaWorkProgramQuery")
+    @ApiOperation(value = "去到宣传工作方案查询")
+    public String goPropagandaWorkProgramQuery() {
+        return "propagandaBusiness/propagandaWorkProgram/query";
+    }
+
+    @GetMapping(value = "propagandaWorkProgram/goPropagandaWorkProgramApply")
+    @ApiOperation(value = "去到宣传工作方案申请")
+    public String goPropagandaWorkProgramApply() {
+        return "propagandaBusiness/propagandaWorkProgram/apply";
+    }
+
+    @GetMapping(value = "propagandaWorkProgram/goPropagandaWorkProgramReport")
+    @ApiOperation(value = "去到宣传工作方案进度汇报")
+    public String goPropagandaWorkProgramReport() {
+        return "propagandaBusiness/propagandaWorkProgram/report";
+    }
+
+    @GetMapping(value = "propagandaWorkPlan/goPropagandaWorkPlanQuery")
+    @ApiOperation(value = "去到宣传计划查询")
+    public String goPropagandaWorkPlanQuery() {
+        return "propagandaBusiness/propagandaWorkPlan/query";
+    }
+
+    @GetMapping(value = "propagandaWorkPlan/goPropagandaWorkPlanApply")
+    @ApiOperation(value = "去到宣传计划申请")
+    public String goPropagandaWorkPlanApply() {
+        return "propagandaBusiness/propagandaWorkPlan/apply";
+    }
+
+    @GetMapping(value = "propagandaWorkPlan/goPropagandaWorkPlanReport")
+    @ApiOperation(value = "去到宣传计划进度汇报")
+    public String goPropagandaWorkPlanReport() {
+        return "propagandaBusiness/propagandaWorkPlan/report";
+    }
+
+
 }
