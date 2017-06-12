@@ -28,7 +28,7 @@
             </button>
             <button type="button" class="btn btn-default btn-sm">
                 <span class="glyphicon glyphicon-download-alt"></span>
-                重置
+                导出
             </button>
         </form>
     </div>
@@ -46,6 +46,7 @@
 <script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
 <script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../../../vendor/template-web-min.js"></script>
+<script type="text/javascript" src="../../../js/public.js"></script>
 <script id="data_table" type="text/html">
     <thead>
         <tr>
@@ -94,6 +95,7 @@
             success: function (data) {
                 var html = template('data_table', data);
                 document.getElementById('table').innerHTML = html;
+
             }
         });
     });
