@@ -127,7 +127,7 @@ function mid_table_action(templateId, added_dom, delDom, fnBeforeAdd, fnAfterRem
 $("#btn-reset").on('click', function () {
     var $form = $('.form-inline');
     for(var i = 0,l = $form.length;i<l;i++){
-        $form[i].reset();
+        $form[i].reset()
     }
 });
 
