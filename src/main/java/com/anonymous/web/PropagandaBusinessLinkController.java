@@ -86,5 +86,17 @@ public class PropagandaBusinessLinkController {
         return "propagandaBusiness/propagandaMaterialsRecipients/statistics";
     }
 
+    @GetMapping(value = "/goPropagandaWorkSummaryApply")
+    @ApiOperation(value = "去到宣传工作总结申请")
+    public String goPropagandaWorkSummaryApply() {
+        return "propagandaBusiness/propagandaWorkSummaryApply";
+    }
+
+    @GetMapping(value = "/goPropagandaWorkSummaryQuery")
+    @ApiOperation(value = "去到宣传工作总结查询")
+    public String goPropagandaWorkSummaryQuery() {
+        return "propagandaBusiness/propagandaWorkSummaryQuery";
+    }
+
 
 }
