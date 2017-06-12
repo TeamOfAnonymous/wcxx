@@ -98,5 +98,27 @@ public class PropagandaBusinessLinkController {
         return "propagandaBusiness/propagandaWorkSummaryQuery";
     }
 
+    @GetMapping(value = "/goQueryAndStatistics")
+    @ApiOperation(value = "去到宣传事务查询和统计")
+    public String goQueryAndStatistics() {
+        return "propagandaBusiness/queryAndStatistics";
+    }
 
+    @GetMapping(value = "statistics/goPropagandaInformationStatisticsForm")
+    @ApiOperation(value = "去到宣传信息发布统计报表")
+    public String goPropagandaInformationStatisticsForm() {
+        return "propagandaBusiness/statistics/propagandaInformationStatisticsForm";
+    }
+
+    @GetMapping(value = "statistics/goPropagandaMaterialsProducedStatisticsForm")
+    @ApiOperation(value = "去到宣传品（资料）制作统计报表")
+    public String goPropagandaMaterialsProducedStatisticsForm() {
+        return "propagandaBusiness/statistics/propagandaMaterialsProducedStatisticsForm";
+    }
+
+    @GetMapping(value = "statistics/goPropagandaMaterialsRecipientsStatisticsForm")
+    @ApiOperation(value = "去到宣传物资领用统计报表")
+    public String goPropagandaMaterialsRecipientsStatisticsForm() {
+        return "propagandaBusiness/statistics/propagandaMaterialsRecipientsStatisticsForm";
+    }
 }
