@@ -70,14 +70,7 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
 
     @Override
     public Map<String, Object> getPropagandaMaterialsRecipientsByApplicationDate(LocalDate startDate, LocalDate endDate) {
-        List<PropagandaMaterialsRecipients> propagandaMaterialsRecipients = new ArrayList<>();
-        if (startDate == null || "".equals(startDate)) {
-            propagandaMaterialsRecipients = propagandaMaterialsRecipientsRepository.findAll();
-        } else if (endDate == null || "".equals(endDate)) {
-            propagandaMaterialsRecipients = propagandaMaterialsRecipientsRepository.findByApplicationDate(startDate, LocalDate.now());
-        } else {
-            propagandaMaterialsRecipients = propagandaMaterialsRecipientsRepository.findByApplicationDate(startDate, endDate);
-        }
+        List<PropagandaMaterialsRecipients> propagandaMaterialsRecipients = findByApplicationDate(startDate, endDate);
 
         Set<User> users = new HashSet<>();
         for (PropagandaMaterialsRecipients propagandaMaterialsRecipients1 : propagandaMaterialsRecipients) {
@@ -86,7 +79,7 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
         List<List<String>> statisticsResult = new ArrayList<>();
 
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("heads",createHead());
+        resultMap.put("heads", createHead());
 
         for (User user : users) {
             List<String> result = initResult(user.getName());
@@ -115,14 +108,14 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
             result.set(6, String.valueOf(Integer.parseInt(result.get(1)) + Integer.parseInt(result.get(2)) + Integer.parseInt(result.get(3)) + Integer.parseInt(result.get(4)) + Integer.parseInt(result.get(5))));
             statisticsResult.add(result);
         }
-        resultMap.put("contents",statisticsResult);
+        resultMap.put("contents", statisticsResult);
         List<String> totalResult = initResult("总计");
         for (int i = 1; i < totalResult.size(); i++) {
             for (int j = 0; j < statisticsResult.size(); j++) {
                 totalResult.set(i, String.valueOf(Integer.parseInt(totalResult.get(i)) + Integer.parseInt(statisticsResult.get(j).get(i))));
             }
         }
-        resultMap.put("foots",totalResult);
+        resultMap.put("foots", totalResult);
 
         return resultMap;
     }
@@ -134,6 +127,46 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
             propagandaMaterialsService.delete(propagandaMaterials);
         }
         propagandaMaterialsRecipientsRepository.delete(id);
+    }
+
+    //宣传物资领用统计报表
+    @Override
+    public Map<String, Integer> getPropagandaMaterialsRecipientsStatisticsForm(LocalDate startDate, LocalDate endDate) {
+        List<PropagandaMaterialsRecipients> propagandaMaterialsRecipients = findByApplicationDate(startDate, endDate);
+        Set<String> propagandaMaterialsNames = new HashSet<>();
+        for (PropagandaMaterialsRecipients propagandaMaterialsRecipients1 : propagandaMaterialsRecipients) {
+            for (PropagandaMaterials propagandaMaterials : propagandaMaterialsRecipients1.getPropagandaMaterials()) {
+                propagandaMaterialsNames.add(propagandaMaterials.getName());
+            }
+        }
+        Map<String, Integer> statisticsData = new LinkedHashMap<>();
+        for (String name : propagandaMaterialsNames) {
+            int total = 0;
+            for (PropagandaMaterialsRecipients propagandaMaterialsRecipients1 : propagandaMaterialsRecipients) {
+                for (PropagandaMaterials propagandaMaterials : propagandaMaterialsRecipients1.getPropagandaMaterials()) {
+                    if (name.equals(propagandaMaterials.getName())) {
+                        total = total + propagandaMaterials.getQuantity();
+                    }
+                }
+            }
+            statisticsData.put(name, total);
+        }
+        System.out.println(propagandaMaterialsNames);
+        System.out.println(statisticsData);
+        return statisticsData;
+    }
+
+    //通过日期查询宣传物资领用
+    private List<PropagandaMaterialsRecipients> findByApplicationDate(LocalDate startDate, LocalDate endDate) {
+        List<PropagandaMaterialsRecipients> propagandaMaterialsRecipients = null;
+        if (startDate == null || "".equals(startDate)) {
+            propagandaMaterialsRecipients = propagandaMaterialsRecipientsRepository.findAll();
+        } else if (endDate == null || "".equals(endDate)) {
+            propagandaMaterialsRecipients = propagandaMaterialsRecipientsRepository.findByApplicationDate(startDate, LocalDate.now());
+        } else {
+            propagandaMaterialsRecipients = propagandaMaterialsRecipientsRepository.findByApplicationDate(startDate, endDate);
+        }
+        return propagandaMaterialsRecipients;
     }
 
     private List<String> initResult(String name) {
