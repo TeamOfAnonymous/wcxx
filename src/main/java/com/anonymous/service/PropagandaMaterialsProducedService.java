@@ -2,6 +2,7 @@ package com.anonymous.service;
 
 import com.anonymous.domain.PropagandaMaterialsProduced.*;
 import com.anonymous.domain.PropagandaMaterialsProduced.dto.PropagandaMaterialsProducedDto;
+import com.anonymous.domain.PropagandaMaterialsProduced.dto.PropagandaMaterialsProducedStatisticalDto;
 import com.anonymous.domain.PropagandaMaterialsProduced.query.PropagandaMaterialsProducedStatisticalQuery;
 import com.anonymous.domain.User;
 import com.anonymous.repository.PropagandaMaterialsProduced.PropagandaMaterialsProducedRepository;
@@ -10,8 +11,10 @@ import com.anonymous.service.inter.PropagandaMaterialsProducedServiceInter;
 import com.anonymous.domain.PropagandaMaterialsProduced.query.PropagandaMaterialsProducedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -61,6 +64,15 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
     @Transactional
     public PropagandaMaterialsProduced add(PropagandaMaterialsProduced pm ) {
 
+        //TODO 给该申请添加 申请人
+        //TODO 给该申请添加 负责人
+        // 给该申请设置 审批状态为0 : 0为草稿，1为待审批，2为审核中，3为执行中，4为已完成，5为已归档
+        pm.setApprovalStatus( ApprovalStatus.Draft );
+        //给该申请添加 所属宣传信息申请
+//        PropagandaInformation propagandaInformation = propagandaInformationService.getById( propagandaInformationId );
+//        propagandaMaterialsProduced.setPropagandaInformation(propagandaInformation);
+
+
         // 先保存，目的是为了得到 id ，PropagandaMaterialsContent 保存时才能维护两者的关系
         pm = propagandaMaterialsProducedRepository.save(pm);
 
@@ -73,20 +85,15 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
             item.setPropagandaMaterialsProduced( pm );
             item = propagandaMaterialsContentService.add(item);
             // 更新 总费用
-            totalCost += item.getCost();
+            totalCost += ( item.getCost() * item.getProductionQuantity() ) ;
         }
-
-        //TODO 给该申请添加 申请人
-        //TODO 给该申请添加 负责人
         // 给该申请添加 总费用
         pm.setTotalCost(totalCost);
-        // 给该申请设置 审批状态为0 : 0为草稿，1为待审批，2为审核中，3为执行中，4为已完成，5为已归档
-        pm.setApprovalStatus( ApprovalStatus.Draft );
-        //给该申请添加 所属宣传信息申请
-//        PropagandaInformation propagandaInformation = propagandaInformationService.getById( propagandaInformationId );
-//        propagandaMaterialsProduced.setPropagandaInformation(propagandaInformation);
 
-        return propagandaMaterialsProducedRepository.save(pm);
+        pm = propagandaMaterialsProducedRepository.save(pm);
+
+        // TODO 是否要在保存的的时候直接 提交申请
+        return apply(pm.getId());
     }
 
     /**
@@ -141,41 +148,74 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
         // 当前页的结束下标
         long endIndex = startIndex + pageable.getPageSize() > totalNum ? totalNum : startIndex + pageable.getPageSize() ;
 
-        // 创建 返回的dtolist List<PropagandaMaterialsProducedDto>
-        List<PropagandaMaterialsProducedDto> dtos = new ArrayList<>();
-
         // 得到 查询得到 List<PropagandaMaterialsProduced>
         List<PropagandaMaterialsProduced> pmpList = (List) propagandaMaterialsProducedRepositoryCustom.findByQuery( query, (int) startIndex, (int) endIndex);
 
-        // 为 每一个 PropagandaMaterialsProducedDto 设置 pmcProductionMethod
-        for( PropagandaMaterialsProduced item : pmpList ){
+        // 返回封装好的结果 Page
+        return new PageImpl( pmpTopmpDto( pmpList ) , pageable , totalNum ) ;
+    }
 
-            // 创建一个 dto
-            PropagandaMaterialsProducedDto dtoItem = new PropagandaMaterialsProducedDto();
+    public Page findBySpecification(PropagandaMaterialsProducedQuery query){
 
-            // 得到 宣传品内容 的所有制作方式 （去重复项）
-            Set pmcProductionMethodSets = new HashSet() ;
-            for( PropagandaMaterialsContent itemContent : item.getPropagandaMaterialsContents() ){
-                pmcProductionMethodSets.add(itemContent.getProductionMethod());
-            }
+        // 定义排序规则
+        String[] sortContent = {"applicationDate","totalCost"};
+        Sort sort = new Sort( Sort.Direction.DESC, sortContent);
+        // 创建分页结构
+        Pageable pageable = new PageRequest( query.getPage(), query.getRows(), sort);
 
-            // 构造 dto 中的 pmcProductionMethod
-            for( Iterator pmcProductionMethodSetsI = pmcProductionMethodSets.iterator() ;
-                    pmcProductionMethodSetsI.hasNext() ; ){
-                ProductionProducedMethod itemMethod = (ProductionProducedMethod) pmcProductionMethodSetsI.next();
-                if( dtoItem.getPmcProductionMethod() == null || "".equals( dtoItem.getPmcProductionMethod().trim() ) ){
-                    dtoItem.setPmcProductionMethod( itemMethod.getName() ) ;
-                    continue;
+        // 执行查询 开始
+        Page pmpPage = propagandaMaterialsProducedRepository.findAll(new Specification() {
+            @Override
+            public Predicate toPredicate(Root pmpRoot, CriteriaQuery sqlQuery, CriteriaBuilder builder) {
+
+                // 设置关联表
+                // 设置 PropagandaMaterialsProduced.applicant 对应 User
+                Join<PropagandaMaterialsProduced, User> pmpAndUser = pmpRoot.join("applicant", JoinType.INNER);
+                // 设置 PropagandaMaterialsProduced.propagandaMaterialsContents 对应 propagandaMaterialsContents
+                Join<PropagandaMaterialsProduced, PropagandaMaterialsContent> pmpAndPmc = pmpRoot.join("propagandaMaterialsContents", JoinType.INNER);
+
+                User applicant = null;
+                if( query.getPropagandaMaterialsProduced() != null ){
+                    // 获取查询 Query 中的申请人
+                    applicant = query.getPropagandaMaterialsProduced().getApplicant();
                 }
-                dtoItem.setPmcProductionMethod( dtoItem.getPmcProductionMethod() + "、" + itemMethod.getName() ) ;
+                // 获取查询 Query 中的宣传品
+                PropagandaMaterialsProduced ppm = query.getPropagandaMaterialsProduced();
+
+                List<Predicate> predicateList = new ArrayList<>();
+                // 对 PropagandaMaterialsProduced.applicant.name 进行模糊查询
+                if( applicant != null && applicant.getName() != null ){
+                    predicateList.add( builder.like(pmpAndUser.get("name"), "%" + query.getPropagandaMaterialsProduced().getApplicant().getName() + "%") );
+                }
+                // 对 宣传品标题 进行模糊查询
+                if( ppm != null && ppm.getTitle() != null ){
+                    builder.like(pmpRoot.get("title"), "%" + ppm.getTitle() + "%") ;
+                }
+                // 对 宣传品状态 进行精准查询
+                if( ppm != null && ppm.getApprovalStatus() != null ){
+                    predicateList.add( builder.equal(pmpRoot.get("approvalStatus"), ppm.getApprovalStatus()) );
+                }
+                // 根据 Query 的 maxTotalCost 和 minTotalCost  对 宣传品totalCost 进行范围查询
+                if( query.getMaxTotalCost() > 0 ){
+                    predicateList.add( builder.between(pmpRoot.get("totalCost"), query.getMinTotalCost(), query.getMaxTotalCost()) ) ;
+                }else {
+                    predicateList.add( builder.greaterThanOrEqualTo(pmpRoot.get("totalCost"), query.getMinTotalCost()) ) ;
+                }
+                // 根据 Query 的 productionMethod  对 宣传内容 productionMethod 进行精准查询
+                if( query.getProductionMethod() != null ){
+                    predicateList.add( builder.equal(pmpAndPmc.get("productionMethod"), query.getProductionMethod()) );
+                }
+
+                Predicate[] predicates = new Predicate[predicateList.size()];
+                predicateList.toArray(predicates);
+                sqlQuery.distinct(true).where(predicates);
+                return  sqlQuery.getRestriction();
             }
-            // 组合 PropagandaMaterialsProduced
-            dtoItem.setPmp(item);
-            dtos.add(dtoItem) ;
-        }
+        } , pageable );
+        // 执行查询 结束
 
         // 返回封装好的结果 Page
-        return new PageImpl( dtos , pageable , totalNum ) ;
+        return new PageImpl( pmpTopmpDto( pmpPage.getContent() ) , pageable , pmpPage.getTotalElements() ) ;
     }
 
     /**
@@ -277,7 +317,7 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
      * @return
      */
     @Override
-    public List<List<String>> statisticalQuery(PropagandaMaterialsProducedStatisticalQuery query) {
+    public PropagandaMaterialsProducedStatisticalDto statisticalQuery(PropagandaMaterialsProducedStatisticalQuery query) {
 
         // 找出该日期下的所有 宣传品制作申请
         List<PropagandaMaterialsProduced> pmps = propagandaMaterialsProducedRepository.findByApplicationDateBetween(query.getStartTime() , query.getEndTime());
@@ -354,7 +394,18 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
             System.out.println();
         }
 
-        return resultTable;
+        PropagandaMaterialsProducedStatisticalDto pmpSDto = new PropagandaMaterialsProducedStatisticalDto();
+
+        pmpSDto.setHeader(resultTable.get(0));
+        for(int i = 0 ; i < resultTable.size() ; i++ ){
+            if( i == 0 || i == resultTable.size()-1 ){
+                continue;
+            }
+            pmpSDto.getContent().add(resultTable.get(i));
+        }
+        pmpSDto.setFooter(resultTable.get( resultTable.size()-1));
+
+        return pmpSDto;
     }
 
     /**
@@ -411,6 +462,44 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
         // 添加总计逻辑  -- end
 
         return table;
+    }
+
+    /**
+     * 将 pmp 转换为 pmpDto
+     * @param pmpList
+     * @return
+     */
+    private List<PropagandaMaterialsProducedDto> pmpTopmpDto(List<PropagandaMaterialsProduced> pmpList){
+        // 创建 返回的dtolist List<PropagandaMaterialsProducedDto>
+        List<PropagandaMaterialsProducedDto> dtos = new ArrayList<>();
+
+        // 为 每一个 PropagandaMaterialsProducedDto 设置 pmcProductionMethod
+        for( PropagandaMaterialsProduced item : pmpList ){
+
+            // 创建一个 dto
+            PropagandaMaterialsProducedDto dtoItem = new PropagandaMaterialsProducedDto();
+
+            // 得到 宣传品内容 的所有制作方式 （去重复项）
+            Set pmcProductionMethodSets = new HashSet() ;
+            for( PropagandaMaterialsContent itemContent : item.getPropagandaMaterialsContents() ){
+                pmcProductionMethodSets.add(itemContent.getProductionMethod());
+            }
+
+            // 构造 dto 中的 pmcProductionMethod
+            for( Iterator pmcProductionMethodSetsI = pmcProductionMethodSets.iterator() ;
+                 pmcProductionMethodSetsI.hasNext() ; ){
+                ProductionProducedMethod itemMethod = (ProductionProducedMethod) pmcProductionMethodSetsI.next();
+                if( dtoItem.getPmcProductionMethod() == null || "".equals( dtoItem.getPmcProductionMethod().trim() ) ){
+                    dtoItem.setPmcProductionMethod( itemMethod.getName() ) ;
+                    continue;
+                }
+                dtoItem.setPmcProductionMethod( dtoItem.getPmcProductionMethod() + "、" + itemMethod.getName() ) ;
+            }
+            // 组合 PropagandaMaterialsProduced
+            dtoItem.setPmp(item);
+            dtos.add(dtoItem) ;
+        }
+        return dtos ;
     }
 
 

@@ -7,6 +7,7 @@ import com.anonymous.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +19,11 @@ import java.util.List;
  * decription :
  */
 @Repository
-public interface PropagandaMaterialsProducedRepository extends JpaRepository<PropagandaMaterialsProduced, String> {
+public interface PropagandaMaterialsProducedRepository
+        extends
+        JpaRepository<PropagandaMaterialsProduced, String> ,
+        JpaSpecificationExecutor
+{
 
     /**
      * 通过 开始日期 和 最后日期 查询 宣传品
