@@ -354,6 +354,13 @@ button {
   text-align: center;
   vertical-align: middle; }
 
+.handel-btn {
+  text-align: center;
+  margin: 20px 0; }
+  .handel-btn .btn {
+    padding-left: 40px;
+    padding-right: 50px; }
+
 /*
 .modal-body {
     .handle-top {
