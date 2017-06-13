@@ -70,32 +70,84 @@
 <script type="text/javascript" src="/vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/vendor/chart.js"></script>
 <script type="text/javascript" src="/vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
+<!--[if IE 8 ]>
+<script type="text/javascript" src="../../vendor/es5-shim/es5-shim.min.js"></script>
+<script type="text/javascript" src="../../vendor/es5-shim/es5-sham.min.js"></script>
+<![endif]-->
 <script type="text/javascript" src="/js/public.js"></script>
 <script>
-    var ctx = $("#myChart").get(0).getContext("2d");
-    var dataChart = new Chart(ctx);
-    var data = {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [
-            {
-                fillColor: "rgba(220,220,220,0.5)",
-                strokeColor: "rgba(220,220,220,1)",
-                data: [65, 59, 90, 81, 56, 55, 40]
-            },
-            {
-                fillColor: "rgba(151,187,205,0.5)",
-                strokeColor: "rgba(151,187,205,1)",
-                data: [28, 48, 40, 19, 96, 27, 100]
+
+    var date_ = new Date();
+    var year = date_.getFullYear();
+    var month = date_.getMonth() + 1;
+    month = month > 10 ? month : '0' + month.toString();
+    var startDate = year + '-' + month + '-01';
+    date_ = new Date(year, month, 0);
+    var endDate = year + '-' + month + '-' + date_.getDate();
+
+    var data = {"startDate": startDate, "endDate": endDate};
+
+    $.ajax({
+        type: "GET",
+        url: "/getPropagandaMaterialsRecipientsStatisticsForm",
+        data: data,
+        dataType: "json",
+        success: function (data) {
+            var arr_ = [];
+            var arr_data = [];
+            for (a in data) {
+                arr_.push(a);
+                arr_data.push(data[a])
             }
-        ]
+            showStatisticsForm(arr_, arr_data);
+        }
+    });
+
+    function showStatisticsForm(arr, arr_data) {
+        var ctx = $("#myChart").get(0).getContext("2d");
+        var dataChart = new Chart(ctx);
+        var data = {
+            labels: arr,
+            datasets: [
+                {
+                    fillColor: "rgba(24, 116, 205,1)",
+                    strokeColor: "rgba(24, 116, 205,1)",
+                    data: arr_data
+                },
+                {
+                    fillColor: "rgba(0, 154, 205,1)",
+                    strokeColor: "rgba(0, 154, 205,1)",
+                    data: arr_data
+                }
+            ]
+        }
+        dataChart.Bar(data, {});
     }
-    dataChart.Bar(data, {});
+
     setBtnQuery(function (data) {
         console.log(data.startDate);
         console.log(data.endDate);
         console.log(data.way);
         console.log(data.sortWay);
+        var data = {"startDate": data.startDate, "endDate": data.endDate};
+
+        $.ajax({
+            type: "GET",
+            url: "/getPropagandaMaterialsRecipientsStatisticsForm",
+            data: data,
+            dataType: "json",
+            success: function (data) {
+                var arr_ = [];
+                var arr_data = [];
+                for (a in data) {
+                    arr_.push(a);
+                    arr_data.push(data[a])
+                }
+                showStatisticsForm(arr_, arr_data);
+            }
+        });
     });
+
 </script>
 </body>
 
