@@ -28,7 +28,7 @@
             </button>
             <button type="button" class="btn btn-default btn-sm">
                 <span class="glyphicon glyphicon-download-alt"></span>
-                重置
+                导出
             </button>
         </form>
     </div>
@@ -36,16 +36,18 @@
     <div class="data-table statistical-table">
         <h3>宣传物资领用统计表</h3>
         <div class="st-info">
-            <span>统计时段&nbsp;:&nbsp;2014-01-01-2014-06-30</span>
+            <span id="showDate">统计时段&nbsp;:&nbsp;</span>
             <span>统计人:XXX</span>
         </div>
         <table class="table table-bordered table-hover" id="table">
         </table>
     </div>
 </div>
-<script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
-<script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../../../vendor/template-web-min.js"></script>
+<script type="text/javascript" src="/vendor/jquery1.9.min.js"></script>
+<script type="text/javascript" src="/vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/vendor/template-web-min.js"></script>
+<script type="text/javascript" src="/vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
+<script type="text/javascript" src="/js/public.js"></script>
 <script id="data_table" type="text/html">
     <thead>
         <tr>
@@ -94,6 +96,7 @@
             success: function (data) {
                 var html = template('data_table', data);
                 document.getElementById('table').innerHTML = html;
+                $("#showDate").append(startDate + "——" + endDate);
             }
         });
     });
@@ -111,9 +114,9 @@
             data: data,
             dataType: "json",
             success: function (data) {
-                console.log(data)
                 var html = template('data_table', data);
                 document.getElementById('table').innerHTML = html;
+                $("#showDate").append(startDate + "——" + endDate);
             }
         });
     }

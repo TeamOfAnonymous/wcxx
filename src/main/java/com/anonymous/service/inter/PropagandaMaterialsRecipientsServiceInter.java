@@ -20,4 +20,6 @@ public interface PropagandaMaterialsRecipientsServiceInter {
     Map<String, Object> getPropagandaMaterialsRecipientsByApplicationDate(LocalDate startDate, LocalDate endDate);
 
     void deletedPropagandaMaterialsRecipients(String id);
+
+    Map<String,Integer> getPropagandaMaterialsRecipientsStatisticsForm(LocalDate startDate, LocalDate endDate);
 }
