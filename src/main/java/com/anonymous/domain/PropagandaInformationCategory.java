@@ -27,7 +27,7 @@ public class PropagandaInformationCategory implements Serializable {
     @ManyToOne
     private User creator;//创建人
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "propagandaInformationCategories")
     private List<PropagandaInformation> propagandaInformations = new ArrayList<>();
 
     public PropagandaInformationCategory() {
