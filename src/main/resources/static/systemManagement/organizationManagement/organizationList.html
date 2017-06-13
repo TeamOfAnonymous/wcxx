@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <title>用户列表</title>
     <link rel="stylesheet" href="../../vendor/bootstrap-3.3.7/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="../../vendor/bootstrap-treeview/dist/bootstrap-treeview.min.css" />
-    <link rel="stylesheet" href="../../css/categoryManagement.css" />
+    <link rel="stylesheet" href="../../vendor/bootstrap-treeview/dist/bootstrap-treeview.min.css"/>
+    <link rel="stylesheet" href="../../css/categoryManagement.css"/>
     <link rel="stylesheet" href="../../css/public.css"/>
     <link rel="stylesheet" href="../../vendor/jquery.my-message/css/jquery.my-message.1.1.css"/>
+    <style>
+        .modal-table .table td:first-child{
+            width: auto;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid setMinWidth recipients-to-apply-for-list">
@@ -33,13 +38,12 @@
     </div>
     <div class="handle-button-group">
         <button
-           class="btn btn-default btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg">
+                class="btn btn-default btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg">
             <span class="glyphicon glyphicon-plus"></span> 新建
         </button>
-        <a href="addUser.html"
-           class="btn btn-default btn-sm">
+        <button class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-file"></span> 修改
-        </a>
+        </button>
         <button type="button" class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-remove"></span>
             删除
@@ -127,29 +131,23 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="modal-table">
-                        <h3>宣传信息类别配置</h3>
+                        <h3>组织机构操作</h3>
                         <table class="table table-bordered">
                             <tbody>
                             <tr>
                                 <td>
-                                    <span class="font-red">*</span> 上级目录
+                                    <span class="font-red">*</span> 上级的组织机构
                                 </td>
-                                <td>
+                                <td colspan="3">
                                     <div class="mt-select">
                                         <input type="text" class="form-control input-sm">
                                         <div id="tree"></div>
                                     </div>
                                 </td>
-                                <td>
-                                    <span class="font-red">*</span> 排序号
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control input-sm">
-                                </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <span class="font-red">*</span> 名称(内容)
+                                    <span class="font-red">*</span> 组织机构名称
                                 </td>
                                 <td colspan="3">
 
@@ -158,22 +156,6 @@
                                 </td>
 
                             </tr>
-                            <tr>
-                                <td>
-                                    <span class="font-red">*</span> 状态
-                                </td>
-                                <td>
-                                    <label class="radio-inline">
-                                        <input checked="ture" type="radio" value="" name="inlineRadioOptions"> 启用
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" value="" name="inlineRadioOptions"> 禁用
-                                    </label>
-                                </td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
                             </tbody>
                         </table>
                     </div>
@@ -195,7 +177,7 @@
 <script type="text/javascript" src="../../js/public.js"></script>
 <script>
     var $tree = $("#tree"),
-        $selectInput = $(".mt-select input");
+            $selectInput = $(".mt-select input");
     $selectInput.on("click", function () {
         $tree.slideToggle(200);
         return false;
