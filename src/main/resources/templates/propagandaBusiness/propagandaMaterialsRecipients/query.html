@@ -38,7 +38,7 @@
                     <option value="5">已归档</option>
                 </select>
             </div>
-            <button type="button" class="btn btn-default btn-sm" onclick="query()">
+            <button type="button" class="btn btn-default btn-sm" id="query">
                 <span class="glyphicon glyphicon-search"></span>
                 查询
             </button>
@@ -121,43 +121,43 @@
     </tr>
     </thead>
     <tbody>
-        {{each content as index i}}
-            <tr>
-                <td><input type="checkbox"/></td>
-                <td>{{i+1}}</td>
-                <td>{{index.title}}</td>
-                <td>{{index.applicant.organization.name}}</td>
-                <td>{{index.applicant.name}}</td>
-                <td>{{index.applicationDate}}</td>
-                <td>
-                    {{if index.approvalStatus == 0}}
-                        <span class="font-red">
+    {{each content as index i}}
+    <tr>
+        <td><input type="checkbox"/></td>
+        <td>{{i+1}}</td>
+        <td>{{index.title}}</td>
+        <td>{{index.applicant.organization.name}}</td>
+        <td>{{index.applicant.name}}</td>
+        <td>{{index.applicationDate}}</td>
+        <td>
+            {{if index.approvalStatus == 0}}
+            <span class="font-red">
                             草稿
                         </span>
-                    {{else if index.approvalStatus == 1}}
-                        <span class="font-red">
+            {{else if index.approvalStatus == 1}}
+            <span class="font-red">
                             待审批
                         </span>
-                    {{else if index.approvalStatus == 2}}
-                        <span class="font-red">
+            {{else if index.approvalStatus == 2}}
+            <span class="font-red">
                             审核中
                         </span>
-                    {{else if index.approvalStatus == 3}}
-                        <span class="font-red">
+            {{else if index.approvalStatus == 3}}
+            <span class="font-red">
                             执行中
                         </span>
-                    {{else if index.approvalStatus == 4}}
-                        <span class="font-red">
+            {{else if index.approvalStatus == 4}}
+            <span class="font-red">
                             已完成
                         </span>
-                    {{else if index.approvalStatus == 5}}
-                        <span class="font-red">
+            {{else if index.approvalStatus == 5}}
+            <span class="font-red">
                             已归档
                         </span>
-                    {{/if}}
-                </td>
-            </tr>
-        {{/each}}
+            {{/if}}
+        </td>
+    </tr>
+    {{/each}}
     </tbody>
 </script>
 <script>
@@ -184,33 +184,35 @@
         });
     });
 
-    query = function () {
-        var title = $("#title").val();
-        var applicant = $("#applicant").val();
-        var applicationDate = $("#applicationDate").val();
-        var approvalStatus = $("#approvalStatus").val();
+    $("#query").on('click',
+        function () {
+            var title = $("#title").val();
+            var applicant = $("#applicant").val();
+            var applicationDate = $("#applicationDate").val();
+            var approvalStatus = $("#approvalStatus").val();
 
-        var data = {
-            "currentPage": "0",
-            "size": "10",
-            "title": title,
-            "applicant": applicant,
-            "applicationDate": applicationDate,
-            "approvalStatus": approvalStatus
-        };
+            var data = {
+                "currentPage": "0",
+                "size": "10",
+                "title": title,
+                "applicant": applicant,
+                "applicationDate": applicationDate,
+                "approvalStatus": approvalStatus
+            };
 
-        $.ajax({
-            type: "GET",
-            url: "/getPropagandaMaterialsRecipientsForPage",
-            data: data,
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
-                var html = template('data_table', data);
-                document.getElementById('table').innerHTML = html;
-            }
-        });
-    }
+            $.ajax({
+                type: "GET",
+                url: "/getPropagandaMaterialsRecipientsForPage",
+                data: data,
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    var html = template('data_table', data);
+                    document.getElementById('table').innerHTML = html;
+                }
+            });
+        }
+    )
 
 
 </script>
