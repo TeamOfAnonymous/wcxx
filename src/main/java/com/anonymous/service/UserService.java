@@ -7,6 +7,9 @@ import com.anonymous.service.inter.OrganizationServiceInter;
 import com.anonymous.service.inter.UserServiceInter;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,5 +44,11 @@ public class UserService implements UserServiceInter {
     @Override
     public User getUser(String id) {
         return userRepository.findOne(id);
+    }
+
+    @Override
+    public Page<User> getUsersForPage(Integer currentPage, Integer size, String name, String sex, String organization, String post) {
+        Pageable pageable = new PageRequest(currentPage, size);
+        return userRepository.findByNameAndSexAndOrganizationAndPost(name, sex, organization, post, pageable);
     }
 }

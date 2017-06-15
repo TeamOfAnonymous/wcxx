@@ -1,6 +1,7 @@
 package com.anonymous.service.inter;
 
 import com.anonymous.domain.User;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface UserServiceInter {
     User edit(User user);
 
     User getUser(String id);
+
+    Page<User> getUsersForPage(Integer currentPage, Integer size, String name, String sex, String organization, String post);
 }
