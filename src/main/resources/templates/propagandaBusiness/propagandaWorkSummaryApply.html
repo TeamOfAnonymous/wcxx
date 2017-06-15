@@ -36,7 +36,7 @@
 						<tr>
 							<td><span class="font-red">*</span>标题</td>
 							<td colspan="3">
-								<input type="text" class="form-control input-sm" />
+								<input type="text" class="form-control input-sm" name="title" id="title"/>
 							</td>
 						</tr>
 					</tbody>
@@ -145,9 +145,9 @@
 		<script>
 			var winH = window.screen.height,
 				winW = window.screen.width;
-			$(".ft-b-r-b-left").on("click", "button", function() {
+			/*$(".ft-b-r-b-left").on("click", "button", function() {
 				window.open('../public/submitToDealWith.html', '提交办理', 'height=503, width=760, top=' + (winH - 503) / 2 + ', left=' + (winW - 760) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
-			});
+			});*/
 			//查看流程图
 			$("#readFliwImg").on("click", function() {
 				window.open('../public/flowImg.html', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
@@ -156,6 +156,31 @@
 			var ue = UE.getEditor('editor');
 			//获取html
 			//UE.getEditor('editor').getAllHtml()
+            $(".ft-b-r-b-left").on("click", "button", function() {
+
+                var $data = {
+                    "draftMan": {
+                        "id": "a911e744-d064-4381-95ee-21e431ddbfd4"
+                    },
+                    "draftDate": "2017-02-05",
+                    "approvalStatus": 0,
+                    "id": null,
+                    "content": UE.getEditor('editor').getAllHtml(),
+                    "title": $("#title").val()
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "/addPropagandaWorkSummary",
+                    data: JSON.stringify($data),
+                    contentType:"application/json",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        loading.hide();
+                    }
+                })
+            })
 		</script>
 	</body>
 
