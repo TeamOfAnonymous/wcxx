@@ -6,6 +6,7 @@ import com.anonymous.service.inter.UserServiceInter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,6 +48,18 @@ public class UserController {
     @ResponseBody
     public User getUser(@RequestParam String id) {
         return userService.getUser(id);
+    }
+
+    @RequestMapping(value = "getUsersForPage", method = RequestMethod.GET)
+    @ApiOperation(value = "通过id获取用户人员")
+    @ResponseBody
+    public Page<User> getUsersForPage(@RequestParam Integer currentPage,
+                                      @RequestParam Integer size,
+                                      @RequestParam String name,
+                                      @RequestParam String sex,
+                                      @RequestParam String organization,
+                                      @RequestParam String post) {
+        return userService.getUsersForPage(currentPage, size, name, sex, organization, post);
     }
 
 

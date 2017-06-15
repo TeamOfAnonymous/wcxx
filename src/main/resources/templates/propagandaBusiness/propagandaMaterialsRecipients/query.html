@@ -38,7 +38,7 @@
                     <option value="5">已归档</option>
                 </select>
             </div>
-            <button type="button" class="btn btn-default btn-sm" onclick="query()">
+            <button type="button" class="btn btn-default btn-sm" id="query">
                 <span class="glyphicon glyphicon-search"></span>
                 查询
             </button>
@@ -57,7 +57,7 @@
            class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-file"></span> 归档
         </a>
-        <button type="button" class="btn btn-default btn-sm">
+        <button type="button" class="btn btn-default btn-sm" id="deleted">
             <span class="glyphicon glyphicon-remove"></span>
             删除
         </button>
@@ -69,9 +69,9 @@
     <div class="page">
         <ul class="pagination pagination-sm">
             <li class="disabled">
-						<span href="#" aria-label="Previous">
-							<span aria-hidden="true">&laquo;</span>
-						</span>
+                <span href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </span>
             </li>
             <li class="active">
                 <span href="#">1</span>
@@ -121,43 +121,43 @@
     </tr>
     </thead>
     <tbody>
-        {{each content as index i}}
-            <tr>
-                <td><input type="checkbox"/></td>
-                <td>{{i+1}}</td>
-                <td>{{index.title}}</td>
-                <td>{{index.applicant.organization.name}}</td>
-                <td>{{index.applicant.name}}</td>
-                <td>{{index.applicationDate}}</td>
-                <td>
-                    {{if index.approvalStatus == 0}}
-                        <span class="font-red">
+    {{each content as index i}}
+    <tr>
+        <td><input type="checkbox" data-id="{{index.id}}"/></td>
+        <td>{{i+1}}</td>
+        <td>{{index.title}}</td>
+        <td>{{index.applicant.organization.name}}</td>
+        <td>{{index.applicant.name}}</td>
+        <td>{{index.applicationDate}}</td>
+        <td>
+            {{if index.approvalStatus == 0}}
+            <span class="font-red">
                             草稿
                         </span>
-                    {{else if index.approvalStatus == 1}}
-                        <span class="font-red">
+            {{else if index.approvalStatus == 1}}
+            <span class="font-red">
                             待审批
                         </span>
-                    {{else if index.approvalStatus == 2}}
-                        <span class="font-red">
+            {{else if index.approvalStatus == 2}}
+            <span class="font-red">
                             审核中
                         </span>
-                    {{else if index.approvalStatus == 3}}
-                        <span class="font-red">
+            {{else if index.approvalStatus == 3}}
+            <span class="font-red">
                             执行中
                         </span>
-                    {{else if index.approvalStatus == 4}}
-                        <span class="font-red">
+            {{else if index.approvalStatus == 4}}
+            <span class="font-red">
                             已完成
                         </span>
-                    {{else if index.approvalStatus == 5}}
-                        <span class="font-red">
+            {{else if index.approvalStatus == 5}}
+            <span class="font-red">
                             已归档
                         </span>
-                    {{/if}}
-                </td>
-            </tr>
-        {{/each}}
+            {{/if}}
+        </td>
+    </tr>
+    {{/each}}
     </tbody>
 </script>
 <script>
@@ -170,39 +170,48 @@
             "applicationDate": "",
             "approvalStatus": "100"
         };
-
-        $.ajax({
-            type: "GET",
-            url: "/getPropagandaMaterialsRecipientsForPage",
-            data: data,
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
-                var html = template('data_table', data);
-                document.getElementById('table').innerHTML = html;
-            }
-        });
+        //调用ajax进行查询
+        save(data);
     });
 
-    query = function () {
-        var title = $("#title").val();
-        var applicant = $("#applicant").val();
-        var applicationDate = $("#applicationDate").val();
-        var approvalStatus = $("#approvalStatus").val();
+    $("#query").on('click',
+        function () {
+            var title = $("#title").val();
+            var applicant = $("#applicant").val();
+            var applicationDate = $("#applicationDate").val();
+            var approvalStatus = $("#approvalStatus").val();
 
-        var data = {
-            "currentPage": "0",
-            "size": "10",
-            "title": title,
-            "applicant": applicant,
-            "applicationDate": applicationDate,
-            "approvalStatus": approvalStatus
-        };
+            var data = {
+                "currentPage": "0",
+                "size": "10",
+                "title": title,
+                "applicant": applicant,
+                "applicationDate": applicationDate,
+                "approvalStatus": approvalStatus
+            };
+            //调用ajax进行查询
+            save(data);
+        }
+    )
 
+    //点击删除按钮调用的方法
+    $("#deleted").on('click',
+        function () {
+            var $data = [];
+            var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
+            $inputs.each(function () {
+                $data.push($(this).attr('data-id'));
+            });
+            //调用ajax进行删除
+            deleted($data);
+        }
+    )
+
+    function save($data) {
         $.ajax({
             type: "GET",
             url: "/getPropagandaMaterialsRecipientsForPage",
-            data: data,
+            data: $data,
             dataType: "json",
             success: function (data) {
                 console.log(data);
@@ -212,6 +221,18 @@
         });
     }
 
+
+    //调用后台删除方法
+    function deleted($data) {
+        $.ajax({
+            type: "GET",
+            url: "/deletedPropagandaMaterialsRecipients",
+            data: "ids=" + $data,
+            success: function () {
+                alert("删除成功");
+            }
+        });
+    }
 
 </script>
 </body>
