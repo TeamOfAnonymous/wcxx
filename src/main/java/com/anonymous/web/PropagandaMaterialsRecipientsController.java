@@ -40,8 +40,8 @@ public class PropagandaMaterialsRecipientsController {
 
     @RequestMapping(value = "deletedPropagandaMaterialsRecipients", method = RequestMethod.GET)
     @ApiOperation(value = "通过id删除宣传物资领用")
-    public void deletedPropagandaMaterialsRecipients(@RequestParam String id) {
-        propagandaMaterialsRecipientsService.deletedPropagandaMaterialsRecipients(id);
+    public void deletedPropagandaMaterialsRecipients(@RequestParam String[] ids) {
+        propagandaMaterialsRecipientsService.deletedPropagandaMaterialsRecipients(ids);
     }
 
     @RequestMapping(value = "getPropagandaMaterialsRecipientsStatistics", method = RequestMethod.GET)

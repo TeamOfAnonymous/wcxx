@@ -141,12 +141,14 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
     }
 
     @Override
-    public void deletedPropagandaMaterialsRecipients(String id) {
-        PropagandaMaterialsRecipients propagandaMaterialsRecipients = getPropagandaMaterialsRecipients(id);
-        for (PropagandaMaterials propagandaMaterials : propagandaMaterialsRecipients.getPropagandaMaterials()) {
-            propagandaMaterialsService.delete(propagandaMaterials);
+    public void deletedPropagandaMaterialsRecipients(String[] ids) {
+        for (String id : ids) {
+            PropagandaMaterialsRecipients propagandaMaterialsRecipients = getPropagandaMaterialsRecipients(id);
+            for (PropagandaMaterials propagandaMaterials : propagandaMaterialsRecipients.getPropagandaMaterials()) {
+                propagandaMaterialsService.delete(propagandaMaterials);
+            }
+            propagandaMaterialsRecipientsRepository.delete(id);
         }
-        propagandaMaterialsRecipientsRepository.delete(id);
     }
 
     //宣传物资领用统计报表
