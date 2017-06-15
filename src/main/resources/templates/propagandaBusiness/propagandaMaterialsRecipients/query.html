@@ -194,6 +194,7 @@
         }
     )
 
+    //点击删除按钮调用的方法
     $("#deleted").on('click',
         function () {
             var $data = [];
@@ -201,6 +202,7 @@
             $inputs.each(function () {
                 $data.push($(this).attr('data-id'));
             });
+            //调用ajax进行删除
             deleted($data);
         }
     )
@@ -219,6 +221,8 @@
         });
     }
 
+
+    //调用后台删除方法
     function deleted($data) {
         $.ajax({
             type: "GET",
