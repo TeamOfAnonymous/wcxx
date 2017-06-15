@@ -1,7 +1,7 @@
 package com.anonymous.service;
 
-import com.anonymous.domain.PpgdaInfStatistics;
-import com.anonymous.domain.PropagandaInformationCategory;
+import com.anonymous.domain.PropagandaInformation.PpgdaInfStatistics;
+import com.anonymous.domain.PropagandaInformation.PropagandaInformationCategory;
 import com.anonymous.domain.User;
 import com.anonymous.repository.PpgdaInfStatisticsRepository;
 import com.anonymous.repository.PropagandaInformationCategoryRepository;

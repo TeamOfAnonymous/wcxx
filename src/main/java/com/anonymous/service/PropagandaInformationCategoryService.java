@@ -1,8 +1,7 @@
 package com.anonymous.service;
 
-import com.anonymous.domain.Organization;
-import com.anonymous.domain.PropagandaInformation;
-import com.anonymous.domain.PropagandaInformationCategory;
+import com.anonymous.domain.PropagandaInformation.PropagandaInformation;
+import com.anonymous.domain.PropagandaInformation.PropagandaInformationCategory;
 import com.anonymous.repository.PropagandaInformationCategoryRepository;
 import com.anonymous.service.inter.PropagandaInformationCategoryServiceInter;
 import com.anonymous.service.inter.PropagandaInformationServiceInter;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**

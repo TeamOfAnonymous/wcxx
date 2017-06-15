@@ -1,4 +1,7 @@
-package com.anonymous.domain;
+package com.anonymous.domain.PropagandaInformation;
+
+import com.anonymous.domain.PropagandaInformation.PropagandaInformation;
+import com.anonymous.domain.User;
 
 import javax.persistence.*;
 import java.io.Serializable;

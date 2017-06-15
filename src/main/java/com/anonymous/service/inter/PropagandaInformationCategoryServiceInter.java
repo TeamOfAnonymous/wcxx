@@ -1,10 +1,8 @@
 package com.anonymous.service.inter;
 
-import com.anonymous.domain.Organization;
-import com.anonymous.domain.PropagandaInformationCategory;
+import com.anonymous.domain.PropagandaInformation.PropagandaInformationCategory;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**

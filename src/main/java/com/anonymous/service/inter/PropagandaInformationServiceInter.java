@@ -1,6 +1,8 @@
 package com.anonymous.service.inter;
 
-import com.anonymous.domain.PropagandaInformation;
+import com.anonymous.domain.PropagandaInformation.PpgdaInfQueryCondition;
+import com.anonymous.domain.PropagandaInformation.PropagandaInformation;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -25,4 +27,6 @@ public interface PropagandaInformationServiceInter {
 	PropagandaInformation getById(String id);
 
     List<PropagandaInformation> findByPropagandaInformationCategories(String id);
+
+	Page<PropagandaInformation> findByQueryCondition(PpgdaInfQueryCondition condition);
 }
