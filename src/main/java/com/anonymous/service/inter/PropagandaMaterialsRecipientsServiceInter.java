@@ -21,5 +21,5 @@ public interface PropagandaMaterialsRecipientsServiceInter {
 
     void deletedPropagandaMaterialsRecipients(String id);
 
-    Map<String,Integer> getPropagandaMaterialsRecipientsStatisticsForm(LocalDate startDate, LocalDate endDate);
+    List<Map<String,Integer>> getPropagandaMaterialsRecipientsStatisticsForm(LocalDate startDate, LocalDate endDate);
 }

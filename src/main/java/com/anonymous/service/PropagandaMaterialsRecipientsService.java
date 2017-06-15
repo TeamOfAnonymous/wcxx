@@ -1,6 +1,7 @@
 package com.anonymous.service;
 
 import com.anonymous.domain.PropagandaMaterials;
+import com.anonymous.domain.PropagandaMaterialsProduced.ApprovalStatus;
 import com.anonymous.domain.PropagandaMaterialsRecipients;
 import com.anonymous.domain.User;
 import com.anonymous.repository.PropagandaMaterialsRecipientsRepository;
@@ -131,29 +132,45 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
 
     //宣传物资领用统计报表
     @Override
-    public Map<String, Integer> getPropagandaMaterialsRecipientsStatisticsForm(LocalDate startDate, LocalDate endDate) {
-        List<PropagandaMaterialsRecipients> propagandaMaterialsRecipients = findByApplicationDate(startDate, endDate);
+    public List<Map<String,Integer>> getPropagandaMaterialsRecipientsStatisticsForm(LocalDate startDate, LocalDate endDate) {
+        //获取时间段内所有的宣传物资领用申请
+        List<PropagandaMaterialsRecipients> propagandaMaterialsRecipients1 = findByApplicationDate(startDate, endDate);
         Set<String> propagandaMaterialsNames = new HashSet<>();
-        for (PropagandaMaterialsRecipients propagandaMaterialsRecipients1 : propagandaMaterialsRecipients) {
-            for (PropagandaMaterials propagandaMaterials : propagandaMaterialsRecipients1.getPropagandaMaterials()) {
+        //获取宣传物资名称
+        for (PropagandaMaterialsRecipients propagandaMaterialsRecipients : propagandaMaterialsRecipients1) {
+            for (PropagandaMaterials propagandaMaterials : propagandaMaterialsRecipients.getPropagandaMaterials()) {
                 propagandaMaterialsNames.add(propagandaMaterials.getName());
             }
         }
-        Map<String, Integer> statisticsData = new LinkedHashMap<>();
+        //统计所有的宣传物资领用数量
+        Map<String, Integer> statisticsTotalData = statisticsData(propagandaMaterialsNames, propagandaMaterialsRecipients1);
+        //统计所有的宣传物资实际领用数量
+        int approvalStatus = 3;
+        List<PropagandaMaterialsRecipients> propagandaMaterialsRecipients2 = propagandaMaterialsRecipientsRepository.findByApplicationDateAndApprovalStatus(startDate,endDate,approvalStatus);
+        Map<String, Integer> statisticsPracticalData = statisticsData(propagandaMaterialsNames, propagandaMaterialsRecipients2);
+        System.out.println(propagandaMaterialsNames);
+        System.out.println(statisticsTotalData);
+        System.out.println(statisticsPracticalData);
+        List<Map<String,Integer>> data = new ArrayList<>();
+        data.add(statisticsTotalData);
+        data.add(statisticsPracticalData);
+        return data;
+    }
+
+    private Map<String, Integer> statisticsData(Set<String> propagandaMaterialsNames, List<PropagandaMaterialsRecipients> propagandaMaterialsRecipients2) {
+        Map<String, Integer> statisticsPracticalData = new LinkedHashMap<>();
         for (String name : propagandaMaterialsNames) {
             int total = 0;
-            for (PropagandaMaterialsRecipients propagandaMaterialsRecipients1 : propagandaMaterialsRecipients) {
-                for (PropagandaMaterials propagandaMaterials : propagandaMaterialsRecipients1.getPropagandaMaterials()) {
+            for (PropagandaMaterialsRecipients propagandaMaterialsRecipients : propagandaMaterialsRecipients2) {
+                for (PropagandaMaterials propagandaMaterials : propagandaMaterialsRecipients.getPropagandaMaterials()) {
                     if (name.equals(propagandaMaterials.getName())) {
                         total = total + propagandaMaterials.getQuantity();
                     }
                 }
             }
-            statisticsData.put(name, total);
+            statisticsPracticalData.put(name, total);
         }
-        System.out.println(propagandaMaterialsNames);
-        System.out.println(statisticsData);
-        return statisticsData;
+        return statisticsPracticalData;
     }
 
     //通过日期查询宣传物资领用
