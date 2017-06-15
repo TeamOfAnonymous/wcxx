@@ -1,156 +1,212 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="UTF-8">
-		<title>宣传工作总结报告列表</title>
-		<link rel="stylesheet" href="../../vendor/bootstrap-3.3.7/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="../../css/public.css" />
-		<link rel="stylesheet" href="../../css/newPublicityPlanList.css" />
-		<link rel="stylesheet" href="../../vendor/jquery.my-message/css/jquery.my-message.1.1.css" />
-	</head>
+<head>
+    <meta charset="UTF-8">
+    <title>宣传工作总结报告列表</title>
+    <link rel="stylesheet" href="../../vendor/bootstrap-3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../css/public.css"/>
+    <link rel="stylesheet" href="../../css/newPublicityPlanList.css"/>
+    <link rel="stylesheet" href="../../vendor/jquery.my-message/css/jquery.my-message.1.1.css"/>
+</head>
 
-	<body>
-		<div class="container-fluid setMinWidth new-publicity-plan-list">
-			<div class="handle-top">
-				<form class="form-inline">
-					<div class="form-group">
-						<label>标题:</label>
-						<input type="text" class="form-control input-sm">
-					</div>
-					<div class="form-group">
-						<label>拟稿人:</label>
-						<input type="text" class="form-control input-sm">
-					</div>
-					<div class="form-group">
-						<label>拟稿时间:</label>
-						<input type="text" class="form-control input-sm">
-					</div>
-					<div class="form-group">
-						<label>状态:</label>
-						<select name="" class="form-control input-sm">
-							<option value="">全部</option>
-						</select>
-					</div>
-					<button type="button" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-search"></span>
-						查询
-					</button>
-					<button type="button" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-repeat"></span>
-						重置
-					</button>
-				</form>
-			</div>
-			<div class="handle-button-group">
-				<a href="/propagandaBusiness/goPropagandaWorkSummaryApply" class="btn btn-default btn-sm">
-					<span class="glyphicon glyphicon-plus"></span> 新建
-				</a>
-				<button type="button" class="btn btn-default btn-sm">
-					<span class="glyphicon glyphicon-file"></span> 归档
-				</button>
-				<button type="button" class="btn btn-default btn-sm">
-					<spam class="glyphicon glyphicon-remove"></spam>
-					删除</button>
-			</div>
-			<div class="data-table">
-				<table class="table table-bordered table-hover checked-table">
-					<thead>
-						<tr>
-							<th><input type="checkbox" /></th>
-							<th>No.</th>
-							<th>标题</th>
-							<th>拟稿部门</th>
-							<th>拟稿人</th>
-							<th>拟稿时间</th>
-							<th>状态</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><input type="checkbox" /></td>
-							<td>1</td>
-							<td>
-								<a href="readPublicityPlan.html">查看宣传计划</a>
-							</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>
-								<span class="font-red">
-								待审批
-							</span>
-							</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" /></td>
-							<td>2</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>
-								<span>
-								执行中
-							</span>
-							</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" /></td>
-							<td>3</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>
-								<span>已归档</span>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="page">
-				<ul class="pagination pagination-sm">
-					<li class="disabled">
-						<span href="#" aria-label="Previous">
-							<span aria-hidden="true">&laquo;</span>
-						</span>
-					</li>
-					<li class="active">
-						<span href="#">1</span>
-					</li>
-					<li>
-						<span href="#">2</span>
-					</li>
-					<li>
-						<span href="#">3</span>
-					</li>
-					<li>
-						<span href="#">4</span>
-					</li>
-					<li>
-						<span href="#">5</span>
-					</li>
-					<li>
-						<span href="#" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
-						</span>
-					</li>
-					<li class="li-page-handle">
-						转到第
-						<input type="text" class="form-control input-sm" /> 页
-						<button type="button" class="btn btn-default btn-sm">
-							GO
-						</button>
-					</li>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<script type="text/javascript" src="../../vendor/jquery1.9.min.js"></script>
-		<script type="text/javascript" src="../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="../../vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
-		<script type="text/javascript" src="../../js/public.js"></script>
-	</body>
+<body>
+<div class="container-fluid setMinWidth new-publicity-plan-list">
+    <div class="handle-top">
+        <form class="form-inline">
+            <div class="form-group">
+                <label>标题:</label>
+                <input name="title" id="title" type="text" class="form-control input-sm">
+            </div>
+            <div class="form-group">
+                <label>拟稿人:</label>
+                <input name="draftMan" id="draftMan" type="text" class="form-control input-sm">
+            </div>
+            <div class="form-group">
+                <label>拟稿时间:</label>
+                <input name="draftDate" id="draftDate" type="text" class="form-control input-sm">
+            </div>
+            <div class="form-group">
+                <label>状态:</label>
+                <select name="approvalStatus" id="approvalStatus" class="form-control input-sm">
+                    <option value="100">全部</option>
+                    <option value="0">草稿</option>
+                    <option value="1">待审批</option>
+                    <option value="2">审核中</option>
+                    <option value="2">执行中</option>
+                    <option value="4">已完成</option>
+                    <option value="5">已归档</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-default btn-sm" id="query">
+                <span class="glyphicon glyphicon-search"></span>
+                查询
+            </button>
+            <button type="button" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-repeat"></span>
+                重置
+            </button>
+        </form>
+    </div>
+    <div class="handle-button-group">
+        <a href="/propagandaBusiness/goPropagandaWorkSummaryApply" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-plus"></span> 新建
+        </a>
+        <button type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-file"></span> 归档
+        </button>
+        <button type="button" class="btn btn-default btn-sm" id="delete">
+            <spam class="glyphicon glyphicon-remove"></spam>
+            删除
+        </button>
+    </div>
+    <div class="data-table">
+        <table class="table table-bordered table-hover checked-table" id="table">
+        </table>
+    </div>
+    <div class="page">
+        <ul class="pagination pagination-sm">
+            <li class="disabled">
+                <span href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </span>
+            </li>
+            <li class="active">
+                <span href="#">1</span>
+            </li>
+            <li>
+                <span href="#">2</span>
+            </li>
+            <li>
+                <span href="#">3</span>
+            </li>
+            <li>
+                <span href="#">4</span>
+            </li>
+            <li>
+                <span href="#">5</span>
+            </li>
+            <li>
+                <span href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </span>
+            </li>
+            <li class="li-page-handle">
+                转到第
+                <input type="text" class="form-control input-sm"/> 页
+                <button type="button" class="btn btn-default btn-sm">
+                    GO
+                </button>
+            </li>
+            </li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript" src="../../vendor/jquery1.9.min.js"></script>
+<script type="text/javascript" src="../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
+<script type="text/javascript" src="../../../vendor/template-web-min.js"></script>
+<script type="text/javascript" src="../../js/public.js"></script>
+</body>
+<script id="data_table" type="text/html">
+    <thead>
+    <tr>
+        <th><input type="checkbox"/></th>
+        <th>No.</th>
+        <th>标题</th>
+        <th>拟稿部门</th>
+        <th>拟稿人</th>
+        <th>拟稿时间</th>
+        <th>状态</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{each content as index i}}
+    <tr>
+        <td><input type="checkbox" value="{{index.id}}"/></td>
+        <td>{{i+1}}</td>
+        <td>{{index.title}}</td>
+        <td>{{index.draftMan.organization.name}}</td>
+        <td>{{index.draftMan.name}}</td>
+        <td>{{index.draftDate}}</td>
+        <td>
+            {{if index.approvalStatus == 0}}
+            <span class="font-red">
+                            草稿
+                        </span>
+            {{else if index.approvalStatus == 1}}
+            <span class="font-red">
+                            待审批
+                        </span>
+            {{else if index.approvalStatus == 2}}
+            <span class="font-red">
+                            审核中
+                        </span>
+            {{else if index.approvalStatus == 3}}
+            <span class="font-red">
+                            执行中
+                        </span>
+            {{else if index.approvalStatus == 4}}
+            <span class="font-red">
+                            已完成
+                        </span>
+            {{else if index.approvalStatus == 5}}
+            <span class="font-red">
+                            已归档
+                        </span>
+            {{/if}}
+        </td>
+    </tr>
+    {{/each}}
+    </tbody>
+</script>
+<script>
+    $(function () {
+        var data = {
+            "currentPage": "0",
+            "size": "10",
+            "title": "",
+            "draftMan": "",
+            "draftDate": "",
+            "approvalStatus": "100"
+        };
 
+        //调用ajax进行查询
+        save(data);
+    })
+
+    $("#query").on('click',
+        function () {
+            var title = $("#title").val();
+            var draftMan = $("#applicant").val();
+            var draftDate = $("#applicationDate").val();
+            var approvalStatus = $("#approvalStatus").val();
+
+            var data = {
+                "currentPage": "0",
+                "size": "10",
+                "title": title,
+                "draftMan": draftMan,
+                "draftDate": draftDate,
+                "approvalStatus": approvalStatus
+            };
+            //调用ajax进行查询
+            save(data);
+        }
+    )
+
+    function save(data) {
+        $.ajax({
+            type: "GET",
+            url: "/getPropagandaWorkSummaryForPage",
+            data: data,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                var html = template('data_table', data);
+                document.getElementById('table').innerHTML = html;
+            }
+        });
+    }
+</script>
 </html>
