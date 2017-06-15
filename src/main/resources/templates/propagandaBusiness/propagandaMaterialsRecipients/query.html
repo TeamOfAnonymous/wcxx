@@ -57,7 +57,7 @@
            class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-file"></span> 归档
         </a>
-        <button type="button" class="btn btn-default btn-sm">
+        <button type="button" class="btn btn-default btn-sm" id="deleted">
             <span class="glyphicon glyphicon-remove"></span>
             删除
         </button>
@@ -69,9 +69,9 @@
     <div class="page">
         <ul class="pagination pagination-sm">
             <li class="disabled">
-						<span href="#" aria-label="Previous">
-							<span aria-hidden="true">&laquo;</span>
-						</span>
+                <span href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </span>
             </li>
             <li class="active">
                 <span href="#">1</span>
@@ -123,7 +123,7 @@
     <tbody>
     {{each content as index i}}
     <tr>
-        <td><input type="checkbox"/></td>
+        <td><input type="checkbox" data-id="{{index.id}}"/></td>
         <td>{{i+1}}</td>
         <td>{{index.title}}</td>
         <td>{{index.applicant.organization.name}}</td>
@@ -170,18 +170,8 @@
             "applicationDate": "",
             "approvalStatus": "100"
         };
-
-        $.ajax({
-            type: "GET",
-            url: "/getPropagandaMaterialsRecipientsForPage",
-            data: data,
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
-                var html = template('data_table', data);
-                document.getElementById('table').innerHTML = html;
-            }
-        });
+        //调用ajax进行查询
+        save(data);
     });
 
     $("#query").on('click',
@@ -199,21 +189,46 @@
                 "applicationDate": applicationDate,
                 "approvalStatus": approvalStatus
             };
-
-            $.ajax({
-                type: "GET",
-                url: "/getPropagandaMaterialsRecipientsForPage",
-                data: data,
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                    var html = template('data_table', data);
-                    document.getElementById('table').innerHTML = html;
-                }
-            });
+            //调用ajax进行查询
+            save(data);
         }
     )
 
+    $("#deleted").on('click',
+        function () {
+            var $data = [];
+            var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
+            $inputs.each(function () {
+                $data.push($(this).attr('data-id'));
+            });
+            deleted($data);
+        }
+    )
+
+    function save($data) {
+        $.ajax({
+            type: "GET",
+            url: "/getPropagandaMaterialsRecipientsForPage",
+            data: $data,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                var html = template('data_table', data);
+                document.getElementById('table').innerHTML = html;
+            }
+        });
+    }
+
+    function deleted($data) {
+        $.ajax({
+            type: "GET",
+            url: "/deletedPropagandaMaterialsRecipients",
+            data: "ids=" + $data,
+            success: function () {
+                alert("删除成功");
+            }
+        });
+    }
 
 </script>
 </body>
