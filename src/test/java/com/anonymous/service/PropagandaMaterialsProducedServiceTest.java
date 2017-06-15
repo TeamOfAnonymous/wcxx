@@ -1,6 +1,7 @@
 package com.anonymous.service;
 
 import com.anonymous.domain.PropagandaMaterialsProduced.*;
+import com.anonymous.domain.PropagandaMaterialsProduced.dto.PropagandaMaterialsProducedStatisticalDto;
 import com.anonymous.domain.PropagandaMaterialsProduced.query.PropagandaMaterialsProducedStatisticalQuery;
 import com.anonymous.domain.User;
 import com.anonymous.domain.PropagandaMaterialsProduced.query.PropagandaMaterialsProducedQuery;
@@ -158,20 +159,58 @@ public class PropagandaMaterialsProducedServiceTest {
     }
 
     @Test
+    public void testFindBySpecification(){
+        PropagandaMaterialsProducedQuery query = new PropagandaMaterialsProducedQuery();
+        PropagandaMaterialsProduced p = new PropagandaMaterialsProduced();
+
+        query.setPropagandaMaterialsProduced(p);
+
+        query.setMinTotalCost(0);
+        query.setMaxTotalCost(100);
+
+        query.setPage(1);
+        query.setRows(3);
+
+//        query.setProductionMethod(ProductionProducedMethod.ProducedInner);
+
+        // 通过宣传品标题
+        p.setTitle("tle");
+
+        // 通过宣传品申请人姓名查找
+        User user = new User();
+        //       user.setName("小");
+        user.setName("");
+        p.setApplicant(user);
+
+        // 通过 状态
+//        p.setApprovalStatus(ApprovalStatus.Draft);
+
+        System.out.println(query.toString());
+
+        Page<PropagandaMaterialsProduced> page = propagandaMaterialsProducedService.findBySpecification(query);
+
+        System.out.println("getTotalElements " + page.getTotalElements());
+        System.out.println("getTotalPages " + page.getTotalPages());
+        System.out.println("getNumberOfElements " + page.getNumberOfElements());
+        System.out.println("getNumber " + page.getNumber());
+        System.out.println("getSize " + page.getSize());
+    }
+
+    @Test
     public void testFindStatisticalQuery(){
         PropagandaMaterialsProducedStatisticalQuery query = new PropagandaMaterialsProducedStatisticalQuery(
                 LocalDate.of( 2011, 10 , 4 ),
                 LocalDate.of( 2019, 6 , 10 )
         );
-        List<List<String>> resultTable = propagandaMaterialsProducedService.statisticalQuery(query);
+        PropagandaMaterialsProducedStatisticalDto resultTable = propagandaMaterialsProducedService.statisticalQuery(query);
 
         // 遍历该 二维表
-        for( List<String> row : resultTable ){
-            for( String column : row){
-                System.out.print("\t " + column);
-            }
-            System.out.println();
-        }
-        System.out.println();
+//        for( List<String> row : resultTable ){
+//            for( String column : row){
+//                System.out.print("\t " + column);
+//            }
+//            System.out.println();
+//        }
+//        System.out.println();
     }
 }

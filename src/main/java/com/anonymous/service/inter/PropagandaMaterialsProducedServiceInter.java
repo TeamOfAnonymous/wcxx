@@ -1,6 +1,7 @@
 package com.anonymous.service.inter;
 
 import com.anonymous.domain.PropagandaMaterialsProduced.PropagandaMaterialsProduced;
+import com.anonymous.domain.PropagandaMaterialsProduced.dto.PropagandaMaterialsProducedStatisticalDto;
 import com.anonymous.domain.PropagandaMaterialsProduced.query.PropagandaMaterialsProducedQuery;
 import com.anonymous.domain.PropagandaMaterialsProduced.query.PropagandaMaterialsProducedStatisticalQuery;
 import org.springframework.data.domain.Page;
@@ -25,5 +26,7 @@ public interface PropagandaMaterialsProducedServiceInter {
 
     Page findByQuery(PropagandaMaterialsProducedQuery query) ;
 
-    List<List<String>> statisticalQuery(PropagandaMaterialsProducedStatisticalQuery query) ;
+    PropagandaMaterialsProducedStatisticalDto statisticalQuery(PropagandaMaterialsProducedStatisticalQuery query) ;
+
+    Page findBySpecification(PropagandaMaterialsProducedQuery query) ;
 }

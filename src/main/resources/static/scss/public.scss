@@ -140,7 +140,7 @@ button {
     }
   }
   .table {
-    tfoot{
+    tfoot {
       font-weight: bold;
     }
     td {
@@ -498,6 +498,15 @@ button {
         vertical-align: middle;
       }
     }
+  }
+}
+
+.handel-btn {
+  text-align: center;
+  margin: 20px 0;
+  .btn {
+    padding-left: 40px;
+    padding-right: 40px;
   }
 }
 

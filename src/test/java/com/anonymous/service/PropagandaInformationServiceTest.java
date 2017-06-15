@@ -2,6 +2,7 @@ package com.anonymous.service;
 
 import com.anonymous.domain.PropagandaInformation;
 import com.anonymous.domain.PropagandaInformationCategory;
+import com.anonymous.domain.User;
 import com.anonymous.service.inter.PropagandaInformationCategoryServiceInter;
 import com.anonymous.service.inter.PropagandaInformationServiceInter;
 import org.junit.FixMethodOrder;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,14 +49,24 @@ public class PropagandaInformationServiceTest {
 		propagandaInformationCategories.add(propagandaInformationCategoryOne);
 		propagandaInformationCategories.add(propagandaInformationCategoryTwo);
 
+		User user1 = new User();
+		user1.setId("qweqwe");
+
+		User user2 = new User();
+		user2.setId("asdasd");
+
 		//创建一个宣传信息对象1
 		PropagandaInformation propagandaInformationOne = new PropagandaInformation();
 		//创建一个宣传信息对象2
 		PropagandaInformation propagandaInformationTwo = new PropagandaInformation();
 		propagandaInformationOne.setTitle("第一个宣传信息对象");
-		//propagandaInformationOne.setPropagandaInformationCategory(propagandaInformationCategories);
+		propagandaInformationOne.setApplicant(user1);
+		propagandaInformationOne.setApplicationDate(LocalDateTime.now());
+		propagandaInformationOne.setPropagandaInformationCategories(propagandaInformationCategories);
 		propagandaInformationTwo.setTitle("第二个宣传信息对象");
-		//propagandaInformationTwo.setPropagandaInformationCategory(propagandaInformationCategories);
+		propagandaInformationTwo.setApplicant(user2);
+		propagandaInformationTwo.setApplicationDate(LocalDateTime.now());
+		propagandaInformationTwo.setPropagandaInformationCategories(propagandaInformationCategories);
 
 		propagandaInformationService.save(propagandaInformationOne);
 		propagandaInformationService.save(propagandaInformationTwo);

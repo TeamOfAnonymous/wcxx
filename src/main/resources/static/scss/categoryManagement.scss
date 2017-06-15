@@ -10,12 +10,15 @@ $bg-color:#F7F7F7 !default;
     .data-table {
         .table {
             td {
+                vertical-align: middle;
                 .cmt-tree {
-                    display: inline-block;
-                    background-image: url(../img/minus.gif);
+                    display: block;
                     background-repeat: no-repeat;
                     background-position: 6px 6px;
                     padding-left: 21px;
+                    &:first-child{
+                        background-image: url(../img/minus.gif);
+                    }
                 }
                 .cmt-tree.L1 {
                     margin-left: 0;

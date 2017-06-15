@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,43 +61,45 @@ public class PropagandaMaterialsProducedRepositoryCustomImpl implements Propagan
         // 设置 PropagandaMaterialsProduced.propagandaMaterialsContents 对应 propagandaMaterialsContents
         Join<PropagandaMaterialsProduced, PropagandaMaterialsContent> pmpAndPmc = pmpRoot.join("propagandaMaterialsContents", JoinType.INNER);
 
-        // 获取查询 Query 中的申请人
-        User applicant = query.getPropagandaMaterialsProduced().getApplicant();
+        User applicant = null;
+        if( query.getPropagandaMaterialsProduced() != null ){
+            // 获取查询 Query 中的申请人
+            applicant = query.getPropagandaMaterialsProduced().getApplicant();
+        }
         // 获取查询 Query 中的宣传品
         PropagandaMaterialsProduced ppm = query.getPropagandaMaterialsProduced();
 
+        List<Predicate> predicates = new ArrayList<>();
+        // 对 PropagandaMaterialsProduced.applicant.name 进行模糊查询
+        if( applicant != null && applicant.getName() != null ){
+            predicates.add( builder.like(pmpAndUser.get("name"), "%" + query.getPropagandaMaterialsProduced().getApplicant().getName() + "%") );
+        }
+        // 对 宣传品标题 进行模糊查询
+        if( ppm != null && ppm.getTitle() != null ){
+            builder.like(pmpRoot.get("title"), "%" + ppm.getTitle() + "%") ;
+        }
+        // 对 宣传品状态 进行精准查询
+        if( ppm != null && ppm.getApprovalStatus() != null ){
+            predicates.add( builder.equal(pmpRoot.get("approvalStatus"), ppm.getApprovalStatus()) );
+        }
+        // 根据 Query 的 maxTotalCost 和 minTotalCost  对 宣传品totalCost 进行范围查询
+        if( query.getMaxTotalCost() > 0 ){
+            predicates.add( builder.between(pmpRoot.get("totalCost"), query.getMinTotalCost(), query.getMaxTotalCost()) ) ;
+        }else {
+            predicates.add( builder.greaterThanOrEqualTo(pmpRoot.get("totalCost"), query.getMinTotalCost()) ) ;
+        }
+        // 根据 Query 的 productionMethod  对 宣传内容 productionMethod 进行精准查询
+        if( query.getProductionMethod() != null ){
+            predicates.add( builder.equal(pmpAndPmc.get("productionMethod"), query.getProductionMethod()) );
+        }
+
+        Predicate[] pre = new Predicate[predicates.size()];
+        predicates.toArray(pre);
+
+
         sqlQuery
                 .where(
-                        // 对 PropagandaMaterialsProduced.applicant.name 进行模糊查询
-                        builder.and(
-                                applicant != null && applicant.getName() != null ?
-                                        builder.like(pmpAndUser.get("name"), "%" + query.getPropagandaMaterialsProduced().getApplicant().getName() + "%") :
-                                        builder.and()
-                        ),
-                        // 对 宣传品标题 进行模糊查询
-                        builder.and(
-                                ppm != null && ppm.getTitle() != null ?
-                                        builder.like(pmpRoot.get("title"), "%" + ppm.getTitle() + "%") :
-                                        builder.and()
-                        ),
-                        // 对 宣传品状态 进行精准查询
-                        builder.and(
-                                ppm != null && ppm.getApprovalStatus() != null ?
-                                        builder.equal(pmpRoot.get("approvalStatus"), ppm.getApprovalStatus()) :
-                                        builder.and()
-                        ),
-                        // 根据 Query 的 maxTotalCost 和 minTotalCost  对 宣传品totalCost 进行范围查询
-                        builder.and(
-                                query.getMaxTotalCost() > 0 ?
-                                        builder.between(pmpRoot.get("totalCost"), query.getMinTotalCost(), query.getMaxTotalCost()) :
-                                        builder.greaterThanOrEqualTo(pmpRoot.get("totalCost"), query.getMinTotalCost())
-                        ),
-                        // 根据 Query 的 productionMethod  对 宣传内容 productionMethod 进行精准查询
-                        builder.and(
-                                query.getProductionMethod() != null ?
-                                        builder.equal(pmpAndPmc.get("productionMethod"), query.getProductionMethod()) :
-                                        builder.and()
-                        )
+                        pre
                 );
         // 构造 sql 语句  -- end
     }

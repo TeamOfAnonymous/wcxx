@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户列表</title>
+    <link rel="stylesheet" href="../../vendor/bootstrap-3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../css/public.css"/>
+    <link rel="stylesheet" href="../../vendor/jquery.my-message/css/jquery.my-message.1.1.css"/>
+</head>
+<body>
+<div class="container-fluid setMinWidth recipients-to-apply-for-list">
+    <div class="handle-top">
+        <form class="form-inline">
+            <div class="form-group">
+                <label>用户名:</label>
+                <input type="text" class="form-control input-sm" name="title" id="title"/>
+            </div>
+            <div class="form-group">
+                <label>姓名:</label>
+                <input type="text" class="form-control input-sm" name="applicant" id="applicant"/>
+            </div>
+            <div class="form-group">
+                <label>职务:</label>
+                <select class="form-control input-sm">
+                    <option value="100">全部</option>
+                    <option value="0">职务1</option>
+                    <option value="1">职务2</option>
+                    <option value="2">职务3</option>
+                    <option value="2">职务4</option>
+                    <option value="4">职务5</option>
+                    <option value="5">职务6</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-search"></span>
+                查询
+            </button>
+            <button id="btn-reset" type="button" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-repeat"></span>
+                重置
+            </button>
+        </form>
+    </div>
+    <div class="handle-button-group">
+        <a href="/systemManagement/goAddUser"
+           class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-plus"></span> 新建
+        </a>
+        <a href="addUser.html"
+           class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-file"></span> 修改
+        </a>
+        <button type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-remove"></span>
+            删除
+        </button>
+    </div>
+    <div class="data-table">
+        <table class="table table-bordered table-hover checked-table">
+            <thead>
+            <tr>
+                <th><input type="checkbox"></th>
+                <th>No.</th>
+                <th>用户id</th>
+                <th>用户名</th>
+                <th>密码</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>职务</th>
+                <th>联系电话</th>
+                <th>邮件地址</th>
+                <th>所在部门</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><input type="checkbox"></td>
+                <td>1</td>
+                <td>test</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td><input type="checkbox"></td>
+                <td>2</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td><input type="checkbox"></td>
+                <td>3</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="page">
+        <ul class="pagination pagination-sm">
+            <li class="disabled">
+						<span href="#" aria-label="Previous">
+							<span aria-hidden="true">&laquo;</span>
+						</span>
+            </li>
+            <li class="active">
+                <span href="#">1</span>
+            </li>
+            <li>
+                <span href="#">2</span>
+            </li>
+            <li>
+                <span href="#">3</span>
+            </li>
+            <li>
+                <span href="#">4</span>
+            </li>
+            <li>
+                <span href="#">5</span>
+            </li>
+            <li>
+                <span href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </span>
+            </li>
+            <li class="li-page-handle">
+                转到第
+                <input type="text" class="form-control input-sm"/> 页
+                <button type="button" class="btn btn-default btn-sm">
+                    GO
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script type="text/javascript" src="../../vendor/jquery1.9.min.js"></script>
+<script type="text/javascript" src="../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
+<script type="text/javascript" src="../../vendor/template-web-min.js"></script>
+<script type="text/javascript" src="../../js/public.js"></script>
+</body>
+</html>

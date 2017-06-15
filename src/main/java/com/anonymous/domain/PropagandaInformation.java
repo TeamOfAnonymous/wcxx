@@ -29,7 +29,7 @@ public class PropagandaInformation implements Serializable {
     @ManyToOne
     private User applicant;//申请人
 
-    @ManyToMany(mappedBy = "propagandaInformations")
+    @ManyToMany
     private List<PropagandaInformationCategory> propagandaInformationCategories = new ArrayList<>();//宣传信息类别
 
     public PropagandaInformation() {

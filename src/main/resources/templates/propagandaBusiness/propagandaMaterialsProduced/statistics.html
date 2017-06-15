@@ -15,20 +15,20 @@
 				<form class="form-inline">
 					<div class="form-group">
 						<label>统计时段:</label>
-						<input type="date" class="form-control input-sm" /> -
-						<input type="date" class="form-control input-sm" />
+						<input type="date" class="form-control input-sm" id="startTime" /> -
+						<input type="date" class="form-control input-sm" id="endTime" />
 					</div>
-					<button type="button" class="btn btn-default btn-sm">
+					<button type="button" class="btn btn-default btn-sm" id="queryBtn">
 						<span class="glyphicon glyphicon-search"></span>
 						查询
 					</button>
-					<button type="button" class="btn btn-default btn-sm">
+					<button type="reset" class="btn btn-default btn-sm" id="resetBtn">
 						<span class="glyphicon glyphicon-repeat"></span>
 						重置
 					</button>
 					<button type="button" class="btn btn-default btn-sm">
 						<span class="glyphicon glyphicon-download-alt"></span>
-						重置
+						导出
 					</button>
 				</form>
 			</div>
@@ -36,70 +36,88 @@
 			<div class="data-table statistical-table">
 				<h3>宣传品(资料)制作申请统计表</h3>
 				<div class="st-info">
-					<span>统计时段&nbsp;:&nbsp;2014-01-01-2014-06-30</span>
+					<span id="showCurrentQuery">统计时段&nbsp;:&nbsp;2014-01-01-2014-06-30</span>
 					<span>统计人:XXX</span>
 				</div>
-				<table class="table table-bordered table-hover">
-					<thead>
-						<tr>
-							<th>No.</th>
-							<th>负责人</th>
-							<th>宣传(献血、知识)手册</th>
-							<th>电视、海报广告</th>
-							<th>电视媒体视频(材料)</th>
-							<th>宣传、活动(指引)单张</th>
-							<th>其它</th>
-							<th>总计</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>1</td>
-							<td>test</td>
-							<td>test</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>78</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>test</td>
-							<td>test</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>78</td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>test</td>
-							<td>test</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>87</td>
-						</tr>
-						<tr>
-							<td>-</td>
-							<td>总计</td>
-							<td>12</td>
-							<td>11</td>
-							<td>51</td>
-							<td>54</td>
-							<td>45</td>
-							<td>78</td>
-						</tr>
-					</tbody>
-
+				<table id="table" class="table table-bordered table-hover">
 				</table>
 			</div>
 		</div>
 		<script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
 		<script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../../../vendor/template-web-min.js"></script>
 	</body>
+	<script id="data_table" type="text/html">
+		<thead>
+		<tr>
+			<td>No.</td>
+			{{each header as head h}}
+			<td>{{head}}</td>
+			{{/each}}
+		</tr>
+		</thead>
+		<tbody>
+		{{each content as content c}}
+		<tr>
+			<td>{{c+1}}</td>
+			{{each content as index i}}
+			<td>{{index}}</td>
+			{{/each}}
+		</tr>
+		{{/each}}
+		</tbody>
+		<tfoot>
+		<tr>
+			<td>-</td>
+			{{each footer as foot f}}
+			<td>{{foot}}</td>
+			{{/each}}
+		</tr>
+		</tfoot>
+	</script>
+	<script>
+        $(function () {
+            // 构建查询条件
+            var query = {};
+			// 进行查询
+            submitQuery(query);
+        });
 
+        $("#queryBtn").click(function () {
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();
+
+            var query = {};
+            if( startTime != ""){
+                query.startTime = startTime ;
+			}
+            if( endTime != ""){
+                query.endTime = endTime ;
+            }
+			// 进行查询
+            submitQuery(query);
+        });
+        
+        function submitQuery(query) {
+            $.ajax({
+                type: "POST",
+                url: "/statisticalQueryForPropagandaMaterialsProduced" ,
+                data: JSON.stringify(query) ,
+                dataType: "json" ,
+                contentType : "application/json" ,
+                success: function (data) {
+                    if( query.startTime == "" || query.startTime == null){
+                        query.startTime = "以前";
+					}
+                    if( query.endTime == "" || query.endTime == null){
+                        query.endTime = "当前";
+                    }
+                    $("#showCurrentQuery").html("统计时段&nbsp;:&nbsp; " + query.startTime + " —— " + query.endTime);
+                    var html = template('data_table', data);
+                    document.getElementById('table').innerHTML = html;
+                }
+            });
+        }
+
+	</script>
 </html>

@@ -1,6 +1,7 @@
 package com.anonymous.web;
 
 import com.anonymous.domain.PropagandaMaterialsProduced.PropagandaMaterialsProduced;
+import com.anonymous.domain.PropagandaMaterialsProduced.dto.PropagandaMaterialsProducedStatisticalDto;
 import com.anonymous.domain.PropagandaMaterialsProduced.query.PropagandaMaterialsProducedStatisticalQuery;
 import com.anonymous.service.inter.PropagandaMaterialsProducedServiceInter;
 import com.anonymous.domain.PropagandaMaterialsProduced.query.PropagandaMaterialsProducedQuery;
@@ -85,7 +86,7 @@ public class PropagandaMaterialsProducedController {
     @PostMapping(value = "statisticalQueryForPropagandaMaterialsProduced")
     @ApiOperation(value = "业务查询 : 宣传品（资料）制作申请统计查询")
     @ResponseBody
-    public List<List<String>>  statisticalQuery(@RequestBody PropagandaMaterialsProducedStatisticalQuery query) {
+    public PropagandaMaterialsProducedStatisticalDto statisticalQuery(@RequestBody PropagandaMaterialsProducedStatisticalQuery query) {
         return propagandaMaterialsProducedService.statisticalQuery(query);
     }
 }
