@@ -37,4 +37,7 @@ public interface PropagandaMaterialsRecipientsRepository extends JpaRepository<P
 
     @Query("from PropagandaMaterialsRecipients p where p.applicant.id = ?1")
     List<PropagandaMaterialsRecipients> findByApplicant(String id);
+
+    @Query("from PropagandaMaterialsRecipients p where (p.applicationDate between ?1 and ?2) and p.approvalStatus >= ?3")
+    List<PropagandaMaterialsRecipients> findByApplicationDateAndApprovalStatus(LocalDate startDate, LocalDate endDate, int approvalStatus);
 }
