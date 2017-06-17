@@ -64,7 +64,7 @@
 				<a href="/propagandaBusiness/propagandaMaterialsProduced/goPropagandaMaterialsProducedApply" class="btn btn-default btn-sm">
 					<span class="glyphicon glyphicon-file"></span> 归档
 				</a>
-				<button type="button" class="btn btn-default btn-sm">
+				<button id="deleteBtn" type="button" class="btn btn-default btn-sm">
 					<span class="glyphicon glyphicon-remove"></span>
 					删除
 				</button>
@@ -134,7 +134,7 @@
 		<tbody>
 		{{each content as index i}}
 		<tr>
-			<td><input type="checkbox"/></td>
+			<td><input name="pmpIds" type="checkbox" value="{{index.pmp.id}}"/></td>
 			<td>{{i+1}}</td>
 			<td>{{index.pmp.title}}</td>
 			<td>{{index.pmcProductionMethod}}</td>
@@ -148,7 +148,6 @@
 	</script>
 
 	<script>
-
 
         $(function () {
 
@@ -171,6 +170,20 @@
             sumbitQuery(query);
         });
 
+        // 删除按钮点击事件
+        $("#deleteBtn").click(function () {
+			var pmpIdsBtn = $('input:checkbox[name=pmpIds]:checked');
+            console.log(pmpIdsBtn);
+            // 构建 要删除的 pmp id集合
+            var pmpIds = new Array();
+            pmpIdsBtn.each(function(){
+                pmpIds.push( $(this).val() );
+            });
+            // 发送请求
+            sumbitDelete( pmpIds ) ;
+        });
+
+        // 查询按钮点击事件
         $("#queryBtn").click(function () {
             var title = $("#title").val();
             var applicantName = $("#applicantName").val();
@@ -214,7 +227,25 @@
 
         });
 
-        // 发送请求
+        // 发送 删除 请求
+		function sumbitDelete( pmpIds ) {
+            $.ajax({
+                type:"POST",
+				contentType : "application/x-www-form-urlencoded" ,
+                url: "/deletePropagandaMaterialsProduced" ,
+                data: {"pmpIds":pmpIds.toString()} ,
+                success: function (data) {
+                    message.add("删除 : " + data , "warning");
+                    // 更新数据
+                    sumbitQuery(currentQeury);
+                }
+            });
+			
+        }
+
+        // 保存当前的查询条件
+        var currentQeury = {} ;
+        // 发送 查询 请求
         function sumbitQuery(query) {
             $.ajax({
                 type: "POST",
@@ -225,6 +256,7 @@
                 success: function (data) {
                     var html = template('data_table', data);
                     document.getElementById('table').innerHTML = html;
+                    currentQeury = query ;
                 }
             });
         }
