@@ -89,4 +89,15 @@ public class PropagandaMaterialsProducedController {
     public PropagandaMaterialsProducedStatisticalDto statisticalQuery(@RequestBody PropagandaMaterialsProducedStatisticalQuery query) {
         return propagandaMaterialsProducedService.statisticalQuery(query);
     }
+
+    /**
+     * @param pmpIds
+     * @return
+     */
+    @PostMapping(value = "deletePropagandaMaterialsProduced")
+    @ApiOperation(value = "通过id删除申请 , 删除成功返回 true ，否则返回 false")
+    @ResponseBody
+    public boolean deletes(@RequestParam(value="pmpIds" ) String[] pmpIds ) {
+        return propagandaMaterialsProducedService.delete(pmpIds);
+    }
 }
