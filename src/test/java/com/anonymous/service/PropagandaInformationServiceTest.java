@@ -1,24 +1,20 @@
 package com.anonymous.service;
 
-import com.anonymous.domain.PropagandaInformation;
-import com.anonymous.domain.PropagandaInformationCategory;
+import com.anonymous.domain.PropagandaInformation.PropagandaInformation;
+import com.anonymous.domain.PropagandaInformation.PropagandaInformationCategory;
 import com.anonymous.domain.User;
+import com.anonymous.repository.PropagandaInformationRepository;
 import com.anonymous.service.inter.PropagandaInformationCategoryServiceInter;
 import com.anonymous.service.inter.PropagandaInformationServiceInter;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * Description：enter your comment
@@ -33,6 +29,9 @@ public class PropagandaInformationServiceTest {
 
 	@Autowired
 	private PropagandaInformationServiceInter propagandaInformationService;
+
+	@Autowired
+	private PropagandaInformationRepository propagandaInformationRepository;
 
 	@Test
 	public void save() throws Exception {
@@ -52,25 +51,32 @@ public class PropagandaInformationServiceTest {
 		User user1 = new User();
 		user1.setId("qweqwe");
 
-		User user2 = new User();
-		user2.setId("asdasd");
+//		User user2 = new User();
+//		user2.setId("asdasd");
 
 		//创建一个宣传信息对象1
 		PropagandaInformation propagandaInformationOne = new PropagandaInformation();
 		//创建一个宣传信息对象2
-		PropagandaInformation propagandaInformationTwo = new PropagandaInformation();
-		propagandaInformationOne.setTitle("第一个宣传信息对象");
+//		PropagandaInformation propagandaInformationTwo = new PropagandaInformation();
+		propagandaInformationOne.setTitle("改过的第一个宣传信息对象");
+		propagandaInformationOne.setId("561ddf3e-233f-4520-812b-87eda9f36b32");
 		propagandaInformationOne.setApplicant(user1);
-		propagandaInformationOne.setApplicationDate(LocalDateTime.now());
+		propagandaInformationOne.setApplicationDate(LocalDate.now());
 		propagandaInformationOne.setPropagandaInformationCategories(propagandaInformationCategories);
-		propagandaInformationTwo.setTitle("第二个宣传信息对象");
-		propagandaInformationTwo.setApplicant(user2);
-		propagandaInformationTwo.setApplicationDate(LocalDateTime.now());
-		propagandaInformationTwo.setPropagandaInformationCategories(propagandaInformationCategories);
+//		propagandaInformationTwo.setTitle("第二个宣传信息对象");
+//		propagandaInformationTwo.setApplicant(user2);
+//		propagandaInformationTwo.setApplicationDate(LocalDateTime.now());
+//		propagandaInformationTwo.setPropagandaInformationCategories(propagandaInformationCategories);
 
 		propagandaInformationService.save(propagandaInformationOne);
-		propagandaInformationService.save(propagandaInformationTwo);
+//		propagandaInformationService.save(propagandaInformationTwo);
 
+	}
+
+	@Test
+	public void get() throws Exception {
+		PropagandaInformation one = propagandaInformationRepository.findOne("e4fc5164-b57c-4e7a-a7eb-92d8dfa1b3aa");
+		System.out.println(one.getPropagandaInformationCategories().get(0).getName());
 	}
 
 }

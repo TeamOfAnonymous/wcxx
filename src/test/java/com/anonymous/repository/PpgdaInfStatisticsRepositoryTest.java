@@ -1,7 +1,7 @@
 package com.anonymous.repository;
 
-import com.anonymous.domain.PpgdaInfStatistics;
-import com.anonymous.domain.PropagandaInformationCategory;
+import com.anonymous.domain.PropagandaInformation.PpgdaInfStatistics;
+import com.anonymous.domain.PropagandaInformation.PropagandaInformationCategory;
 import com.anonymous.domain.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,8 +11,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.util.*;
-
-import static org.junit.Assert.*;
 
 /**
  * Description：enter your comment

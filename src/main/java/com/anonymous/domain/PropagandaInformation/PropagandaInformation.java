@@ -1,9 +1,10 @@
-package com.anonymous.domain;
+package com.anonymous.domain.PropagandaInformation;
+
+import com.anonymous.domain.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class PropagandaInformation implements Serializable {
     @GeneratedValue(generator = "UUID2_GENERATOR")
     private String id;//宣传信息id
 
-    private LocalDateTime applicationDate;//申请时间
+    private LocalDate applicationDate;//申请时间
     private String title;//标题
     private LocalDate startDate;//信息发布开始时间
     private LocalDate endDate;//信息发布结束时间
@@ -29,7 +30,7 @@ public class PropagandaInformation implements Serializable {
     @ManyToOne
     private User applicant;//申请人
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<PropagandaInformationCategory> propagandaInformationCategories = new ArrayList<>();//宣传信息类别
 
     public PropagandaInformation() {
@@ -43,11 +44,11 @@ public class PropagandaInformation implements Serializable {
         this.id = id;
     }
 
-    public LocalDateTime getApplicationDate() {
+    public LocalDate getApplicationDate() {
         return applicationDate;
     }
 
-    public void setApplicationDate(LocalDateTime applicationDate) {
+    public void setApplicationDate(LocalDate applicationDate) {
         this.applicationDate = applicationDate;
     }
 

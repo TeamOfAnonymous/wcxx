@@ -1,8 +1,6 @@
 package com.anonymous.web;
 
-import com.anonymous.domain.Organization;
-import com.anonymous.domain.PropagandaInformationCategory;
-import com.anonymous.service.PropagandaInformationCategoryService;
+import com.anonymous.domain.PropagandaInformation.PropagandaInformationCategory;
 import com.anonymous.service.inter.PropagandaInformationCategoryServiceInter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

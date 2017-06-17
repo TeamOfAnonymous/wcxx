@@ -1,12 +1,14 @@
 package com.anonymous.web;
 
-import com.anonymous.domain.PropagandaInformation;
+import com.anonymous.domain.PropagandaInformation.PpgdaInfQueryCondition;
+import com.anonymous.domain.PropagandaInformation.PropagandaInformation;
 import com.anonymous.service.PpgdaInfStatisticsService;
 import com.anonymous.service.inter.PpgdaInfStatisticsServiceInter;
 import com.anonymous.service.inter.PropagandaInformationServiceInter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,13 @@ public class PropagandaInformationController {
 	@RequestMapping(value = "addPropagandaInformation", method = RequestMethod.POST)
 	public PropagandaInformation save(@RequestBody PropagandaInformation propagandaInformation){
 		return  propagandaInformationService.save(propagandaInformation);
+	}
+
+	@RequestMapping(value = "getPropagandaInformationByQueryCondition", method = RequestMethod.POST)
+	@ApiOperation(value = "宣传信息查询")
+	@ResponseBody
+	public Page propagandaMaterialsProducedQuery(@RequestBody PpgdaInfQueryCondition condition) {
+		return propagandaInformationService.findByQueryCondition(condition);
 	}
 
 	@ResponseBody

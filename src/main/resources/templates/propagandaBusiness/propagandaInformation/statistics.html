@@ -88,7 +88,7 @@
             dataType: "json",
             success: function (data) {
                 var my_table = template('template_table', data)
-                document.getElementById('statistics_table').innerHTML = my_table;
+                $('#statistics_table').html(my_table);
                 console.log(data);
             }
         });

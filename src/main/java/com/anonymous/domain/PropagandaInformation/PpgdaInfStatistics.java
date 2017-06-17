@@ -1,4 +1,4 @@
-package com.anonymous.domain;
+package com.anonymous.domain.PropagandaInformation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

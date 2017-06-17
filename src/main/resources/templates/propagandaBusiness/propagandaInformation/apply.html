@@ -36,59 +36,27 @@
 						<tr>
 							<td><span class="font-red">*</span>标题</td>
 							<td colspan="3">
-								<input type="text" class="form-control" />
+								<input type="text" class="form-control" id="title" />
 							</td>
 						</tr>
 						<tr>
 							<td><span class="font-red">*</span>类别</td>
 							<td colspan="3" id="mainCategory">
-								<!--<label class="checkbox-inline">-->
-									<!--<input type="checkbox" value="" /> 电视媒体类-->
-								<!--</label>-->
-								<!--<label class="checkbox-inline">-->
-  										<!--<input type="checkbox" value="" /> 网络媒体类-->
-								<!--</label>-->
-								<!--<label class="checkbox-inline">-->
-  									<!--<input type="checkbox" value="" />电梯海报类-->
-								<!--</label>-->
-								<!--<label class="checkbox-inline">-->
-  									<!--<input type="checkbox" value="" /> 新闻稿件类-->
-								<!--</label>-->
-								<!--<label class="checkbox-inline">-->
-  									<!--<input type="checkbox" value="" />微博微信类-->
-								<!--</label>-->
-								<!--<label class="checkbox-inline">-->
-  									<!--<input type="checkbox" value="" /> 其它-->
-								<!--</label>-->
 							</td>
 						</tr>
 						<tr>
 							<td><span class="font-red">*</span>发布媒介(对象)</td>
 							<td colspan="3" id="subCategory">
-								<!--新闻稿件类&nbsp;:&nbsp;-->
-								<!--<label class="checkbox-inline">-->
-  									<!--<input type="checkbox" value="" /> 广州日报-->
-								<!--</label>-->
-								<!--<label class="checkbox-inline">-->
-  									<!--<input type="checkbox" value="" /> 南方都市报-->
-								<!--</label>-->
-								<!--<label class="checkbox-inline">-->
-  									<!--<input type="checkbox" value="" /> 南方周末报-->
-								<!--</label>-->
-								<!--<br /> 微博微信类&nbsp;:&nbsp;-->
-								<!--<label class="checkbox-inline">-->
-  									<!--<input type="checkbox" value="" /> 中心微博-->
-								<!--</label>-->
 							</td>
 						</tr>
 						<tr>
 							<td>信息发布(投放)开始时间</td>
 							<td>
-								<input type="date" class="form-control" />
+								<input type="date" class="form-control" id="startDate" />
 							</td>
 							<td>信息发布(投放)结束时间</td>
 							<td>
-								<input type="date" class="form-control" />
+								<input type="date" class="form-control" id="endDate" />
 							</td>
 						</tr>
 						<tr>
@@ -102,13 +70,13 @@
 						<tr>
 							<td>内容</td>
 							<td colspan="3">
-								<textarea class="form-control" rows="3"></textarea>
+								<textarea class="form-control" rows="3" id="content"></textarea>
 							</td>
 						</tr>
 						<tr>
 							<td>备注</td>
 							<td colspan="3">
-								<textarea class="form-control" rows="3"></textarea>
+								<textarea class="form-control" rows="3" id="remarks"></textarea>
 							</td>
 						</tr>
 						<tr>
@@ -189,6 +157,9 @@
 				</div>
 			</div>
 		</div>
+
+        <button id="testSubmit">测试提交</button>
+
 		<script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
 		<script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="../../../vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
@@ -204,21 +175,22 @@
 				window.open('../../public/flowImg.html', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
 			});
 
-			<!-- 遍历出父节点 -->
+			//遍历出父节点
             $.ajax({
                 type: "GET",
                 url: "/getPropagandaInformationCategories",
                 success: function (data) {
                     var node = "";
                     data.forEach(function (val, index) {
-                        if(val.name == null) {
+                        if(val.name === null) {
                             alert("null");
                             return false;
 						}
 						node = node + "<label class='checkbox-inline'> <input type='checkbox' value='" + val.id + "'/>"+ val.name +"</label>"  ;
                     });
-                    $('#mainCategory').append(node);
-                    $('#mainCategory').on('change','input[type="checkbox"]',function (e) {
+                    var mainCategorySelector = $('#mainCategory');
+                    mainCategorySelector.append(node);
+                    mainCategorySelector.on('change','input[type="checkbox"]',function (e) {
 						if ($(this).is(':checked'))
                         	addChildCategory($(this.closest('.checkbox-inline')).text(), this.value);
 						else
@@ -228,6 +200,7 @@
                 }
             });
 
+			//添加子节点
 			function addChildCategory(categoryName, categoryId) {
                 $.ajax({
                     type: "GET",
@@ -238,7 +211,7 @@
                         console.log(data);
                         var node = categoryName + "&nbsp;:&nbsp;";
                         data.forEach(function (val, index) {
-                            if(val.name == null) {
+                            if(val.name === null) {
                                 alert("null");
                                 return false;
                             }
@@ -255,12 +228,50 @@
                     }
                 });
             }
-            
+
+            //删除子节点
             function delChildCategory(categoryId) {
-			    console.log(categoryId)
-                $("#"+categoryId).onclick = null;
-                $("#"+categoryId).remove();
+				$("#"+categoryId).remove();
             }
+
+            $("#testSubmit").click(function (e) {
+                var title = $('#title')[0].value;
+                var content = $('#content')[0].value;
+                var remarks = $('#remarks')[0].value;
+                var startDate = $('#startDate')[0].value;
+                var endDate = $('#endDate')[0].value;
+                var information = {
+                    title : title,
+                    content : content,
+                    remarks : remarks,
+                    startDate : startDate,
+                    endDate : endDate
+                };
+                var propagandaInformationCategories = [];
+                $('input[type="checkbox"]:checked').each(function(){
+                    propagandaInformationCategories.push({
+                        id : $(this).val()
+                    });//向数组中添加元素
+                });
+                information.propagandaInformationCategories = propagandaInformationCategories;
+                console.log(information);
+                ppgdaInfoSumbit(information);
+            })
+
+            function ppgdaInfoSumbit(information) {
+                $.ajax({
+                    type: "POST",
+                    url: "/addPropagandaInformation" ,
+                    data: JSON.stringify(information) ,
+                    dataType: "json" ,
+                    contentType : "application/json" ,
+                    success: function (data) {
+                        alert("成功");
+                        console.log(data);
+                    }
+                });
+            }
+
 
 		</script>
 	</body>

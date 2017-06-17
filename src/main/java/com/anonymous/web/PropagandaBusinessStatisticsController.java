@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,8 +28,8 @@ public class PropagandaBusinessStatisticsController {
     @RequestMapping(value = "getPropagandaMaterialsRecipientsStatisticsForm", method = RequestMethod.GET)
     @ApiOperation(value = "宣传物资领用统计报表")
     @ResponseBody
-    public Map<String, Integer> getPropagandaMaterialsRecipientsStatisticsForm(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-                                                                          @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+    public List<Map<String,Integer>> getPropagandaMaterialsRecipientsStatisticsForm(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                                                                                    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
         return propagandaMaterialsRecipientsService.getPropagandaMaterialsRecipientsStatisticsForm(startDate, endDate);
     }
 

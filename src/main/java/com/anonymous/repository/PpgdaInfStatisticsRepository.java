@@ -1,13 +1,11 @@
 package com.anonymous.repository;
 
-import com.anonymous.domain.PpgdaInfStatistics;
+import com.anonymous.domain.PropagandaInformation.PpgdaInfStatistics;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Description：宣传统计Repository

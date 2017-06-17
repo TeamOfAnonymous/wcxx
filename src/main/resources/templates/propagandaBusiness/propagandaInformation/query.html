@@ -1,161 +1,272 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 
-	<head>
-		<meta charset="utf-8" />
-		<title>宣传信息发布列表</title>
-		<link rel="stylesheet" href="../../../vendor/bootstrap-3.3.7/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="../../../css/public.css" />
-		<link rel="stylesheet" href="../../../css/infoList.css" />
-		<link rel="stylesheet" href="../../../vendor/jquery.my-message/css/jquery.my-message.1.1.css" />
-	</head>
+<head>
+    <meta charset="utf-8"/>
+    <title>宣传信息发布列表</title>
+    <link rel="stylesheet" href="../../../vendor/bootstrap-3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../../css/public.css"/>
+    <link rel="stylesheet" href="../../../css/infoList.css"/>
+    <link rel="stylesheet" href="../../../vendor/jquery.my-message/css/jquery.my-message.1.1.css"/>
+</head>
 
-	<body>
-		<div class="container-fluid setMinWidth info-list">
-			<div class="handle-top">
-				<form class="form-inline">
-					<div class="form-group">
-						<label>标题:</label>
-						<input type="text" class="form-control input-sm" />
-					</div>
-					<div class="form-group">
-						<label>申请人:</label>
-						<input type="text" class="form-control input-sm" />
-					</div>
-					<div class="form-group">
-						<label>申请时间:</label>
-						<input type="date" class="form-control input-sm" />
-					</div>
-					<div class="form-group">
-						<label>类别:</label>
-						<select name="" class="form-control input-sm">
-							<option value="">全部</option>
-						</select>
-					</div>
-					<div class="form-group">
-						<label>状态:</label>
-						<select name="" class="form-control input-sm">
-							<option value="">全部</option>
-						</select>
-					</div>
-					<button type="button" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-search"></span>
-						查询
-					</button>
-					<button type="button" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-repeat"></span>
-						重置
-					</button>
-				</form>
-			</div>
-			<div class="handle-button-group">
-				<a href="/propagandaBusiness/propagandaInformation/goPropagandaInformationApply" class="btn btn-default btn-sm">
-					<span class="glyphicon glyphicon-plus"></span> 新建
-				</a>
-				<a href="/propagandaBusiness/propagandaInformation/goPropagandaInformationApply" class="btn btn-default btn-sm">
-					<span class="glyphicon glyphicon-file"></span> 归档
-				</a>
-				<button type="button" class="btn btn-default btn-sm">
-					<span class="glyphicon glyphicon-remove"></span>删除
-				</button>
-			</div>
-			<div class="data-table">
-				<table class="table table-bordered table-hover checked-table">
-					<thead>
-						<tr>
-							<th><input type="checkbox" /></th>
-							<th>No.</th>
-							<th>标题</th>
-							<th>类别</th>
-							<th>发布媒介</th>
-							<th>申请人</th>
-							<th>申请时间</th>
-							<th>状态</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><input type="checkbox" /></td>
-							<td>1</td>
-							<td>test</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>
-								<span class="font-red">
-								待审批
-							</span>
-							</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" /></td>
-							<td>2</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>
-								<span>
-								执行中
-							</span>
-							</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" /></td>
-							<td>3</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>
-								<span>已归档</span>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="page">
-				<ul class="pagination pagination-sm">
-					<li class="disabled">
+<body>
+<div class="container-fluid setMinWidth info-list">
+    <div class="handle-top">
+        <form class="form-inline">
+            <div class="form-group">
+                <label>标题:</label>
+                <input type="text" id="title" class="form-control input-sm"/>
+            </div>
+            <div class="form-group">
+                <label>申请人:</label>
+                <input type="text" id="applicant" class="form-control input-sm"/>
+            </div>
+            <div class="form-group">
+                <label>申请时间:</label>
+                <input type="date" id="applicationDate" class="form-control input-sm"/>
+            </div>
+            <div class="form-group">
+                <label>类别:</label>
+                <select id="mainCategories" class="form-control input-sm">
+                </select>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>状态:</label>
+                <select id="approvalStatus" class="form-control input-sm">
+                    <option value="">全部</option>
+                    <option value="0">草稿</option>
+                    <option value="1">待审批</option>
+                    <option value="2">审核中</option>
+                    <option value="3">执行中</option>
+                    <option value="4">已完成</option>
+                    <option value="5">已归档</option>
+                </select>
+            </div>
+            <button type="button" id="query" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-search"></span>
+                查询
+            </button>
+            <button type="button" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-repeat"></span>
+                重置
+            </button>
+        </form>
+    </div>
+    <div class="handle-button-group">
+        <a href="/propagandaBusiness/propagandaInformation/goPropagandaInformationApply" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-plus"></span> 新建
+        </a>
+        <a href="/propagandaBusiness/propagandaInformation/goPropagandaInformationApply" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-file"></span> 归档
+        </a>
+        <button type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-remove"></span>删除
+        </button>
+    </div>
+    <div class="data-table">
+        <table class="table table-bordered table-hover checked-table">
+            <thead>
+            <tr>
+                <th><input type="checkbox"/></th>
+                <th>No.</th>
+                <th>标题</th>
+                <th>类别</th>
+                <th>发布媒介</th>
+                <th>申请人</th>
+                <th>申请时间</th>
+                <th>状态</th>
+            </tr>
+            </thead>
+            <tbody id="ppgdaTable">
+            </tbody>
+        </table>
+    </div>
+    <div class="page">
+        <ul class="pagination pagination-sm">
+            <li class="disabled">
 						<span href="#" aria-label="Previous">
 							<span aria-hidden="true">&laquo;</span>
 						</span>
-					</li>
-					<li class="active">
-						<span href="#">1</span>
-					</li>
-					<li>
-						<span href="#">2</span>
-					</li>
-					<li>
-						<span href="#">3</span>
-					</li>
-					<li>
-						<span href="#">4</span>
-					</li>
-					<li>
-						<span href="#">5</span>
-					</li>
-					<li>
-						<span href="#" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
-						</span>
-					</li>
-					<li class="li-page-handle">
-						转到第
-						<input type="text" class="form-control input-sm" /> 页
-						<button type="button" class="btn btn-default btn-sm">GO</button>
-					</li>
-					</ul>
-			</div>
-		</div>
-		<script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
-		<script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="../../../vendor/jquery.my-message/js/jquery.my-message.1.1.js" ></script>
-		<script type="text/javascript" src="../../../js/public.js" ></script>
-	</body>
+            </li>
+            <li class="active">
+                <span href="#">1</span>
+            </li>
+            <li>
+                <span href="#">2</span>
+            </li>
+            <li>
+                <span href="#">3</span>
+            </li>
+            <li>
+                <span href="#">4</span>
+            </li>
+            <li>
+                <span href="#">5</span>
+            </li>
+            <li>
+                <span href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </span>
+            </li>
+            <li class="li-page-handle">
+                转到第
+                <input type="text" class="form-control input-sm"/> 页
+                <button type="button" class="btn btn-default btn-sm">GO</button>
+            </li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
+<script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
+<script type="text/javascript" src="../../../js/public.js"></script>
+<script type="text/javascript" src="../../../vendor/template-web-min.js"></script>
+</body>
+<script id="template_table" type="text/html">
+    {{set temp = 1}}
+    {{each content as ppgdaInfo p}}
+    <tr>
+        <td><input type="checkbox"/></td>
+        <td>{{temp++}}</td>
+        <td>{{ppgdaInfo.title}}</td>
+        <td>{{ppgdaInfo.mainCategory}}</td>
+        <td>{{ppgdaInfo.subCategory}}</td>
+        <td>{{ppgdaInfo.applicant.name}}</td>
+        <td>{{ppgdaInfo.applicationDate}}</td>
+        <td>
+            {{if ppgdaInfo.approvalStatus == 0}}
+            <span class="font-red">
+                    {{ppgdaInfo.approvalStatus}}
+                </span>
+            {{else}}
+            {{ppgdaInfo.approvalStatus}}
+            {{/if}}
+        </td>
+    </tr>
+    {{/each}}
+</script>
+
+<script type="text/javascript">
+
+    var customData = {
+        title: null,
+        applicant: null,
+        applicationDate: null,
+        approvalStatus: null,
+        mainCategories: null
+    }
+
+    $.ajax({
+        type: "GET",
+        url: "/getPropagandaInformationCategories",
+        success: function (data) {
+            var node = "<option value=''>全部</option>";
+            data.forEach(function (val, index) {
+                if (val.name === null) {
+                    alert("null");
+                    return false;
+                }
+                node = node + "<option value='" + val.id + "'>" + val.name + "</option>";
+            });
+            var mainCategorySelector = $('#mainCategories');
+            mainCategorySelector.html(node);
+            console.log(node);
+        }
+    });
+
+
+    $(function () {
+        ppgdaInfoSumbit(null);
+    });
+
+
+    $("#query").click(function (e) {
+
+        customData.title = $('#title')[0].value;
+        customData.applicant = $('#applicant')[0].value;
+        customData.applicationDate = $('#applicationDate')[0].value;
+        customData.approvalStatus = $('#approvalStatus')[0].value;
+        customData.mainCategories = $('#mainCategories')[0].value;
+
+        ppgdaInfoSumbit(customData);
+
+    });
+
+    function ppgdaInfoSumbit(information) {
+
+        var data = dataSetting(information);
+
+        $.ajax({
+            type: "POST",
+            url: "/getPropagandaInformationByQueryCondition",
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (data) {
+                dataProcessing(data);
+                console.log(data);
+            }
+        });
+    }
+
+    function dataSetting(data) {
+
+        var currentPage = 1;
+        var limit = 10;
+        var sortName = "applicationDate";
+        var ppgdaInfo = null;
+
+        if (data !== null) {
+            ppgdaInfo = {
+                title: data.title,
+                applicant: {
+                    name: data.applicant
+                },
+                applicationDate: data.applicationDate,
+                approvalStatus: data.approvalStatus,
+                propagandaInformationCategories: [{
+                    name: data.mainCategories
+                }]
+            };
+        }
+
+        return {
+            currentPage: currentPage,
+            limit: limit,
+            sortName: sortName,
+            propagandaInformation: ppgdaInfo
+        };
+
+    }
+
+    function dataProcessing(data) {
+
+        data.content.forEach(function (val, index) {
+            var mainCategory = [];
+            var subCategory = [];
+            val.propagandaInformationCategories.forEach(function (val, index) {
+                if (val.pid === null || val.pid === "") {
+                    mainCategory.push(val.name);
+                } else {
+                    subCategory.push(val.name);
+                }
+            });
+            //if(mainCategory.length <= 0)
+            mainCategory = mainCategory.join("、");
+            subCategory = subCategory.join("、");
+            val.mainCategory = mainCategory;
+            val.subCategory = subCategory;
+        });
+        loadTable(data);
+    }
+
+    function loadTable(data) {
+        var my_table = template('template_table', data);
+        $('#ppgdaTable').html(my_table);
+    }
+
+</script>
 
 </html>
