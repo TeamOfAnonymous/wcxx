@@ -186,53 +186,22 @@
         $tree.slideUp(200);
     })
 
-    function getTree() {
-        var tree = [{
-            text: "Parent 1",
-            id: "001",
-            nodes: [{
-                id: '0011',
-                text: "Child 1",
-                nodes: [{
-                    id: '00111',
-                    text: "Grandchild 1"
-                },
-                    {
-                        id: '00112',
-                        text: "Grandchild 2"
-                    }
-                ]
-            },
-                {
-                    id: '0012',
-                    text: "Child 2"
-                }
-            ]
+    $.ajax({
+        type: "GET",
+        url: "/getOrganizationTree",
+        data:{
+            type : "selectTree"
         },
-            {
-                id: '002',
-                text: "Parent 2"
-            },
-            {
-                id: '003',
-                text: "Parent 3"
-            },
-            {
-                id: '004',
-                text: "Parent 4"
-            },
-            {
-                id: '005',
-                text: "Parent 5"
-            }
-        ];
-        return tree;
-    }
-
-    $tree.treeview({
-        data: getTree(),
-        showBorder: false,
+        success: function (data) {
+            console.log(data);
+            $tree.treeview({
+                data: data,
+                showBorder: false,
+            });
+        }
     });
+
+
     $tree.on('nodeSelected', function (event, data) {
         //console.log(data);
         $selectInput.val(data.text);
