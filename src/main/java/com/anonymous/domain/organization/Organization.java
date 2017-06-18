@@ -1,4 +1,4 @@
-package com.anonymous.domain;
+package com.anonymous.domain.organization;
 
 import javax.persistence.*;
 import java.io.Serializable;
