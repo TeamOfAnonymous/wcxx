@@ -1,6 +1,7 @@
 package com.anonymous.service.inter;
 
-import com.anonymous.domain.Organization;
+import com.anonymous.domain.organization.Organization;
+import com.anonymous.domain.organization.OrganizationTree;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface OrganizationServiceInter {
     Organization edit(Organization organization);
 
     boolean delete(String id);
+
+    List<OrganizationTree> getOrganizationTree();
 }

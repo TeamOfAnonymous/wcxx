@@ -1,6 +1,7 @@
 package com.anonymous.web;
 
-import com.anonymous.domain.Organization;
+import com.anonymous.domain.organization.Organization;
+import com.anonymous.domain.organization.OrganizationTree;
 import com.anonymous.service.inter.OrganizationServiceInter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -48,11 +49,20 @@ public class OrganizationController {
         return organizationService.edit(organization);
     }
 
+    @RequestMapping(value = "getOrganizationTree", method = RequestMethod.GET)
+    @ApiOperation(value = "获取组织机构的树")
+    @ResponseBody
+    public List<OrganizationTree> getOrganizationTree() {
+        return organizationService.getOrganizationTree();
+    }
+
     @RequestMapping(value = "deletedOrganization", method = RequestMethod.GET)
     @ApiOperation(value = "删除组织机构")
     @ResponseBody
     public boolean deletedOrganization(@RequestParam String id) {
         return organizationService.delete(id);
     }
+
+
 
 }

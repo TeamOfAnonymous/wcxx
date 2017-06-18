@@ -1,6 +1,6 @@
 package com.anonymous.repository;
 
-import com.anonymous.domain.Organization;
+import com.anonymous.domain.organization.Organization;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
