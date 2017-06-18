@@ -16,16 +16,16 @@ public class PropagandaMaterialsContentService implements PropagandaMaterialsCon
     /**
      * 宣传品制作内容 dao
      */
-    PropagandaMaterialsContentRepository propagandaMaterialsContentRepository;
+    PropagandaMaterialsContentRepository pmcRepository;
 
-    public PropagandaMaterialsContentService(@Autowired PropagandaMaterialsContentRepository propagandaMaterialsContentRepository){
-        this.propagandaMaterialsContentRepository = propagandaMaterialsContentRepository ;
+    public PropagandaMaterialsContentService(@Autowired PropagandaMaterialsContentRepository pmcRepository){
+        this.pmcRepository = pmcRepository ;
     }
 
 
     @Override
     public PropagandaMaterialsContent findById(String id) {
-        return propagandaMaterialsContentRepository.findOne(id);
+        return pmcRepository.findOne(id);
     }
 
     /**
@@ -35,7 +35,7 @@ public class PropagandaMaterialsContentService implements PropagandaMaterialsCon
      */
     @Override
     public PropagandaMaterialsContent add(PropagandaMaterialsContent propagandaMaterialsContent ) {
-        return propagandaMaterialsContentRepository.save(propagandaMaterialsContent);
+        return pmcRepository.save(propagandaMaterialsContent);
 
 
 //        // 通过 宣传品制作申请id 为 宣传品内容 设置其所属的 宣传品制作
@@ -48,5 +48,11 @@ public class PropagandaMaterialsContentService implements PropagandaMaterialsCon
 //        propagandaMaterialsProducedService.update(propagandaMaterialsProduced);
 //
 //        return propagandaMaterialsContentRepository.save(propagandaMaterialsContent);
+    }
+
+    @Override
+    public boolean delete(String id) {
+        pmcRepository.delete( id );
+        return pmcRepository.findOne( id ) == null ? true : false ;
     }
 }

@@ -43,18 +43,19 @@ public class PropagandaMaterialsProducedServiceTest {
     @Test
     public void testAdd() {
         PropagandaMaterialsProduced p = new PropagandaMaterialsProduced();
-        p.setTitle("title14");
-        p.setRemarks("remarks14");
+        p.setTitle("title5");
+        p.setRemarks("remarks5");
         p.setApprovalStatus(ApprovalStatus.Draft);
-        p.setApplicant(userService.getUser("9412405e-5ddc-4ce7-bd0f-05eee28f9932"));
+        p.setApplicant(userService.getUser("29d3d48d-f9e2-42cc-b362-93c70bf24dc5"));
+        p.setPrincipal(userService.getUser("29d3d48d-f9e2-42cc-b362-93c70bf24dc5"));
         System.out.println("size = " + p.getPropagandaMaterialsContents().size());
 
         PropagandaMaterialsContent pc1 = new PropagandaMaterialsContent();
-        pc1.setAdvertisingCompanyContactInformation("test14");
-        pc1.setAdvertisingCompanyContactPerson("test14");
-        pc1.setAdvertisingCompanyName("test14");
+        pc1.setAdvertisingCompanyContactInformation("test9");
+        pc1.setAdvertisingCompanyContactPerson("test9");
+        pc1.setAdvertisingCompanyName("test9");
         pc1.setCost(20);
-        pc1.setName("test14");
+        pc1.setName("test9");
         pc1.setProductionMethod(ProductionProducedMethod.ProducedInner);
         pc1.setProductionQuantity(10);
         pc1.setPromotionalCategory(PromotionalCategory.Book);
@@ -62,17 +63,25 @@ public class PropagandaMaterialsProducedServiceTest {
         System.out.println(PromotionalCategory.Book);
 
         PropagandaMaterialsContent pc2 = new PropagandaMaterialsContent();
-        pc2.setAdvertisingCompanyContactInformation("test14");
-        pc2.setAdvertisingCompanyContactPerson("test14");
-        pc2.setAdvertisingCompanyName("test14");
+        pc2.setAdvertisingCompanyContactInformation("test10");
+        pc2.setAdvertisingCompanyContactPerson("test10");
+        pc2.setAdvertisingCompanyName("test10");
         pc2.setCost(20);
-        pc2.setName("test14");
+        pc2.setName("test10");
         pc2.setProductionMethod(ProductionProducedMethod.AdAgencyProduced);
         pc2.setProductionQuantity(10);
         pc2.setPromotionalCategory(PromotionalCategory.Other);
         p.getPropagandaMaterialsContents().add(pc2);
 
         propagandaMaterialsProducedService.add(p);
+    }
+
+
+    @Test
+    public void testDeletes() {
+        String[] ids = new String[]{"96b309f9-f274-453b-8077-00584d2dc04e"};
+        boolean result = propagandaMaterialsProducedService.delete( ids );
+        System.out.println( "result = " + result );
     }
 
     @Test

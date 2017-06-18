@@ -22,6 +22,8 @@ public interface PropagandaMaterialsProducedServiceInter {
 
     PropagandaMaterialsProduced apply(String id) ;
 
+    boolean delete(String[] ids) ;
+
     Page findByMultiExample(PropagandaMaterialsProducedQuery query) ;
 
     Page findByQuery(PropagandaMaterialsProducedQuery query) ;

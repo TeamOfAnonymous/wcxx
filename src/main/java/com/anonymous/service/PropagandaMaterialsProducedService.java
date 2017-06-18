@@ -30,12 +30,12 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
     /**
      * 宣传品制作申请 dao
      */
-    private PropagandaMaterialsProducedRepository propagandaMaterialsProducedRepository;
+    private PropagandaMaterialsProducedRepository pmpRepository;
 
     /**
      * 宣传信息 service
      */
-    private PropagandaMaterialsContentService propagandaMaterialsContentService;
+    private PropagandaMaterialsContentService pmcService;
 
     /**
      * 宣传品制作申请 Custom dao
@@ -45,14 +45,14 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
     public PropagandaMaterialsProducedService(@Autowired PropagandaMaterialsProducedRepository propagandaMaterialsProducedRepository ,
                                               @Autowired PropagandaMaterialsContentService propagandaMaterialsContentService ,
                                               @Autowired PropagandaMaterialsProducedRepositoryCustom propagandaMaterialsProducedRepositoryCustom){
-        this.propagandaMaterialsProducedRepository = propagandaMaterialsProducedRepository;
-        this.propagandaMaterialsContentService = propagandaMaterialsContentService;
+        this.pmpRepository = propagandaMaterialsProducedRepository;
+        this.pmcService = propagandaMaterialsContentService;
         this.propagandaMaterialsProducedRepositoryCustom = propagandaMaterialsProducedRepositoryCustom ;
     }
 
     @Override
     public PropagandaMaterialsProduced findById(String id) {
-        return propagandaMaterialsProducedRepository.findOne(id);
+        return pmpRepository.findOne(id);
     }
 
     /**
@@ -74,7 +74,7 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
 
 
         // 先保存，目的是为了得到 id ，PropagandaMaterialsContent 保存时才能维护两者的关系
-        pm = propagandaMaterialsProducedRepository.save(pm);
+        pm = pmpRepository.save(pm);
 
         // 初始化总费用
         float totalCost = 0;
@@ -83,14 +83,14 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
         List<PropagandaMaterialsContent> pmcs = pm.getPropagandaMaterialsContents();
         for (PropagandaMaterialsContent item : pmcs ) {
             item.setPropagandaMaterialsProduced( pm );
-            item = propagandaMaterialsContentService.add(item);
+            item = pmcService.add(item);
             // 更新 总费用
             totalCost += ( item.getCost() * item.getProductionQuantity() ) ;
         }
         // 给该申请添加 总费用
         pm.setTotalCost(totalCost);
 
-        pm = propagandaMaterialsProducedRepository.save(pm);
+        pm = pmpRepository.save(pm);
 
         // TODO 是否要在保存的的时候直接 提交申请
         return apply(pm.getId());
@@ -104,7 +104,7 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
     @Override
     @Transactional
     public PropagandaMaterialsProduced update(PropagandaMaterialsProduced propagandaMaterialsProduced) {
-        return propagandaMaterialsProducedRepository.save( propagandaMaterialsProduced );
+        return pmpRepository.save( propagandaMaterialsProduced );
     }
 
     /**
@@ -115,13 +115,44 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
     @Override
     @Transactional
     public PropagandaMaterialsProduced apply(String id) {
-        PropagandaMaterialsProduced propagandaMaterialsProduced = propagandaMaterialsProducedRepository.findOne(id);
+        PropagandaMaterialsProduced propagandaMaterialsProduced = pmpRepository.findOne(id);
 
         // 修改 审批状态为1 : 0为草稿，1为待审批，2为审核中，3为执行中，4为已完成，5为已归档
         propagandaMaterialsProduced.setApprovalStatus( ApprovalStatus.WaitForApproval );
         // 给该申请添加 申请时间
         propagandaMaterialsProduced.setApplicationDate( LocalDateTime.now() );
-        return propagandaMaterialsProducedRepository.save(propagandaMaterialsProduced);
+        return pmpRepository.save(propagandaMaterialsProduced);
+    }
+
+    /**
+     * 通过 id集合 删除 ，同时级联删除下属内容
+     * @param ids
+     * @return
+     */
+    @Override
+    public boolean delete(String[] ids) {
+        // 遍历 id集合 一个一个删除
+        for( String id : ids ){
+            if( ! delete( id ) ){
+                throw new RuntimeException("删除 宣传制作时 出现异常 ");
+            }
+        }
+        return true;
+    }
+
+    private boolean delete(String id) {
+        PropagandaMaterialsProduced p = pmpRepository.findOne(id);
+        if( p != null ){
+            // 删除之前，先把其下属 宣传品内容删除
+            List<PropagandaMaterialsContent> pcs = p.getPropagandaMaterialsContents();
+            for( PropagandaMaterialsContent pc : pcs){
+                if( ! pmcService.delete( pc.getId() ) ){
+                    throw new RuntimeException("删除 宣传制作 链接删除 宣传品内容时 出现异常 ");
+                }
+            }
+            pmpRepository.delete( id );
+        }
+        return  pmpRepository.findOne( id ) == null ? true : false ;
     }
 
     /**
@@ -164,7 +195,7 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
         Pageable pageable = new PageRequest( query.getPage(), query.getRows(), sort);
 
         // 执行查询 开始
-        Page pmpPage = propagandaMaterialsProducedRepository.findAll(new Specification() {
+        Page pmpPage = pmpRepository.findAll(new Specification() {
             @Override
             public Predicate toPredicate(Root pmpRoot, CriteriaQuery sqlQuery, CriteriaBuilder builder) {
 
@@ -254,9 +285,9 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
                     .withIgnorePaths("id")    // 忽略 id
                     .withIgnoreNullValues();
             Example example = Example.of( p , matcher);
-            list = propagandaMaterialsProducedRepository.findAll( example, sort);
+            list = pmpRepository.findAll( example, sort);
         }else{
-            list = propagandaMaterialsProducedRepository.findAll( sort);
+            list = pmpRepository.findAll( sort);
         }
 
         // 去除 totalCost 不符合的数据
@@ -320,7 +351,7 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
     public PropagandaMaterialsProducedStatisticalDto statisticalQuery(PropagandaMaterialsProducedStatisticalQuery query) {
 
         // 找出该日期下的所有 宣传品制作申请
-        List<PropagandaMaterialsProduced> pmps = propagandaMaterialsProducedRepository.findByApplicationDateBetween(query.getStartTime() , query.getEndTime());
+        List<PropagandaMaterialsProduced> pmps = pmpRepository.findByApplicationDateBetween(query.getStartTime() , query.getEndTime());
 
         // 利用 hashmap 将得到的 宣传品制作申请list 按申请人分组 key:User value:List<PropagandaMaterialsProduced>
         Map pmpsGroupByApplicant = new HashMap<User,List<PropagandaMaterialsProduced>>();

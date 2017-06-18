@@ -11,4 +11,6 @@ public interface PropagandaMaterialsContentServiceInter {
     PropagandaMaterialsContent findById(String id) ;
 
     PropagandaMaterialsContent add(PropagandaMaterialsContent propagandaMaterialsContent ) ;
+
+    boolean delete(String id) ;
 }
