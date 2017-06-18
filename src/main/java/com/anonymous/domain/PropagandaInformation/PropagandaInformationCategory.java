@@ -27,6 +27,8 @@ public class PropagandaInformationCategory implements Serializable {
 
     private String pid;//上一级的类别id
 
+    private Integer sortNum; //排序号
+
     @ManyToOne
     private User creator;//创建人
 
@@ -82,5 +84,13 @@ public class PropagandaInformationCategory implements Serializable {
 
     public void setCreator(User creator) {
         this.creator = creator;
+    }
+
+    public Integer getSortNum() {
+        return sortNum;
+    }
+
+    public void setSortNum(Integer sortNum) {
+        this.sortNum = sortNum;
     }
 }

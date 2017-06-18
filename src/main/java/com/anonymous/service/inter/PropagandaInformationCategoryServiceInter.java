@@ -1,5 +1,6 @@
 package com.anonymous.service.inter;
 
+import com.anonymous.domain.PropagandaInformation.CategoryTree;
 import com.anonymous.domain.PropagandaInformation.PropagandaInformationCategory;
 
 import java.util.List;
@@ -22,20 +23,8 @@ public interface PropagandaInformationCategoryServiceInter {
     List<PropagandaInformationCategory> findByPid(String pid);
 
     /**
-     * 通过模糊字段查询
-     * @param indistinct 模糊字段
+     * 获取树形结构的全部字段
      * @return
      */
-    Set<List<PropagandaInformationCategory>> findByIndistinctName(String indistinct);
-
-    /**
-     * 将数据显示出来
-     */
-    Set<List<PropagandaInformationCategory>> displayAll();
-
-    /**
-     * 将各分类数据封装成map
-     */
-    Set<List<PropagandaInformationCategory>> packageListToMap(List<PropagandaInformationCategory> propagandaInformationCategories);
-
+    Object[] getCategoriesOfTree(String mainCategory, String medium, String type);
 }

@@ -1,5 +1,6 @@
 package com.anonymous.web;
 
+import com.anonymous.domain.PropagandaInformation.CategoryTree;
 import com.anonymous.domain.PropagandaInformation.PropagandaInformationCategory;
 import com.anonymous.service.inter.PropagandaInformationCategoryServiceInter;
 import io.swagger.annotations.Api;
@@ -46,6 +47,13 @@ public class PropagandaInformationCategoryController {
     @ResponseBody
     public List<PropagandaInformationCategory> getPropagandaInformationCategories() {
         return propagandaInformationCategoryService.findByPidIsNull();
+    }
+
+    @RequestMapping(value = "getCategoriesOfTree", method = RequestMethod.GET)
+    @ApiOperation(value = "获取全部宣传信息类别")
+    @ResponseBody
+    public Object[] getCategoriesOfTree(String mainCategory, String medium, String type) {
+        return propagandaInformationCategoryService.getCategoriesOfTree(mainCategory, medium, type);
     }
 
     @RequestMapping(value = "getPropagandaInformationCategoriesByPid", method = RequestMethod.GET)

@@ -201,65 +201,32 @@
     });
     $('.modal').on('click', function () {
         $tree.slideUp(200);
-    })
-
-    function getTree() {
-        var tree = [{
-            text: "Parent 1",
-            id: "001",
-            nodes: [{
-                id: '0011',
-                text: "Child 1",
-                nodes: [{
-                    id: '00111',
-                    text: "Grandchild 1"
-                },
-                    {
-                        id: '00112',
-                        text: "Grandchild 2"
-                    }
-                ]
-            },
-                {
-                    id: '0012',
-                    text: "Child 2"
-                }
-            ]
-        },
-            {
-                id: '002',
-                text: "Parent 2"
-            },
-            {
-                id: '003',
-                text: "Parent 3"
-            },
-            {
-                id: '004',
-                text: "Parent 4"
-            },
-            {
-                id: '005',
-                text: "Parent 5"
-            }
-        ];
-        return tree;
-    }
-
-    $tree.treeview({
-        data: getTree(),
-        showBorder: false,
     });
+
+    $.ajax({
+        type: "GET",
+        url: "/getCategoriesOfTree",
+        data:{
+            type : "selectTree"
+        },
+        success: function (data) {
+            console.log(data);
+            $tree.treeview({
+                data: data,
+                showBorder: false
+            });
+        }
+    });
+
     $tree.on('nodeSelected', function (event, data) {
         //console.log(data);
         $selectInput.val(data.text);
-        $selectInput.data('treeId', data.id)
+        $selectInput.data('treeId', data.id);
         if (!data.nodes) {
             $tree.slideUp(200);
             console.log($selectInput.data('treeId'))
 
         }
-        ;
     });
     $tree.on('click', function () {
         return false;

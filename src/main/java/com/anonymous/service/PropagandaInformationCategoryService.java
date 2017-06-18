@@ -1,15 +1,21 @@
 package com.anonymous.service;
 
+import com.anonymous.domain.PropagandaInformation.CategoryTree;
 import com.anonymous.domain.PropagandaInformation.PropagandaInformation;
 import com.anonymous.domain.PropagandaInformation.PropagandaInformationCategory;
 import com.anonymous.repository.PropagandaInformationCategoryRepository;
 import com.anonymous.service.inter.PropagandaInformationCategoryServiceInter;
 import com.anonymous.service.inter.PropagandaInformationServiceInter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * Created by WangZK on 2017/6/1.
@@ -70,31 +76,79 @@ public class PropagandaInformationCategoryService implements PropagandaInformati
         return propagandaInformationCategoryRepository.findByPid(pid);
     }
 
+    /**
+     * 获取树形结构的全部字段
+     *
+     * @param mainCategory
+     * @param medium
+     * @return
+     */
     @Override
-    public Set<List<PropagandaInformationCategory>> findByIndistinctName(String indistinct) {
-        List<PropagandaInformationCategory> propagandaInformationCategoryList = propagandaInformationCategoryRepository.findByNameLike("%" + indistinct + "%");
-        return packageListToMap(propagandaInformationCategoryList);
-    }
+    public Object[] getCategoriesOfTree(String mainCategory, String medium, String type) {
 
-    @Override
-    public Set<List<PropagandaInformationCategory>> displayAll() {
-        List<PropagandaInformationCategory> fatherList = this.findByPidIsNull();
-        return packageListToMap(fatherList);
-    }
+        Sort sort = new Sort(Sort.Direction.DESC, "sortNum");
 
+        PropagandaInformationCategory propagandaInformationCategory;
 
+        if ( !"".equals(mainCategory) || !"".equals(medium) ) {
 
-    @Override
-    public Set<List<PropagandaInformationCategory>> packageListToMap(List<PropagandaInformationCategory> propagandaInformationCategories) {
-        for (PropagandaInformationCategory propagandaInformationCategory : propagandaInformationCategories) {
-            List<PropagandaInformationCategory> sonList = this.findByPid(propagandaInformationCategory.getId());
-            if (sonList.size() <= 0) {
+            propagandaInformationCategory = new PropagandaInformationCategory();
 
-            } else {
+            if (!"".equals(medium))
+                propagandaInformationCategory.setName(medium);
+            else
+                propagandaInformationCategory.setName(mainCategory);
 
-            }
+            ExampleMatcher matcher = ExampleMatcher.matching()
+                    .withMatcher("name", ExampleMatcher.GenericPropertyMatcher::contains)
+                    .withIgnorePaths("id", "status", "sortNum", "lastModifiedTime", "pid", "creator")
+                    .withIgnoreNullValues();
+
+            Example<PropagandaInformationCategory> example = Example.of(propagandaInformationCategory, matcher);
+
+            return castToSelectTree(this.propagandaInformationCategoryRepository.findAll(example, sort));
+        } else {
+            if ("selectTree".equals(type))
+                return castToSelectTree(this.propagandaInformationCategoryRepository.findAll(sort));
+            else
+                return castToListTree(this.propagandaInformationCategoryRepository.findAll(sort));
         }
+    }
 
+    /**
+     * 转成分类管理的主列表
+     */
+    private Object[] castToListTree(List<PropagandaInformationCategory> propagandaInformationCategories){
+        Map map;
         return null;
     }
-}
+
+    /**
+     * 转成分类管理的下拉框的树
+     */
+    private Object[] castToSelectTree(List<PropagandaInformationCategory> propagandaInformationCategories){
+        List<CategoryTree> temp = new ArrayList<>();
+        CategoryTree sonNode;
+        CategoryTree grandSonNode;
+        for (PropagandaInformationCategory p : propagandaInformationCategories){
+            if (!StringUtils.isEmpty(p.getPid()))
+                continue;
+            sonNode = new CategoryTree();
+            sonNode.setId(p.getId());
+            sonNode.setText(p.getName());
+            for (PropagandaInformationCategory sp : propagandaInformationCategories) {
+                if ( sonNode.getId().equals(sp.getPid()) ){
+                    if(null == sonNode.getNodes())
+                        sonNode.setNodes(new ArrayList<>());
+                    grandSonNode = new CategoryTree();
+                    grandSonNode.setId(sp.getId());
+                    grandSonNode.setText(sp.getName());
+                    sonNode.getNodes().add(grandSonNode);
+                }
+            }
+            temp.add(sonNode);
+        }
+        Object[] objects = temp.toArray();
+        return objects;
+    }
+ }
