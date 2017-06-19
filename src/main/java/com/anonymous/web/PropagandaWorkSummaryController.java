@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -51,7 +52,7 @@ public class PropagandaWorkSummaryController {
                                                                        @RequestParam Integer size,
                                                                        @RequestParam String title,
                                                                        @RequestParam String draftMan,
-                                                                       @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime draftDate,
+                                                                       @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate draftDate,
                                                                        @RequestParam Integer approvalStatus){
         return propagandaWorkSummaryService.getPropagandaWorkSummaryForPage(currentPage,size,title,draftMan,draftDate,approvalStatus);
 
