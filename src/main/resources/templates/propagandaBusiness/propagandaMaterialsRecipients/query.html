@@ -30,12 +30,11 @@
                 <label>状态:</label>
                 <select name="approvalStatus" id="approvalStatus" class="form-control input-sm">
                     <option value="100">全部</option>
-                    <option value="0">草稿</option>
-                    <option value="1">待审批</option>
-                    <option value="2">审核中</option>
+                    <option value="0">待审批</option>
+                    <option value="1">审核中</option>
                     <option value="2">执行中</option>
-                    <option value="4">已完成</option>
-                    <option value="5">已归档</option>
+                    <option value="3">已完成</option>
+                    <option value="4">已归档</option>
                 </select>
             </div>
             <button type="button" class="btn btn-default btn-sm" id="query">
@@ -132,25 +131,21 @@
         <td>
             {{if index.approvalStatus == 0}}
             <span class="font-red">
-                            草稿
+                            待审批
                         </span>
             {{else if index.approvalStatus == 1}}
             <span class="font-red">
-                            待审批
+                            审核中
                         </span>
             {{else if index.approvalStatus == 2}}
             <span class="font-red">
-                            审核中
+                            执行中
                         </span>
             {{else if index.approvalStatus == 3}}
             <span class="font-red">
-                            执行中
-                        </span>
-            {{else if index.approvalStatus == 4}}
-            <span class="font-red">
                             已完成
                         </span>
-            {{else if index.approvalStatus == 5}}
+            {{else if index.approvalStatus == 4}}
             <span class="font-red">
                             已归档
                         </span>
@@ -171,8 +166,10 @@
             "approvalStatus": "100"
         };
         //调用ajax进行查询
-        save(data);
+        query(data);
     });
+
+    var currentQeury = {} ;
 
     $("#query").on('click',
         function () {
@@ -190,7 +187,7 @@
                 "approvalStatus": approvalStatus
             };
             //调用ajax进行查询
-            save(data);
+            query(data);
         }
     )
 
@@ -202,12 +199,13 @@
             $inputs.each(function () {
                 $data.push($(this).attr('data-id'));
             });
+            console.log($data);
             //调用ajax进行删除
-            deleted($data);
+            //deleted($data);
         }
     )
 
-    function save($data) {
+    function query($data) {
         $.ajax({
             type: "GET",
             url: "/getPropagandaMaterialsRecipientsForPage",
@@ -217,6 +215,8 @@
                 console.log(data);
                 var html = template('data_table', data);
                 document.getElementById('table').innerHTML = html;
+
+                currentQeury = $data;
             }
         });
     }
@@ -229,7 +229,7 @@
             url: "/deletedPropagandaMaterialsRecipients",
             data: "ids=" + $data,
             success: function () {
-                alert("删除成功");
+                query(currentQeury);
             }
         });
     }
