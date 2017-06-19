@@ -34,7 +34,7 @@
                 <td>用户名</td>
                 <td><input id="username" name="username" type="text" class="form-control input-sm"/></td>
                 <td>密码</td>
-                <td><input name="name" type="text" class="form-control input-sm"/></td>
+                <td><input id="password" name="password" type="password" class="form-control input-sm"/></td>
             </tr>
             <tr>
                 <td>姓名</td>
@@ -42,7 +42,7 @@
                 <td>性别</td>
                 <td>
                     <label class="radio-inline">
-                        <input type="radio" value="男" name="sex">男
+                        <input type="radio" value="男" name="sex" checked>男
                     </label>
                     <label class="radio-inline">
                         <input type="radio" value="女" name="sex">女
@@ -132,12 +132,12 @@
             "id": null,
             "name": $("#name").val(),
             "organization": {
-                "id": "string"
+                "id": $selectInput.data('treeId')
             },
             "password": $("#password").val(),
             "phoneNumber": $("#phoneNumber").val(),
             "post": $("#post").val(),
-            "sex": $("#sex").val(),
+            "sex": $("input[name='sex']:checked").val(),
             "username": $("#username").val()
         }
 
@@ -150,6 +150,7 @@
             success: function (data) {
                 console.log(data);
                 loading.hide();
+                self.location.href = "/systemManagement/goUserList";
             }
         })
     });
