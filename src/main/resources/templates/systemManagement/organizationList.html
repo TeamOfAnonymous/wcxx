@@ -37,93 +37,19 @@
         </form>
     </div>
     <div class="handle-button-group">
-        <button
-                class="btn btn-default btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg">
+        <button id="btn-add" class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-plus"></span> 新建
         </button>
         <button class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-file"></span> 修改
         </button>
-        <button type="button" class="btn btn-default btn-sm">
+        <button id="btn-del" type="button" class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-remove"></span>
             删除
         </button>
     </div>
     <div class="data-table">
-        <table class="table table-bordered table-hover checked-table">
-            <thead>
-            <tr>
-                <th><input type="checkbox"></th>
-                <th>No.</th>
-                <th>组织机构id</th>
-                <th>组织机构名称</th>
-                <th>上级的组织机构id</th>
-                <th>上级的组织机构</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td><input type="checkbox"></td>
-                <td>1</td>
-                <td>test</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox"></td>
-                <td>2</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox"></td>
-                <td>3</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="page">
-        <ul class="pagination pagination-sm">
-            <li class="disabled">
-						<span href="#" aria-label="Previous">
-							<span aria-hidden="true">&laquo;</span>
-						</span>
-            </li>
-            <li class="active">
-                <span href="#">1</span>
-            </li>
-            <li>
-                <span href="#">2</span>
-            </li>
-            <li>
-                <span href="#">3</span>
-            </li>
-            <li>
-                <span href="#">4</span>
-            </li>
-            <li>
-                <span href="#">5</span>
-            </li>
-            <li>
-                <span href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </span>
-            </li>
-            <li class="li-page-handle">
-                转到第
-                <input type="text" class="form-control input-sm"/> 页
-                <button type="button" class="btn btn-default btn-sm">
-                    GO
-                </button>
-            </li>
-        </ul>
+        <div id="table-tree"></div>
     </div>
     <!--模态框-->
     <div id="modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
@@ -151,7 +77,7 @@
                                     <span class="font-red">*</span> 组织机构名称
                                 </td>
                                 <td colspan="3">
-                                    <input id="name" type="text" class="form-control input-sm">
+                                    <input id="newOrganization" type="text" class="form-control input-sm">
                                 </td>
 
                             </tr>
@@ -176,7 +102,10 @@
 <script type="text/javascript" src="../../js/public.js"></script>
 <script>
     var $tree = $("#tree"),
-        $selectInput = $(".mt-select input");
+            $selectInput = $(".mt-select input"),
+            $newOrganization = $('#newOrganization'),
+            node_checked_arr = [];
+    var modalTree = null, tableTree = null;
     $selectInput.on("click", function () {
         $tree.slideToggle(200);
         return false;
@@ -184,57 +113,100 @@
     $('.modal').on('click', function () {
         $tree.slideUp(200);
     })
-
-    $.ajax({
-        type: "GET",
-        url: "/getOrganizationTree",
-        data: {
-            type: "selectTree"
-        },
-        success: function (data) {
-            console.log(data);
-            $tree.treeview({
-                data: data,
-                showBorder: false,
-            });
-            $tree.on('nodeSelected', function (event, data) {
-                $tree.slideUp(200);
-                $selectInput.val(data.text);
-                $selectInput.data('treeId', data.id)
-                /* if (!data.nodes) {
-                 console.log($selectInput.data('treeId'))
-                 }*/
-            });
-            $tree.on('click', function () {
-                return false;
-            });
+    $('#btn-add').on('click', function () {
+        $selectInput.val('');
+        $selectInput.data('treeId', '');
+        $newOrganization.val('');
+        $('#modal').modal('show');
+    });
+    $('#btn-del').on('click', function () {
+        if (node_checked_arr.length) {
+            console.log(node_checked_arr);
+            alert(node_checked_arr);
+        } else {
+            message.add("你没有选择信息", "warning");
         }
     });
+    getData();
 
     $('#modal-btn-save').on('click', function () {
-        var $pid = $selectInput.data('treeId');
-        var $name = $("#name").val();
-
+        var pid = $selectInput.data('treeId');
+        var newOrganization = $("#newOrganization").val();
+        if (pid == undefined || pid == '') {
+            message.add("请先选择上级组织机构", "warning");
+            return false;
+        }
+        if (newOrganization == '') {
+            message.add("请先填写新的组织机构名称", "warning");
+            return false;
+        }
         var $data = {
             "id": null,
-            "name": $name,
-            "pid": $pid
+            "name": newOrganization,
+            "pid": pid
         };
-
+        $('#modal').modal('hide');
+        loading.show();
         $.ajax({
             type: "POST",
             url: "/addOrganization",
             data: JSON.stringify($data),
-            contentType:"application/json",
+            contentType: "application/json",
             dataType: "json",
             success: function (data) {
-                console.log(data);
                 loading.hide();
+                message.add("添加成功");
+                getData();
             }
         })
-
-        $('#modal').modal('hide')
     });
+    function getData() {
+        loading.show("加载数据中...");
+        $.ajax({
+            type: "GET",
+            url: "/getOrganizationTree",
+            data: {
+                type: "selectTree"
+            },
+            success: function (data) {
+                //console.log(data);
+                renderTree(data);
+                loading.hide();
+            }
+        });
+    }
+    function renderTree(data) {
+        modalTree = $tree.treeview({
+            data: data,
+            showBorder: false,
+        });
+        $tree.on('nodeSelected', function (event, data) {
+            $tree.slideUp(200);
+            $selectInput.val(data.text);
+            $selectInput.data('treeId', data.id)
+        });
+        $tree.on('click', function () {
+            return false;
+        });
+        tableTree = $('#table-tree').treeview({
+            data: data,
+            showCheckbox: true,
+            selectedBackColor: '#fff',
+            selectedColor: '#000',
+            onNodeChecked: function (event, node) {
+                node_checked_arr.push(node.id);
+            },
+            onNodeUnchecked: function (event, node) {
+                for (var i = 0, l = node_checked_arr.length; i < l; i++) {
+                    if (node_checked_arr[i] == node.id) {
+                        node_checked_arr.splice(i, 1);
+                        break;
+                    }
+                }
+
+            }
+        });
+    }
 </script>
 </body>
 </html>
