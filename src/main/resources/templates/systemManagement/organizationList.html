@@ -200,7 +200,6 @@
                 showBorder: false,
             });
             $tree.on('nodeSelected', function (event, data) {
-                //console.log(data);
                 $tree.slideUp(200);
                 $selectInput.val(data.text);
                 $selectInput.data('treeId', data.id)
