@@ -126,7 +126,8 @@
         </ul>
     </div>
     <!--模态框-->
-    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div id="modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-body">
@@ -161,7 +162,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">保存</button>
+                    <button id="modal-btn-save" type="button" class="btn btn-primary">保存</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                 </div>
             </div>
@@ -200,20 +201,22 @@
             });
             $tree.on('nodeSelected', function (event, data) {
                 //console.log(data);
+                $tree.slideUp(200);
                 $selectInput.val(data.text);
                 $selectInput.data('treeId', data.id)
-                if (!data.nodes) {
-                    $tree.slideUp(200);
-                    console.log($selectInput.data('treeId'))
-
-                }
+                /* if (!data.nodes) {
+                 console.log($selectInput.data('treeId'))
+                 }*/
+            });
+            $tree.on('click', function () {
+                return false;
             });
         }
     });
 
-
-    $tree.on('click', function () {
-        return false;
+    $('#modal-btn-save').on('click', function () {
+        alert($selectInput.data('treeId'));
+        $('#modal').modal('hide')
     });
 </script>
 </body>
