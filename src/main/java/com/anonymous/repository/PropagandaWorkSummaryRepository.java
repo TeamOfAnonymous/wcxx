@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -18,14 +19,14 @@ public interface PropagandaWorkSummaryRepository extends JpaRepository<Propagand
     @Query("from PropagandaWorkSummary p where p.title like %?1% and p.draftMan.name like %?2%")
     Page<PropagandaWorkSummary> getPropagandaWorkSummaryForPage(String title, String draftMan, Pageable pageable);
 
-    @Query("from PropagandaWorkSummary p where p.title like %?1% and p.draftMan.name like %?2% and p.approvalStatus = ?3")
-    Page<PropagandaWorkSummary> getPropagandaWorkSummaryForPage(String title, String draftMan, LocalDateTime draftDate, Pageable pageable);
-
     @Query("from PropagandaWorkSummary p where p.title like %?1% and p.draftMan.name like %?2% and p.draftDate = ?3")
+    Page<PropagandaWorkSummary> getPropagandaWorkSummaryForPage(String title, String draftMan, LocalDate draftDate, Pageable pageable);
+
+    @Query("from PropagandaWorkSummary p where p.title like %?1% and p.draftMan.name like %?2% and p.approvalStatus = ?3")
     Page<PropagandaWorkSummary> getPropagandaWorkSummaryForPage(String title, String draftMan, Integer approvalStatus, Pageable pageable);
 
     @Query("from PropagandaWorkSummary p where p.title like %?1% and p.draftMan.name like %?2% and p.draftDate = ?3 and p.approvalStatus = ?4")
-    Page<PropagandaWorkSummary> getPropagandaWorkSummaryForPage(String title, String draftMan, LocalDateTime draftDate, Integer approvalStatus, Pageable pageable);
+    Page<PropagandaWorkSummary> getPropagandaWorkSummaryForPage(String title, String draftMan, LocalDate draftDate, Integer approvalStatus, Pageable pageable);
 
 
 }

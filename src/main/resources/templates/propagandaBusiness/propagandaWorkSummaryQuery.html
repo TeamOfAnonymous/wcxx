@@ -30,12 +30,10 @@
                 <label>状态:</label>
                 <select name="approvalStatus" id="approvalStatus" class="form-control input-sm">
                     <option value="100">全部</option>
-                    <option value="0">草稿</option>
-                    <option value="1">待审批</option>
-                    <option value="2">审核中</option>
-                    <option value="2">执行中</option>
-                    <option value="4">已完成</option>
-                    <option value="5">已归档</option>
+                    <option value="0">拟稿中</option>
+                    <option value="1">审核中</option>
+                    <option value="2">已完成</option>
+                    <option value="3">已归档</option>
                 </select>
             </div>
             <button type="button" class="btn btn-default btn-sm" id="query">
@@ -125,32 +123,24 @@
     <tr>
         <td><input type="checkbox" value="{{index.id}}"/></td>
         <td>{{i+1}}</td>
-        <td>{{index.title}}</td>
+        <td><a href="">{{index.title}}</a></td>
         <td>{{index.draftMan.organization.name}}</td>
         <td>{{index.draftMan.name}}</td>
         <td>{{index.draftDate}}</td>
         <td>
             {{if index.approvalStatus == 0}}
             <span class="font-red">
-                            草稿
+                            拟稿中
                         </span>
             {{else if index.approvalStatus == 1}}
             <span class="font-red">
-                            待审批
+                            审核中
                         </span>
             {{else if index.approvalStatus == 2}}
             <span class="font-red">
-                            审核中
-                        </span>
-            {{else if index.approvalStatus == 3}}
-            <span class="font-red">
-                            执行中
-                        </span>
-            {{else if index.approvalStatus == 4}}
-            <span class="font-red">
                             已完成
                         </span>
-            {{else if index.approvalStatus == 5}}
+            {{else if index.approvalStatus == 3}}
             <span class="font-red">
                             已归档
                         </span>

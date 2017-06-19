@@ -3,6 +3,7 @@ package com.anonymous.service.inter;
 import com.anonymous.domain.PropagandaWorkSummary;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -16,5 +17,5 @@ public interface PropagandaWorkSummaryServiceInter {
 
     boolean delete(String id);
 
-    Page<PropagandaWorkSummary> getPropagandaWorkSummaryForPage(Integer currentPage, Integer size, String title, String draftMan, LocalDateTime draftDate, Integer approvalStatus);
+    Page<PropagandaWorkSummary> getPropagandaWorkSummaryForPage(Integer currentPage, Integer size, String title, String draftMan, LocalDate draftDate, Integer approvalStatus);
 }

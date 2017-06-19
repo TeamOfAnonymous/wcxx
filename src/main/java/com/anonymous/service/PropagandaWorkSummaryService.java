@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -23,6 +24,7 @@ public class PropagandaWorkSummaryService implements PropagandaWorkSummaryServic
 
     @Override
     public PropagandaWorkSummary add(PropagandaWorkSummary propagandaWorkSummary) {
+        propagandaWorkSummary.setApprovalStatus(0);
         return propagandaWorkSummaryRepository.save(propagandaWorkSummary);
     }
 
@@ -38,7 +40,7 @@ public class PropagandaWorkSummaryService implements PropagandaWorkSummaryServic
     }
 
     @Override
-    public Page<PropagandaWorkSummary> getPropagandaWorkSummaryForPage(Integer currentPage, Integer size, String title, String draftMan, LocalDateTime draftDate, Integer approvalStatus) {
+    public Page<PropagandaWorkSummary> getPropagandaWorkSummaryForPage(Integer currentPage, Integer size, String title, String draftMan, LocalDate draftDate, Integer approvalStatus) {
         Sort sort = new Sort(Sort.Direction.fromString("DESC"), "draftDate");
         Pageable pageable = new PageRequest(currentPage, size, sort);
 

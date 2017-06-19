@@ -1,10 +1,8 @@
 package com.anonymous.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -18,13 +16,14 @@ public class PropagandaWorkSummary implements Serializable {
     @GeneratedValue(generator = "UUID2_GENERATOR")
     private String id;//宣传工作总结id
 
-    private LocalDateTime draftDate;//拟稿时间
+    private LocalDate draftDate;//拟稿时间
 
     private String title;//标题
 
     @ManyToOne
     private User draftMan;//拟稿人
 
+    @Column(length = 16777216)
     private String content;//总结内容
 
     private Integer approvalStatus;//审批状态，0为草稿，1为待审批，2为审核中，3为执行中，4为已完成，5为已归档
@@ -40,11 +39,11 @@ public class PropagandaWorkSummary implements Serializable {
         this.id = id;
     }
 
-    public LocalDateTime getDraftDate() {
+    public LocalDate getDraftDate() {
         return draftDate;
     }
 
-    public void setDraftDate(LocalDateTime draftDate) {
+    public void setDraftDate(LocalDate draftDate) {
         this.draftDate = draftDate;
     }
 
