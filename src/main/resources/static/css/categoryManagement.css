@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .category-management .handle-top .form-group input[type="text"].form-control {
   width: 150px; }
 .category-management .data-table .table td {
@@ -22,7 +23,7 @@
   .category-management .data-table .table td .cmt-tree.L6 {
     margin-left: 100px; }
 
-/**/
+/*树*/
 .mt-select {
   position: relative; }
   .mt-select:after {
