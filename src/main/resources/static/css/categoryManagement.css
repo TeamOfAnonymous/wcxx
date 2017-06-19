@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .category-management .handle-top .form-group input[type="text"].form-control {
   width: 150px; }
 .category-management .data-table .table td {
@@ -22,9 +23,10 @@
   .category-management .data-table .table td .cmt-tree.L6 {
     margin-left: 100px; }
 
-.modal-table .mt-select {
+/*树*/
+.mt-select {
   position: relative; }
-  .modal-table .mt-select:after {
+  .mt-select:after {
     content: "";
     position: absolute;
     right: 5px;
@@ -35,13 +37,13 @@
     border-left-color: transparent;
     border-right-color: transparent;
     border-bottom: none; }
-  .modal-table .mt-select input {
+  .mt-select input {
     padding-right: 30px;
     cursor: pointer; }
-  .modal-table .mt-select input[disabled] {
+  .mt-select input[disabled] {
     background-color: white;
     cursor: default; }
-  .modal-table .mt-select div#tree {
+  .mt-select div#tree {
     display: none;
     position: absolute;
     z-index: 999;
@@ -51,9 +53,9 @@
     max-height: 300px;
     overflow: auto;
     border-radius: 4px; }
-    .modal-table .mt-select div#tree ul.list-group {
+    .mt-select div#tree ul.list-group {
       margin-bottom: 0; }
-      .modal-table .mt-select div#tree ul.list-group .list-group-item {
+      .mt-select div#tree ul.list-group .list-group-item {
         padding: 1px; }
 
 /*# sourceMappingURL=categoryManagement.css.map */

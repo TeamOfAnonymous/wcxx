@@ -169,7 +169,11 @@
                 type: "selectTree"
             },
             success: function (data) {
-                //console.log(data);
+                console.log(data);
+                if (modalTree) {
+                    modalTree.remove();
+                    tableTree.removve();
+                }
                 renderTree(data);
                 loading.hide();
             }

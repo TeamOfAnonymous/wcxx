@@ -88,7 +88,7 @@ public class PropagandaInformationCategoryService implements PropagandaInformati
 
         PropagandaInformationCategory propagandaInformationCategory;
 
-        if ( !"".equals(mainCategory) || !"".equals(medium) ) {
+        if ( !StringUtils.isEmpty(mainCategory) || !StringUtils.isEmpty(medium) ) {
 
             propagandaInformationCategory = new PropagandaInformationCategory();
 
