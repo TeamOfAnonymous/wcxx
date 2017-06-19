@@ -151,9 +151,7 @@
                                     <span class="font-red">*</span> 组织机构名称
                                 </td>
                                 <td colspan="3">
-
-                                    <input type="text" class="form-control input-sm">
-
+                                    <input id="name" type="text" class="form-control input-sm">
                                 </td>
 
                             </tr>
@@ -214,7 +212,27 @@
     });
 
     $('#modal-btn-save').on('click', function () {
-        alert($selectInput.data('treeId'));
+        var $pid = $selectInput.data('treeId');
+        var $name = $("#name").val();
+
+        var $data = {
+            "id": null,
+            "name": $name,
+            "pid": $pid
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/addOrganization",
+            data: JSON.stringify($data),
+            contentType:"application/json",
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                loading.hide();
+            }
+        })
+
         $('#modal').modal('hide')
     });
 </script>
