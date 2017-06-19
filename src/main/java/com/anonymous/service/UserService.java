@@ -1,11 +1,10 @@
 package com.anonymous.service;
 
-import com.anonymous.domain.Organization;
+import com.anonymous.domain.organization.Organization;
 import com.anonymous.domain.User;
 import com.anonymous.repository.UserRepository;
 import com.anonymous.service.inter.OrganizationServiceInter;
 import com.anonymous.service.inter.UserServiceInter;
-import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

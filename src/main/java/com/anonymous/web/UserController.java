@@ -1,6 +1,5 @@
 package com.anonymous.web;
 
-import com.anonymous.domain.Organization;
 import com.anonymous.domain.User;
 import com.anonymous.service.inter.UserServiceInter;
 import io.swagger.annotations.Api;

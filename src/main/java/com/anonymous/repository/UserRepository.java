@@ -1,6 +1,6 @@
 package com.anonymous.repository;
 
-import com.anonymous.domain.Organization;
+import com.anonymous.domain.organization.Organization;
 import com.anonymous.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,13 +1,9 @@
 package com.anonymous.web;
 
-import com.anonymous.domain.Organization;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.swing.text.View;
 
 /**
  * Created by Administrator on 2017/6/8.

@@ -1,6 +1,6 @@
 package com.anonymous.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.anonymous.domain.organization.Organization;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
