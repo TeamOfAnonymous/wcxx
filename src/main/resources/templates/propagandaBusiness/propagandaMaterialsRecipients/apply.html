@@ -21,6 +21,7 @@
                 状态&nbsp;:&nbsp;待审批
             </p>
         </div>
+        <input id="applicantId" value="29d3d48d-f9e2-42cc-b362-93c70bf24dc5" name="applicantId" type="hidden">
         <table class="table table-bordered">
             <tbody>
             <tr>
@@ -236,9 +237,9 @@
         }
         var data = {
             "applicant": {
-                "id": "a911e744-d064-4381-95ee-21e431ddbfd4"
+                "id": $("#applicantId").val()
             },
-            "applicationDate": $("#applicationDate"),
+            "applicationDate": applicationDate,
             "approvalStatus": 0,
             "id": null,
             "propagandaMaterials": p_m_arr,
