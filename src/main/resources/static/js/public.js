@@ -6,7 +6,7 @@ var message = new MyMessage.message({
     align: "right", //显示的位置类型center,right,left
 });
 //loading
-$('body').append('<div id="loading"><div class="l-bg"></div><div class="l-img"></div><p class="l-message">操作中...</p></div>')
+$('body').append('<div id="loading" style="z-index:9999"><div class="l-bg"></div><div class="l-img"></div><p class="l-message">操作中...</p></div>')
 
 //表格选择多条数据
 var $table = $('.checked-table');
