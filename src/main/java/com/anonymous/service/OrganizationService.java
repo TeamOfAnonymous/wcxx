@@ -55,18 +55,20 @@ public class OrganizationService implements OrganizationServiceInter {
     }
 
     @Override
-    public boolean delete(String id) {
+    public boolean delete(String[] ids) {
         //判断是否存在子节点，如果存在，不给删除，如果不存在，则可以删除
-        List<Organization> organizations = organizationRepository.findByPid(id);
-        if (organizations.size() > 0) {
-            return false;
-        } else {
-            List<User> users = userService.findByOrganization(id);
-            if (users.size() > 0) {
+        for (String id : ids) {
+            List<Organization> organizations = organizationRepository.findByPid(id);
+            if (organizations.size() > 0) {
                 return false;
+            } else {
+                List<User> users = userService.findByOrganization(id);
+                if (users.size() > 0) {
+                    return false;
+                }
             }
+            organizationRepository.delete(id);
         }
-        organizationRepository.delete(id);
         return true;
     }
 

@@ -59,8 +59,8 @@ public class OrganizationController {
     @RequestMapping(value = "deletedOrganization", method = RequestMethod.GET)
     @ApiOperation(value = "删除组织机构")
     @ResponseBody
-    public boolean deletedOrganization(@RequestParam String id) {
-        return organizationService.delete(id);
+    public boolean deletedOrganization(@RequestParam String[] ids) {
+        return organizationService.delete(ids);
     }
 
 

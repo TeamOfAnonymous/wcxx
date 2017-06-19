@@ -20,7 +20,7 @@ public interface OrganizationServiceInter {
 
     Organization edit(Organization organization);
 
-    boolean delete(String id);
+    boolean delete(String[] id);
 
     List<OrganizationTree> getOrganizationTree();
 }

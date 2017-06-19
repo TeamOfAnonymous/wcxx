@@ -102,9 +102,9 @@
 <script type="text/javascript" src="../../js/public.js"></script>
 <script>
     var $tree = $("#tree"),
-            $selectInput = $(".mt-select input"),
-            $newOrganization = $('#newOrganization'),
-            node_checked_arr = [];
+        $selectInput = $(".mt-select input"),
+        $newOrganization = $('#newOrganization'),
+        node_checked_arr = [];
     var modalTree = null, tableTree = null;
     $selectInput.on("click", function () {
         $tree.slideToggle(200);
@@ -122,11 +122,24 @@
     $('#btn-del').on('click', function () {
         if (node_checked_arr.length) {
             console.log(node_checked_arr);
-            alert(node_checked_arr);
+            organizationDel(node_checked_arr);
         } else {
             message.add("你没有选择信息", "warning");
         }
     });
+
+    function organizationDel(node_checked_arr) {
+        $.ajax({
+            type: "GET",
+            url: "/deletedOrganization",
+            data: "ids=" + node_checked_arr,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                getData();
+            }
+        });
+    }
     getData();
 
     $('#modal-btn-save').on('click', function () {
@@ -172,7 +185,7 @@
                 console.log(data);
                 if (modalTree) {
                     modalTree.remove();
-                    tableTree.removve();
+                    tableTree.remove();
                 }
                 renderTree(data);
                 loading.hide();
