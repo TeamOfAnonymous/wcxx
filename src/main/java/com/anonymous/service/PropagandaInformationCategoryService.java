@@ -13,9 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by WangZK on 2017/6/1.
@@ -106,7 +104,7 @@ public class PropagandaInformationCategoryService implements PropagandaInformati
 
             Example<PropagandaInformationCategory> example = Example.of(propagandaInformationCategory, matcher);
 
-            return castToSelectTree(this.propagandaInformationCategoryRepository.findAll(example, sort));
+            return castToListTree(this.propagandaInformationCategoryRepository.findAll(example, sort));
         } else {
             if ("selectTree".equals(type))
                 return castToSelectTree(this.propagandaInformationCategoryRepository.findAll(sort));
@@ -119,8 +117,21 @@ public class PropagandaInformationCategoryService implements PropagandaInformati
      * 转成分类管理的主列表
      */
     private Object[] castToListTree(List<PropagandaInformationCategory> propagandaInformationCategories){
-        Map map;
-        return null;
+        Set<PropagandaInformationCategory> set;
+        List<Set<PropagandaInformationCategory>> mainList = new ArrayList<>();
+        for (PropagandaInformationCategory p : propagandaInformationCategories){
+            if (!StringUtils.isEmpty(p.getPid()))
+                continue;
+            set = new LinkedHashSet<>();
+            set.add(p);
+            for (PropagandaInformationCategory sp : propagandaInformationCategories) {
+                if ( p.getId().equals(sp.getPid()) ){
+                    set.add(sp);
+                }
+            }
+            mainList.add(set);
+        }
+        return mainList.toArray();
     }
 
     /**
@@ -130,6 +141,7 @@ public class PropagandaInformationCategoryService implements PropagandaInformati
         List<CategoryTree> temp = new ArrayList<>();
         CategoryTree sonNode;
         CategoryTree grandSonNode;
+
         for (PropagandaInformationCategory p : propagandaInformationCategories){
             if (!StringUtils.isEmpty(p.getPid()))
                 continue;
