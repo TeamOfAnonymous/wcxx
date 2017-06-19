@@ -1,13 +1,15 @@
 package com.anonymous.service;
 
-import com.anonymous.domain.Organization;
+import com.anonymous.domain.organization.Organization;
 import com.anonymous.domain.User;
+import com.anonymous.domain.organization.OrganizationTree;
 import com.anonymous.repository.OrganizationRepository;
 import com.anonymous.service.inter.OrganizationServiceInter;
 import com.anonymous.service.inter.UserServiceInter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,5 +70,33 @@ public class OrganizationService implements OrganizationServiceInter {
         return true;
     }
 
+    //将所有的组织机构遍历成树
+    @Override
+    public List<OrganizationTree> getOrganizationTree() {
+        List<OrganizationTree> organizationTreeList = new ArrayList<>();
+        //获取父节点为空的组织机构
+        List<Organization> organizations = organizationRepository.findByPidIsNull();
+        for (Organization o : organizations) {
+            OrganizationTree organizationTree = new OrganizationTree(o);
+            //调用获取子节点的方法
+            getOrganizationSon(organizationTree);
+            organizationTreeList.add(organizationTree);
+        }
+        return organizationTreeList;
+    }
+
+    //递归获取组织机构的子节点
+    private void getOrganizationSon(OrganizationTree organizationTree) {
+        List<Organization> organizations = organizationRepository.findByPid(organizationTree.getId());
+        List<OrganizationTree> organizationTreeList = new ArrayList<>();
+        if (organizations.size() > 0) {
+            for(Organization o : organizations) {
+                OrganizationTree sonOrganizationTree = new OrganizationTree(o);
+                organizationTreeList.add(sonOrganizationTree);
+                getOrganizationSon(sonOrganizationTree);
+            }
+        }
+        organizationTree.setNodes(organizationTreeList);
+    }
 
 }
