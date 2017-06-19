@@ -88,8 +88,9 @@ public class OrganizationService implements OrganizationServiceInter {
     //递归获取组织机构的子节点
     private void getOrganizationSon(OrganizationTree organizationTree) {
         List<Organization> organizations = organizationRepository.findByPid(organizationTree.getId());
-        List<OrganizationTree> organizationTreeList = new ArrayList<>();
+        List<OrganizationTree> organizationTreeList = null;
         if (organizations.size() > 0) {
+            organizationTreeList = new ArrayList<>();
             for(Organization o : organizations) {
                 OrganizationTree sonOrganizationTree = new OrganizationTree(o);
                 organizationTreeList.add(sonOrganizationTree);
