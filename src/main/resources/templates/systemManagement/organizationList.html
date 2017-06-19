@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../../css/public.css"/>
     <link rel="stylesheet" href="../../vendor/jquery.my-message/css/jquery.my-message.1.1.css"/>
     <style>
-        .modal-table .table td:first-child{
+        .modal-table .table td:first-child {
             width: auto;
         }
     </style>
@@ -177,7 +177,7 @@
 <script type="text/javascript" src="../../js/public.js"></script>
 <script>
     var $tree = $("#tree"),
-            $selectInput = $(".mt-select input");
+        $selectInput = $(".mt-select input");
     $selectInput.on("click", function () {
         $tree.slideToggle(200);
         return false;
@@ -189,8 +189,8 @@
     $.ajax({
         type: "GET",
         url: "/getOrganizationTree",
-        data:{
-            type : "selectTree"
+        data: {
+            type: "selectTree"
         },
         success: function (data) {
             console.log(data);
@@ -198,21 +198,20 @@
                 data: data,
                 showBorder: false,
             });
+            $tree.on('nodeSelected', function (event, data) {
+                //console.log(data);
+                $selectInput.val(data.text);
+                $selectInput.data('treeId', data.id)
+                if (!data.nodes) {
+                    $tree.slideUp(200);
+                    console.log($selectInput.data('treeId'))
+
+                }
+            });
         }
     });
 
 
-    $tree.on('nodeSelected', function (event, data) {
-        //console.log(data);
-        $selectInput.val(data.text);
-        $selectInput.data('treeId', data.id)
-        if (!data.nodes) {
-            $tree.slideUp(200);
-            console.log($selectInput.data('treeId'))
-
-        }
-        ;
-    });
     $tree.on('click', function () {
         return false;
     });
