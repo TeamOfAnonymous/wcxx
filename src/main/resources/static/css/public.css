@@ -330,6 +330,11 @@ button {
   overflow: hidden; }
 .upload-file .uf-file-list {
   padding-top: 10px; }
+  .upload-file .uf-file-list p a:first-child {
+    color: #000; }
+    .upload-file .uf-file-list p a:first-child:hover {
+      color: #000;
+      text-decoration: none; }
 
 .mid-table.tab-table .mt-title {
   padding: 7px 0 0; }
@@ -359,7 +364,7 @@ button {
   margin: 20px 0; }
   .handel-btn .btn {
     padding-left: 40px;
-    padding-right: 50px; }
+    padding-right: 40px; }
 
 /*
 .modal-body {
