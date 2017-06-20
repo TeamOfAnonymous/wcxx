@@ -141,7 +141,14 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
     }
 
     @Override
-    public void deletedPropagandaMaterialsRecipients(String[] ids) {
+    public boolean deletedPropagandaMaterialsRecipients(String[] ids) {
+        for (String id : ids) {
+            PropagandaMaterialsRecipients propagandaMaterialsRecipients = getPropagandaMaterialsRecipients(id);
+            //判断是否可以删除
+            if (propagandaMaterialsRecipients.getApprovalStatus() > 0) {
+                return false;
+            }
+        }
         for (String id : ids) {
             PropagandaMaterialsRecipients propagandaMaterialsRecipients = getPropagandaMaterialsRecipients(id);
             for (PropagandaMaterials propagandaMaterials : propagandaMaterialsRecipients.getPropagandaMaterials()) {
@@ -149,6 +156,7 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
             }
             propagandaMaterialsRecipientsRepository.delete(id);
         }
+        return true;
     }
 
     //宣传物资领用统计报表
@@ -170,6 +178,23 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
         data.add(statisticsTotalData);
         data.add(statisticsPracticalData);
         return data;
+    }
+
+    @Override
+    public boolean filePropagandaMaterialsRecipients(String[] ids) {
+        for (String id : ids) {
+            PropagandaMaterialsRecipients propagandaMaterialsRecipients = getPropagandaMaterialsRecipients(id);
+            //判断是否可以归档
+            if (propagandaMaterialsRecipients.getApprovalStatus() != 3) {
+                return false;
+            }
+        }
+        for (String id : ids) {
+            PropagandaMaterialsRecipients propagandaMaterialsRecipients = getPropagandaMaterialsRecipients(id);
+            propagandaMaterialsRecipients.setApprovalStatus(4);
+            propagandaMaterialsRecipientsRepository.save(propagandaMaterialsRecipients);
+        }
+        return true;
     }
 
     //获取宣传物资的名称，返回Set

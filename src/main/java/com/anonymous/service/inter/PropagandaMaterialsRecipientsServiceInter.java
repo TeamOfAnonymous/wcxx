@@ -19,7 +19,9 @@ public interface PropagandaMaterialsRecipientsServiceInter {
 
     Map<String, Object> getPropagandaMaterialsRecipientsByApplicationDate(LocalDate startDate, LocalDate endDate);
 
-    void deletedPropagandaMaterialsRecipients(String[] ids);
+    boolean deletedPropagandaMaterialsRecipients(String[] ids);
 
     List<Map<String,Integer>> getPropagandaMaterialsRecipientsStatisticsForm(LocalDate startDate, LocalDate endDate);
+
+    boolean filePropagandaMaterialsRecipients(String[] ids);
 }

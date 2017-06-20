@@ -52,11 +52,10 @@
            class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-plus"></span> 新建
         </a>
-        <a href="/propagandaBusiness/propagandaMaterialsRecipients/goPropagandaMaterialsRecipientsApply"
-           class="btn btn-default btn-sm">
+        <button type="button" class="btn btn-default btn-sm" id="file-Btn">
             <span class="glyphicon glyphicon-file"></span> 归档
-        </a>
-        <button type="button" class="btn btn-default btn-sm" id="deleted">
+        </button>
+        <button type="button" class="btn btn-default btn-sm" id="del-Btn">
             <span class="glyphicon glyphicon-remove"></span>
             删除
         </button>
@@ -169,7 +168,7 @@
         query(data);
     });
 
-    var currentQeury = {} ;
+    var currentQeury = {};
 
     $("#query").on('click',
         function () {
@@ -192,18 +191,42 @@
     )
 
     //点击删除按钮调用的方法
-    $("#deleted").on('click',
+    $("#del-Btn").on('click',
         function () {
             var $data = [];
             var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
             $inputs.each(function () {
                 $data.push($(this).attr('data-id'));
             });
-            console.log($data);
             //调用ajax进行删除
-            //deleted($data);
+            deleted($data);
         }
     )
+
+    //点击归档按钮调用的方法
+    $("#file-Btn").on('click',
+        function () {
+            var $data = [];
+            var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
+            $inputs.each(function () {
+                $data.push($(this).attr('data-id'));
+            });
+            //调用ajax进行删除
+            archiveFile($data);
+        }
+    )
+
+    function archiveFile($data) {
+        $.ajax({
+            type: "GET",
+            url: "/filePropagandaMaterialsRecipients",
+            data: "ids=" + $data,
+            success: function (data) {
+                message.add("归档 : " + data , "warning");
+                query(currentQeury);
+            }
+        });
+    }
 
     function query($data) {
         $.ajax({
@@ -228,7 +251,8 @@
             type: "GET",
             url: "/deletedPropagandaMaterialsRecipients",
             data: "ids=" + $data,
-            success: function () {
+            success: function (data) {
+                message.add("删除 : " + data, "warning");
                 query(currentQeury);
             }
         });

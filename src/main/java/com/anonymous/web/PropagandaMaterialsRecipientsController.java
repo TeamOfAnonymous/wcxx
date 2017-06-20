@@ -40,8 +40,16 @@ public class PropagandaMaterialsRecipientsController {
 
     @RequestMapping(value = "deletedPropagandaMaterialsRecipients", method = RequestMethod.GET)
     @ApiOperation(value = "通过id删除宣传物资领用")
-    public void deletedPropagandaMaterialsRecipients(@RequestParam String[] ids) {
-        propagandaMaterialsRecipientsService.deletedPropagandaMaterialsRecipients(ids);
+    @ResponseBody
+    public boolean deletedPropagandaMaterialsRecipients(String[] ids) {
+        return propagandaMaterialsRecipientsService.deletedPropagandaMaterialsRecipients(ids);
+    }
+
+    @RequestMapping(value = "filePropagandaMaterialsRecipients", method = RequestMethod.GET)
+    @ApiOperation(value = "通过id归档")
+    @ResponseBody
+    public boolean filePropagandaMaterialsRecipients(String[] ids) {
+        return propagandaMaterialsRecipientsService.filePropagandaMaterialsRecipients(ids);
     }
 
     @RequestMapping(value = "getPropagandaMaterialsRecipientsStatistics", method = RequestMethod.GET)
