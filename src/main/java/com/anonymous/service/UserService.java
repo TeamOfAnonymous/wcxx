@@ -48,6 +48,16 @@ public class UserService implements UserServiceInter {
     @Override
     public Page<User> getUsersForPage(Integer currentPage, Integer size, String name, String sex, String organization, String post) {
         Pageable pageable = new PageRequest(currentPage, size);
-        return userRepository.findByNameAndSexAndOrganizationAndPost(name, sex, organization, post, pageable);
+        return userRepository.findByNameAndSexAndOrganizationAndPost(name, sex, organization, post,1, pageable);
+    }
+
+    @Override
+    public boolean deletedUser(String[] ids) {
+        for (String id : ids) {
+            User user = userRepository.findOne(id);
+            user.setStatus(0);
+            userRepository.save(user);
+        }
+        return true;
     }
 }

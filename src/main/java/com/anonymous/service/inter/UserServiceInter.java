@@ -18,4 +18,6 @@ public interface UserServiceInter {
     User getUser(String id);
 
     Page<User> getUsersForPage(Integer currentPage, Integer size, String name, String sex, String organization, String post);
+
+    boolean deletedUser(String[] ids);
 }

@@ -42,6 +42,13 @@ public class UserController {
         return userService.edit(user);
     }
 
+    @RequestMapping(value = "deletedUser", method = RequestMethod.GET)
+    @ApiOperation(value = "通过id删除用户人员")
+    @ResponseBody
+    public boolean deletedUser(@RequestParam String[] ids) {
+        return userService.deletedUser(ids);
+    }
+
     @RequestMapping(value = "getUser", method = RequestMethod.GET)
     @ApiOperation(value = "通过id获取用户人员")
     @ResponseBody
@@ -50,7 +57,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "getUsersForPage", method = RequestMethod.GET)
-    @ApiOperation(value = "通过id获取用户人员")
+    @ApiOperation(value = "查询用户人员")
     @ResponseBody
     public Page<User> getUsersForPage(@RequestParam Integer currentPage,
                                       @RequestParam Integer size,

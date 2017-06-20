@@ -25,10 +25,7 @@
             </div>
             <div class="form-group">
                 <label>所在部门：</label>
-                <select class="form-control input-sm" name="organization" id="organization">
-                    <option value="">全部</option>
-                    <option value="血液管理科">血液管理科</option>
-                </select>
+
             </div>
             <div class="form-group">
                 <label>职务:</label>
@@ -56,7 +53,7 @@
            class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-file"></span> 修改
         </a>
-        <button type="button" class="btn btn-default btn-sm">
+        <button type="button" class="btn btn-default btn-sm" id="deletedUser">
             <span class="glyphicon glyphicon-remove"></span>
             删除
         </button>
@@ -105,6 +102,7 @@
 
 <script type="text/javascript" src="../../vendor/jquery1.9.min.js"></script>
 <script type="text/javascript" src="../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../vendor/bootstrap-treeview/dist/bootstrap-treeview.min.js"></script>
 <script type="text/javascript" src="../../vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
 <script type="text/javascript" src="../../vendor/template-web-min.js"></script>
 <script type="text/javascript" src="../../js/public.js"></script>
@@ -164,13 +162,32 @@
                 "size": "10",
                 "name": $name,
                 "sex": $sex,
-                "organization": $organization,
+                "organization": $selectInput.data('treeId'),
                 "post": $post
             };
             //调用ajax进行查询
             query($data);
         }
     )
+    
+    $("#deletedUser").on('click',function () {
+        var $data = [];
+        var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
+        $inputs.each(function () {
+            $data.push($(this).attr('data-id'));
+        });
+        $.ajax({
+            type: "GET",
+            url: "/deletedUser",
+            data: "ids=" + $data,
+            success: function () {
+                query(currentQuery);
+            }
+        });
+    })
+
+    // 保存当前的查询条件
+    var currentQuery = {} ;
 
     function query($data) {
         $.ajax({
@@ -182,6 +199,7 @@
                 console.log(data);
                 var html = template('data_table', data);
                 document.getElementById('table').innerHTML = html;
+                currentQuery = $data;
             }
         });
     }

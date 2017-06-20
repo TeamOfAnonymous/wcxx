@@ -2,10 +2,7 @@ package com.anonymous.domain;
 
 import com.anonymous.domain.organization.Organization;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -25,6 +22,9 @@ public class User implements Serializable {
     private String post;//职务
     private String phoneNumber;//联系电话
     private String email;//邮件地址
+
+    @Column(columnDefinition = "INT default 1")
+    private Integer status = 1;//0为被删除，1为未被删除
 
     @ManyToOne
     private Organization organization; //所在部门
@@ -102,5 +102,13 @@ public class User implements Serializable {
 
     public void setOrganization(Organization organization) {
         this.organization = organization;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

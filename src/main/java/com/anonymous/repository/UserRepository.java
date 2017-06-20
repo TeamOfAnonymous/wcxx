@@ -17,6 +17,6 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, String> {
     List<User> findByOrganization(Organization organization);
 
-    @Query("from User u where u.name like %?1% and u.sex like %?2% and u.organization.name like %?3% and u.post like %?4%")
-    Page<User> findByNameAndSexAndOrganizationAndPost(String name, String sex, String organization, String post, Pageable pageable);
+    @Query("from User u where u.name like %?1% and u.sex like %?2% and u.organization.id like %?3% and u.post like %?4% and u.status = ?5")
+    Page<User> findByNameAndSexAndOrganizationAndPost(String name, String sex, String organization, String post, Integer status, Pageable pageable);
 }
