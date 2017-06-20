@@ -6,7 +6,9 @@ import com.anonymous.domain.PropagandaMaterialsProduced.query.PropagandaMaterial
 import com.anonymous.domain.PropagandaMaterialsProduced.query.PropagandaMaterialsProducedStatisticalQuery;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by huangMP on 2017/5/26.
@@ -31,4 +33,6 @@ public interface PropagandaMaterialsProducedServiceInter {
     PropagandaMaterialsProducedStatisticalDto statisticalQuery(PropagandaMaterialsProducedStatisticalQuery query) ;
 
     Page findBySpecification(PropagandaMaterialsProducedQuery query) ;
+
+    List<Map<String, Integer>> getPropagandaMaterialsProducedByApplicationDate(PropagandaMaterialsProducedStatisticalQuery query);
 }
