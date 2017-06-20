@@ -34,10 +34,21 @@ public class PropagandaWorkSummaryService implements PropagandaWorkSummaryServic
     }
 
     @Override
-    public boolean delete(String id) {
-        propagandaWorkSummaryRepository.delete(id);
+    public boolean delete(String[] ids) {
+        for (String id : ids) {
+            PropagandaWorkSummary propagandaWorkSummary = getById(id);
+            //判断是否可以删除
+            if (propagandaWorkSummary.getApprovalStatus() > 0) {
+                return false;
+            }
+        }
+        for (String id : ids) {
+            propagandaWorkSummaryRepository.delete(id);
+        }
         return true;
     }
+
+
 
     @Override
     public Page<PropagandaWorkSummary> getPropagandaWorkSummaryForPage(Integer currentPage, Integer size, String title, String draftMan, LocalDate draftDate, Integer approvalStatus) {
@@ -60,6 +71,23 @@ public class PropagandaWorkSummaryService implements PropagandaWorkSummaryServic
         }
 
 
+    }
+
+    @Override
+    public boolean file(String[] ids) {
+        for (String id : ids) {
+            PropagandaWorkSummary propagandaWorkSummary = getById(id);
+            //判断是否可以归档
+            if (propagandaWorkSummary.getApprovalStatus() != 2) {
+                return false;
+            }
+        }
+        for (String id : ids) {
+            PropagandaWorkSummary propagandaWorkSummary = getById(id);
+            propagandaWorkSummary.setApprovalStatus(3);
+            propagandaWorkSummaryRepository.save(propagandaWorkSummary);
+        }
+        return true;
     }
 
 

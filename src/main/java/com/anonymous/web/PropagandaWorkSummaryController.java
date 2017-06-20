@@ -38,11 +38,18 @@ public class PropagandaWorkSummaryController {
         return propagandaWorkSummaryService.getById(id);
     }
 
-    @RequestMapping(value = "deletePropagandaWorkSummaryById",method = RequestMethod.GET)
+    @RequestMapping(value = "deletePropagandaWorkSummary",method = RequestMethod.GET)
     @ApiOperation(value = "删除宣传工作总结")
     @ResponseBody
-    public boolean deletePropagandaWorkSummary(@RequestParam String id){
-        return propagandaWorkSummaryService.delete(id);
+    public boolean deletePropagandaWorkSummary(String[] ids){
+        return propagandaWorkSummaryService.delete(ids);
+    }
+
+    @RequestMapping(value = "filePropagandaWorkSummary",method = RequestMethod.GET)
+    @ApiOperation(value = "归档宣传工作总结")
+    @ResponseBody
+    public boolean filePropagandaWorkSummary(String[] ids){
+        return propagandaWorkSummaryService.file(ids);
     }
 
     @RequestMapping(value = "getPropagandaWorkSummaryForPage",method = RequestMethod.GET)

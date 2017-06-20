@@ -15,7 +15,9 @@ public interface PropagandaWorkSummaryServiceInter {
 
     PropagandaWorkSummary getById(String id);
 
-    boolean delete(String id);
+    boolean delete(String[] ids);
 
     Page<PropagandaWorkSummary> getPropagandaWorkSummaryForPage(Integer currentPage, Integer size, String title, String draftMan, LocalDate draftDate, Integer approvalStatus);
+
+    boolean file(String[] ids);
 }

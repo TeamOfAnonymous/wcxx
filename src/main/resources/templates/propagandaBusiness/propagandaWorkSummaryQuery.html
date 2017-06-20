@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label>拟稿时间:</label>
-                <input name="draftDate" id="draftDate" type="text" class="form-control input-sm">
+                <input name="draftDate" id="draftDate" type="date" class="form-control input-sm">
             </div>
             <div class="form-group">
                 <label>状态:</label>
@@ -50,10 +50,10 @@
         <a href="/propagandaBusiness/goPropagandaWorkSummaryApply" class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-plus"></span> 新建
         </a>
-        <button type="button" class="btn btn-default btn-sm">
+        <button type="button" class="btn btn-default btn-sm" id="file-Btn">
             <span class="glyphicon glyphicon-file"></span> 归档
         </button>
-        <button type="button" class="btn btn-default btn-sm" id="delete">
+        <button type="button" class="btn btn-default btn-sm" id="del-Btn">
             <spam class="glyphicon glyphicon-remove"></spam>
             删除
         </button>
@@ -121,7 +121,7 @@
     <tbody>
     {{each content as index i}}
     <tr>
-        <td><input type="checkbox" value="{{index.id}}"/></td>
+        <td><input type="checkbox" data-id="{{index.id}}"/></td>
         <td>{{i+1}}</td>
         <td><a href="">{{index.title}}</a></td>
         <td>{{index.draftMan.organization.name}}</td>
@@ -152,7 +152,7 @@
 </script>
 <script>
     $(function () {
-        var data = {
+        var $data = {
             "currentPage": "0",
             "size": "10",
             "title": "",
@@ -162,17 +162,19 @@
         };
 
         //调用ajax进行查询
-        save(data);
+        query($data);
     })
+
+    var currentQuery = {};
 
     $("#query").on('click',
         function () {
             var title = $("#title").val();
-            var draftMan = $("#applicant").val();
-            var draftDate = $("#applicationDate").val();
+            var draftMan = $("#draftMan").val();
+            var draftDate = $("#draftDate").val();
             var approvalStatus = $("#approvalStatus").val();
 
-            var data = {
+            var $data = {
                 "currentPage": "0",
                 "size": "10",
                 "title": title,
@@ -181,20 +183,71 @@
                 "approvalStatus": approvalStatus
             };
             //调用ajax进行查询
-            save(data);
+            query($data);
         }
     )
 
-    function save(data) {
+    $("#file-Btn").on('click',
+        function () {
+            var $data = [];
+            var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
+            $inputs.each(function () {
+                $data.push($(this).attr('data-id'));
+            });
+            console.log($data);
+            //调用ajax进行删除
+            archiveFile($data);
+        }
+    )
+
+    //调用后台归档方法
+    function archiveFile($data) {
+        $.ajax({
+            type: "GET",
+            url: "/filePropagandaWorkSummary",
+            data: "ids=" + $data,
+            success: function (data) {
+                message.add("归档 : " + data, "warning");
+                query(currentQuery);
+            }
+        });
+    }
+
+    $("#del-Btn").on('click',
+        function () {
+            var $data = [];
+            var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
+            $inputs.each(function () {
+                $data.push($(this).attr('data-id'));
+            });
+            //调用ajax进行删除
+            deleted($data);
+        }
+    )
+
+    //调用后台删除方法
+    function deleted($data) {
+        $.ajax({
+            type: "GET",
+            url: "/deletePropagandaWorkSummary",
+            data: "ids=" + $data,
+            success: function (data) {
+                message.add("删除 : " + data, "warning");
+                query(currentQuery);
+            }
+        });
+    }
+
+    function query($data) {
         $.ajax({
             type: "GET",
             url: "/getPropagandaWorkSummaryForPage",
-            data: data,
+            data: $data,
             dataType: "json",
             success: function (data) {
-                console.log(data);
                 var html = template('data_table', data);
                 document.getElementById('table').innerHTML = html;
+                currentQuery = $data;
             }
         });
     }
