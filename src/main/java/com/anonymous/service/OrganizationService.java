@@ -40,11 +40,6 @@ public class OrganizationService implements OrganizationServiceInter {
     }
 
     @Override
-    public List<Organization> findByPid(String pid) {
-        return organizationRepository.findByPid(pid);
-    }
-
-    @Override
     public Organization findById(String id) {
         return organizationRepository.findOne(id);
     }

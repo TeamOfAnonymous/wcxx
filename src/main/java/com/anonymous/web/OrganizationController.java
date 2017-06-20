@@ -28,20 +28,6 @@ public class OrganizationController {
         return organizationService.add(organization);
     }
 
-    @RequestMapping(value = "getOrganizations", method = RequestMethod.GET)
-    @ApiOperation(value = "获取所有最顶层组织机构")
-    @ResponseBody
-    public List<Organization> getOrganizations() {
-        return organizationService.find();
-    }
-
-    @RequestMapping(value = "getOrganizationsByPid", method = RequestMethod.GET)
-    @ApiOperation(value = "通过父节点获取组织机构")
-    @ResponseBody
-    public List<Organization> getOrganizationsByPid(@RequestParam String pid) {
-        return organizationService.findByPid(pid);
-    }
-
     @RequestMapping(value = "editOrganization", method = RequestMethod.POST)
     @ApiOperation(value = "修改组织机构")
     @ResponseBody
