@@ -462,6 +462,13 @@ button {
   }
   .uf-file-list {
     padding-top: 10px;
+    p a:first-child {
+      color: #000;
+      &:hover {
+        color: #000;
+        text-decoration: none;
+      }
+    }
   }
 }
 
