@@ -45,6 +45,7 @@ var loading = {
 
 //上传和删除文件
 $('#uf-btn-upload').on('click', function () {
+    $('#uf-input-upload').val('');
     $('#uf-input-upload').click();
 });
 $('#uf-input-upload').on('change', function (e) {
@@ -52,28 +53,26 @@ $('#uf-input-upload').on('change', function (e) {
         message.add('请选择正确的文件', 'error');
     } else {
         $('#uf-form').submit();
+        console.log("上传文件");
         loading.show("上传文件中...");
     }
 });
 var $uf_f_l = $('.uf-file-list');
 //监听frame的load事件判断是否上传成功
-$('#uf-Frame').on('load', function () {
-    var doc = this.contentWindow.document;
-    var textAreas = doc.getElementsByTagName('textarea');
-    if (textAreas && textAreas.length > 0) {
-        var response = textAreas[0].value;
-        console.log(response);
-        var file_item = '<p>' + response + '<a href="javascript:;"data-id="' + "001" + '">[删除]</a></p>'
-        $uf_f_l.append(file_item);
-        message.add("上传文件成功");
-    }
-    return false;
+$('#uf-frame').on('load', function () {
+    var response = $("#uf-frame").contents().find("body").html();
+    response = JSON.parse(response);
+    console.log(response);
+    var file_item = '<p><a target="_blank" href="/' + response.path + '"> ' + response.name + '</a><a class="file-del" href="javascript:;" data-path="' + response.path + '" data-name="' + response.name + '" data-id="' + response.id + '">[删除]</a></p>'
+    $uf_f_l.append(file_item);
+    loading.hide();
+    message.add("上传文件成功");
 });
-$uf_f_l.on('click', 'a', function () {
+$uf_f_l.on('click', '.file-del', function () {
     var delUrl = $uf_f_l.attr('data-delUrl'),
         fileId = $(this).attr('data-id');
     //code
-    alert('删除文件')
+    $(this).parent("p").remove();
 });
 
 /**
@@ -126,12 +125,12 @@ function mid_table_action(templateId, added_dom, delDom, fnBeforeAdd, fnAfterRem
  * */
 $("#btn-reset").on('click', function () {
     var $form = $('.form-inline');
-    for(var i = 0,l = $form.length;i<l;i++){
+    for (var i = 0, l = $form.length; i < l; i++) {
         $form[i].reset()
     }
 });
 
-function setBtnQuery (fn) {
+function setBtnQuery(fn) {
     $('#btn-query').on('click', function () {
         fn({
             startDate: $('input[name="startDate"]').val(),
