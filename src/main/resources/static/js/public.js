@@ -140,3 +140,45 @@ function setBtnQuery(fn) {
         })
     });
 }
+
+
+/*
+ * 表单验证*/
+var fv = {
+    isNull: function (dom, msg) {
+        /*
+         *验证value是否为空字符串
+         *dom:inout的jquery对象
+         * msg：提示信息
+         * */
+        if (dom.val() == '') {
+            dom.parent('.form-group').addClass('has-error')
+            message.add('请输入' + msg, 'error');
+            return false;
+        } else {
+            return true;
+        }
+    },
+    init: function (dom, msg) {
+        /*
+         *提示某个input的值weigh未填
+         *dom:inout的jquery对象
+         * msg：提示信息
+         * */
+        dom.on('blur', function () {
+            if ($(this).val() != '') {
+                if ($(this).parent('.form-group').hasClass('has-error')) {
+                    $(this).parent('.form-group').removeClass('has-error');
+                }
+            } else {
+                $("#title").parent('.form-group').addClass('has-error');
+                message.add('请输入' + msg, 'error');
+            }
+        });
+        dom.on('focus', function () {
+            if ($(this).parent('.form-group').hasClass('has-error')) {
+                $(this).parent('.form-group').removeClass('has-error');
+            }
+        });
+    },
+}
