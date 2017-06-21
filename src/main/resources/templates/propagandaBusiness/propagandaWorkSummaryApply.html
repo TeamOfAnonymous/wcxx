@@ -37,7 +37,9 @@
             <tr>
                 <td><span class="font-red">*</span>标题</td>
                 <td colspan="3">
-                    <input type="text" class="form-control input-sm" name="title" id="title"/>
+                    <div class="form-group">
+                        <input type="text" class="form-control input-sm" name="title" id="title"/>
+                    </div>
                 </td>
             </tr>
             </tbody>
@@ -145,7 +147,7 @@
         src="../../vendor/ueditor-1.4.3.3/dist/utf8-jsp/lang/zh-cn/zh-cn.js"></script>
 <script>
     var winH = window.screen.height,
-            winW = window.screen.width;
+        winW = window.screen.width;
     /*$(".ft-b-r-b-left").on("click", "button", function() {
      window.open('../public/submitToDealWith.html', '提交办理', 'height=503, width=760, top=' + (winH - 503) / 2 + ', left=' + (winW - 760) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
      });*/
@@ -157,48 +159,57 @@
     var ue = UE.getEditor('editor');
     //获取html
     //UE.getEditor('editor').getAllHtml()
+    fv.init($('#title'), '标题');
     $(".ft-b-r-b-left").on("click", "button", function () {
-
-        var $data = {
-            "draftMan": {
-                "id": $("#draftManId").val()
-            },
-            "draftDate": draftDate,
-            "approvalStatus": 0,
-            "id": null,
-            "content": UE.getEditor('editor').getAllHtml(),
-            "title": $("#title").val()
-        }
-
-        $.ajax({
-            type: "POST",
-            url: "/addPropagandaWorkSummary",
-            data: JSON.stringify($data),
-            contentType: "application/json",
-            dataType: "json",
-            success: function (data) {
-                contactAnnex(data.id);
+        if (fv.isNull($('#title'), "标题")) {
+            loading.show();
+            var $data = {
+                "draftMan": {
+                    "id": $("#draftManId").val()
+                },
+                "draftDate": draftDate,
+                "approvalStatus": 0,
+                "id": null,
+                "content": UE.getEditor('editor').getAllHtml(),
+                "title": $("#title").val()
             }
-        })
+            $.ajax({
+                type: "POST",
+                url: "/addPropagandaWorkSummary",
+                data: JSON.stringify($data),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+                    contactAnnex(data.id);
+                }
+            })
+        }
     })
 
     function contactAnnex(common_id) {
         var fileMsg = $(".uf-file-list").find('p .file-del');
-        var fileIds = [];
-        fileMsg.each(function () {
-            fileIds.push($(this).attr('data-id'));
-        });
+        if (fileMsg.length == 0) {
+            console.log('没附件');
+            loading.hide();
+            window.location.href = "/propagandaBusiness/goPropagandaWorkSummaryQuery";
+        } else {
+            var fileIds = [];
+            fileMsg.each(function () {
+                fileIds.push($(this).attr('data-id'));
+            });
+            $.ajax({
+                type: "GET",
+                url: "/contactAnnex",
+                data: "common_id=" + common_id + "&&fileIds=" + fileIds,
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+                    loading.hide();
+                    window.location.href = "/propagandaBusiness/goPropagandaWorkSummaryQuery";
+                }
+            })
+        }
 
-        $.ajax({
-            type: "GET",
-            url: "/contactAnnex",
-            data: "common_id="+common_id+"&&fileIds="+fileIds,
-            contentType: "application/json",
-            dataType: "json",
-            success: function (data) {
-                window.location.href = "/propagandaBusiness/goPropagandaWorkSummaryQuery";
-            }
-        })
     }
 
 
