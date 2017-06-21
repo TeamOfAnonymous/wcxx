@@ -239,7 +239,7 @@
     function delChildCategory(categoryId) {
         $("#" + categoryId).remove();
     }
-    fv.init($('#title'), "标题")
+    fv.init($('#title'), "标题");
     $("#testSubmit").click(function (e) {
         var title = $('#title')[0].value;
         var content = $('#content')[0].value;
@@ -267,6 +267,7 @@
     })
 
     function ppgdaInfoSumbit(information) {
+        loading.show();
         $.ajax({
             type: "POST",
             url: "/addPropagandaInformation",
@@ -274,8 +275,10 @@
             dataType: "json",
             contentType: "application/json",
             success: function (data) {
-                alert("成功");
+                loading.hide();
+                message.add("保存成功");
                 console.log(data);
+                window.location.href="/propagandaBusiness/propagandaInformation/goPropagandaInformationQuery"
             }
         });
     }
