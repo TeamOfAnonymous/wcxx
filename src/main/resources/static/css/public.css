@@ -366,6 +366,9 @@ button {
     padding-left: 40px;
     padding-right: 40px; }
 
+.table .form-group {
+  margin-bottom: 0; }
+
 /*
 .modal-body {
     .handle-top {
