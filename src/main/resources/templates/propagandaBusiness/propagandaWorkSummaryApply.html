@@ -177,11 +177,30 @@
             contentType: "application/json",
             dataType: "json",
             success: function (data) {
-                console.log(data);
-                loading.hide();
+                contactAnnex(data.id);
             }
         })
     })
+
+    function contactAnnex(common_id) {
+        var fileMsg = $(".uf-file-list").find('p .file-del');
+        var fileIds = [];
+        fileMsg.each(function () {
+            fileIds.push($(this).attr('data-id'));
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "/contactAnnex",
+            data: "common_id="+common_id+"&&fileIds="+fileIds,
+            contentType: "application/json",
+            dataType: "json",
+            success: function (data) {
+                window.location.href = "/propagandaBusiness/goPropagandaWorkSummaryQuery";
+            }
+        })
+    }
+
 
     var date_ = new Date();
     var year = date_.getFullYear();
