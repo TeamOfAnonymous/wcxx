@@ -215,6 +215,7 @@
 
     $("#del-Btn").on('click',
         function () {
+        loading.show();
             var $data = [];
             var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
             $inputs.each(function () {
@@ -232,13 +233,14 @@
             url: "/deletePropagandaWorkSummary",
             data: "ids=" + $data,
             success: function (data) {
-                message.add("删除 : " + data, "warning");
                 query(currentQuery);
+                message.add("删除 : " + data, "warning");
             }
         });
     }
 
     function query($data) {
+        loading.show();
         $.ajax({
             type: "GET",
             url: "/getPropagandaWorkSummaryForPage",
@@ -248,6 +250,7 @@
                 var html = template('data_table', data);
                 document.getElementById('table').innerHTML = html;
                 currentQuery = $data;
+                loading.hide();
             }
         });
     }
