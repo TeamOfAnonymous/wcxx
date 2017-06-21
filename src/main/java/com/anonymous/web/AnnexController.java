@@ -2,7 +2,6 @@ package com.anonymous.web;
 
 import com.anonymous.domain.Annex;
 import com.anonymous.service.inter.AnnexServiceInter;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
@@ -11,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import springfox.documentation.spring.web.json.Json;
+
+import java.util.List;
 
 /**
  * Created by WangZK on 2017/6/18.
@@ -31,5 +31,14 @@ public class AnnexController {
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonStr = objectMapper.writeValueAsString(annex);
         return jsonStr;
+    }
+
+    @RequestMapping(value = "contactAnnex", method = RequestMethod.GET)
+    @ApiOperation(value = "添加附件")
+    @ResponseBody
+    public List<Annex> contactAnnex(@RequestParam String common_id,
+                             @RequestParam String[] fileIds) {
+        return annexService.contactAnnex(common_id,fileIds);
+
     }
 }

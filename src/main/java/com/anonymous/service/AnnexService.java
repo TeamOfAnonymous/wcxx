@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by WangZK on 2017/6/18.
@@ -48,6 +50,21 @@ public class AnnexService implements AnnexServiceInter {
         }
 
         return annex;
+    }
+
+    @Override
+    public List<Annex> contactAnnex(String common_id, String[] fileIds) {
+        List<Annex> annexes = null;
+        if (fileIds.length > 0) {
+            annexes = new ArrayList<>();
+            for (String id : fileIds) {
+                Annex annex = annexRepository.findOne(id);
+                annex.setCommon_id(common_id);
+                annex = annexRepository.save(annex);
+                annexes.add(annex);
+            }
+        }
+        return annexes;
     }
 
     //获取文件后缀名
