@@ -161,7 +161,7 @@ var fv = {
     },
     init: function (dom, msg) {
         /*
-         *提示某个input的值weigh未填
+         *提示某个input的值是否未填
          *dom:inout的jquery对象
          * msg：提示信息
          * */
