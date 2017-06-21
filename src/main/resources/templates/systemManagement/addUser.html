@@ -31,14 +31,35 @@
         <table class="table table-bordered">
             <tbody>
             <tr>
-                <td>用户名</td>
-                <td><input id="username" name="username" type="text" class="form-control input-sm"/></td>
-                <td>密码</td>
-                <td><input id="password" name="password" type="password" class="form-control input-sm"/></td>
+                <td>
+                    <span class="font-red"> *</span>
+                    用户名
+
+                </td>
+                <td>
+                    <div class="form-group">
+                        <input id="username" name="username" type="text" class="form-control input-sm"/>
+                    </div>
+                </td>
+                <td>
+                    <span class="font-red">
+                *</span>密码
+                </td>
+                <td>
+                    <div class="form-group">
+                        <input id="password" name="password" type="password" class="form-control input-sm"/>
+                    </div>
+                </td>
             </tr>
             <tr>
-                <td>姓名</td>
-                <td><input id="name" name="name" type="text" class="form-control input-sm"/></td>
+                <td><span class="font-red">
+                 *</span>姓名
+                </td>
+                <td>
+                    <div class="form-group">
+                        <input id="name" name="name" type="text" class="form-control input-sm"/>
+                    </div>
+                </td>
                 <td>性别</td>
                 <td>
                     <label class="radio-inline">
@@ -64,10 +85,10 @@
                 </td>
             </tr>
             <tr>
-                <td>所在部门
+                <td><span class="font-red">*</span>所在部门
                 <td colspan="3">
-                    <div class="mt-select">
-                        <input type="text" class="form-control input-sm">
+                    <div class="form-group mt-select">
+                        <input id="department" type="text" class="form-control input-sm">
                         <div id="tree"></div>
                     </div>
                 </td>
@@ -88,6 +109,10 @@
 </body>
 
 <script>
+    fv.init($('#username'), "用户名");
+    fv.init($('#password'), "密码");
+    fv.init($('#name'), "姓名");
+    fv.init($('#department'), "部门");
     $('#cancel').on('click', function () {
         history.back();
     });
@@ -126,32 +151,37 @@
     });
 
     $("#saveUser").on('click', function () {
-        var $data = {
-            "email": $("#email").val(),
-            "id": null,
-            "name": $("#name").val(),
-            "organization": {
-                "id": $selectInput.data('treeId')
-            },
-            "password": $("#password").val(),
-            "phoneNumber": $("#phoneNumber").val(),
-            "post": $("#post").val(),
-            "sex": $("input[name='sex']:checked").val(),
-            "username": $("#username").val()
-        }
-
-        $.ajax({
-            type: "POST",
-            url: "/addUser",
-            data: JSON.stringify($data),
-            contentType: "application/json",
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
-                loading.hide();
-                self.location.href = "/systemManagement/goUserList";
+        if (fv.isNull($('#username'), "用户名")
+                && fv.isNull($('#password'), "密码")
+                && fv.isNull($('#name'), "姓名")
+                && fv.isNull($('#department'), "部门")) {
+            var $data = {
+                "email": $("#email").val(),
+                "id": null,
+                "name": $("#name").val(),
+                "organization": {
+                    "id": $selectInput.data('treeId')
+                },
+                "password": $("#password").val(),
+                "phoneNumber": $("#phoneNumber").val(),
+                "post": $("#post").val(),
+                "sex": $("input[name='sex']:checked").val(),
+                "username": $("#username").val()
             }
-        })
+
+            $.ajax({
+                type: "POST",
+                url: "/addUser",
+                data: JSON.stringify($data),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    loading.hide();
+                    self.location.href = "/systemManagement/goUserList";
+                }
+            });
+        }
     });
 </script>
 
