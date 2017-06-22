@@ -106,10 +106,5 @@ public class PropagandaMaterialsProducedController {
         return propagandaMaterialsProducedService.delete(pmpIds);
     }
 
-    @PostMapping(value = "getPropagandaMaterialsProducedStatisticsForm")
-    @ApiOperation(value = "统计宣传品制作表单")
-    @ResponseBody
-    public List<Map<String, Integer>> getPropagandaMaterialsProducedStatistics(@RequestBody PropagandaMaterialsProducedStatisticalQuery query) {
-        return propagandaMaterialsProducedService.getPropagandaMaterialsProducedByApplicationDate(query);
-    }
+
 }

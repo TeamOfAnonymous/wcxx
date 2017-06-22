@@ -142,14 +142,20 @@
             url: "/getPropagandaMaterialsRecipientsStatisticsForm",
             data: data,
             dataType: "json",
-            success: function (data) {
+            success: function (datas) {
                 var arr_ = [];
+                var arr_total_data = [];
                 var arr_data = [];
+                var data = datas[0];
                 for (a in data) {
                     arr_.push(a);
+                    arr_total_data.push(data[a])
+                }
+                data = datas[1];
+                for (a in data) {
                     arr_data.push(data[a])
                 }
-                showStatisticsForm(arr_, arr_data);
+                showStatisticsForm(arr_, arr_total_data, arr_data);
             }
         });
     });

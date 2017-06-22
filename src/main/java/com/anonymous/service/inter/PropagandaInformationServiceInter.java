@@ -4,7 +4,9 @@ import com.anonymous.domain.PropagandaInformation.PpgdaInfQueryCondition;
 import com.anonymous.domain.PropagandaInformation.PropagandaInformation;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description：宣传信息服务接口
@@ -29,4 +31,6 @@ public interface PropagandaInformationServiceInter {
     List<PropagandaInformation> findByPropagandaInformationCategories(String id);
 
 	Page<PropagandaInformation> findByQueryCondition(PpgdaInfQueryCondition condition);
+
+	List<Map<String, Integer>> getPropagandaInformationByApplicationDate(LocalDate startDate, LocalDate endDate );
 }

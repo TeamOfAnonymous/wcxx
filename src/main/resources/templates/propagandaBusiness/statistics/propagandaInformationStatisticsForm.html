@@ -72,29 +72,88 @@
 <script type="text/javascript" src="/js/public.js"></script>
 
 <script>
-    var ctx = $("#myChart").get(0).getContext("2d");
-    var dataChart = new Chart(ctx);
-    var data = {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [
-            {
-                fillColor: "rgba(220,220,220,0.5)",
-                strokeColor: "rgba(220,220,220,1)",
-                data: [65, 59, 90, 81, 56, 55, 40]
-            },
-            {
-                fillColor: "rgba(151,187,205,0.5)",
-                strokeColor: "rgba(151,187,205,1)",
-                data: [28, 48, 40, 19, 96, 27, 100]
+
+    var date_ = new Date();
+    var year = date_.getFullYear();
+    var month = date_.getMonth() + 1;
+    month = month > 10 ? month : '0' + month.toString();
+    var startDate = year + '-' + month + '-01';
+    date_ = new Date(year, month, 0);
+    var endDate = year + '-' + month + '-' + date_.getDate();
+
+    var data = {"startDate": startDate, "endDate": endDate};
+
+    $.ajax({
+        type: "GET",
+        url: "/getPropagandaInformationStatisticsForm",
+        data: data,
+        dataType: "json",
+        success: function (datas) {
+            var arr_ = [];
+            var arr_total_data = [];
+            var arr_data = [];
+            var data = datas[0];
+            for (a in data) {
+                arr_.push(a);
+                arr_total_data.push(data[a])
             }
-        ]
+            data = datas[1];
+            for (a in data) {
+                arr_data.push(data[a])
+            }
+            showStatisticsForm(arr_, arr_total_data, arr_data);
+        }
+    });
+
+    function showStatisticsForm(arr, arr_total_data, arr_data) {
+        var ctx = $("#myChart").get(0).getContext("2d");
+        var dataChart = new Chart(ctx);
+        var data = {
+            labels: arr,
+            datasets: [
+                {
+                    fillColor: "rgba(24, 116, 205,1)",
+                    strokeColor: "rgba(24, 116, 205,1)",
+                    data: arr_total_data
+                },
+                {
+                    fillColor: "rgba(0, 154, 205,1)",
+                    strokeColor: "rgba(0, 154, 205,1)",
+                    data: arr_data
+                }
+            ]
+        }
+        dataChart.Bar(data, {});
     }
-    dataChart.Bar(data, {});
+
     setBtnQuery(function (data) {
         console.log(data.startDate);
         console.log(data.endDate);
         console.log(data.way);
         console.log(data.sortWay);
+        var data = {"startDate": data.startDate, "endDate": data.endDate};
+
+        $.ajax({
+            type: "GET",
+            url: "/getPropagandaInformationStatisticsForm",
+            data: data,
+            dataType: "json",
+            success: function (datas) {
+                var arr_ = [];
+                var arr_total_data = [];
+                var arr_data = [];
+                var data = datas[0];
+                for (a in data) {
+                    arr_.push(a);
+                    arr_total_data.push(data[a])
+                }
+                data = datas[1];
+                for (a in data) {
+                    arr_data.push(data[a])
+                }
+                showStatisticsForm(arr_, arr_total_data, arr_data);
+            }
+        });
     });
 
 </script>

@@ -25,7 +25,7 @@ public class PropagandaInformation implements Serializable {
     private LocalDate endDate;//信息发布结束时间
     private String content;//内容
     private String remarks;//备注
-    private Integer approvalStatus;//审批状态，0为草稿，1为待审批，2为审核中，3为执行中，4为已完成，5为已归档
+    private Integer approvalStatus;//审批状态，0为待审批，1为审核中，2为执行中，3为已完成，4为已归档
 
     @ManyToOne
     private User applicant;//申请人

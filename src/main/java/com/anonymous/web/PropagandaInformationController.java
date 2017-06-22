@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Description：enter your comment
@@ -57,4 +59,6 @@ public class PropagandaInformationController {
 	                                                                  @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
 		return ppgdaInfStatisticsService.getStatisticsData(startDate, endDate);
 	}
+
+
 }
