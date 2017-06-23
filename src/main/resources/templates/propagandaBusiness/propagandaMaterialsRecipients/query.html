@@ -162,7 +162,7 @@
     </li>
 </script>
 <script>
-    var currentQeury = {
+    var currentQuery = {
         "currentPage": "0",
         "totalPages": "0",
         "size": "10",
@@ -172,9 +172,8 @@
         "approvalStatus": "100"
     };
     //调用ajax进行查询
-    query(currentQeury);
+    query(currentQuery);
 
-    //var currentQeury = {};
 
     $("#query").on('click',
             function () {
@@ -183,7 +182,7 @@
                 var applicationDate = $("#applicationDate").val();
                 var approvalStatus = $("#approvalStatus").val();
 
-                currentQeury = {
+                currentQuery = {
                     "currentPage": "0",
                     "size": "10",
                     "title": title,
@@ -192,34 +191,36 @@
                     "approvalStatus": approvalStatus
                 };
                 //调用ajax进行查询
-                query(currentQeury);
+                query(currentQuery);
             }
     )
 
     //点击删除按钮调用的方法
     $("#del-Btn").on('click',
-            function () {
-                var $data = [];
-                var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
-                $inputs.each(function () {
-                    $data.push($(this).attr('data-id'));
-                });
-                //调用ajax进行删除
-                deleted($data);
-            }
+        function () {
+            loading.show();
+            var $data = [];
+            var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
+            $inputs.each(function () {
+                $data.push($(this).attr('data-id'));
+            });
+            //调用ajax进行删除
+            deleted($data);
+        }
     )
 
     //点击归档按钮调用的方法
     $("#file-Btn").on('click',
-            function () {
-                var $data = [];
-                var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
-                $inputs.each(function () {
-                    $data.push($(this).attr('data-id'));
-                });
-                //调用ajax进行删除
-                archiveFile($data);
-            }
+        function () {
+            loading.show();
+            var $data = [];
+            var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
+            $inputs.each(function () {
+                $data.push($(this).attr('data-id'));
+            });
+            //调用ajax进行删除
+            archiveFile($data);
+        }
     )
 
     function archiveFile($data) {
@@ -228,8 +229,13 @@
             url: "/filePropagandaMaterialsRecipients",
             data: "ids=" + $data,
             success: function (data) {
-                message.add("归档 : " + data, "warning");
-                query(currentQeury);
+                if (data) {
+                    message.add("归档成功","success");
+                    query(currentQuery);
+                } else {
+                    message.add("归档失败，申请还没有完成或者已归档" , "warning");
+                    loading.hide();
+                }
             }
         });
     }
@@ -241,12 +247,12 @@
             data: $data,
             dataType: "json",
             success: function (data) {
-                console.log(data);
                 var html = template('data_table', data);
                 document.getElementById('table').innerHTML = html;
-                currentQeury.totalPages = data.totalPages;
-                var pageStr = template('pageTemplate', currentQeury);
+                currentQuery.totalPages = data.totalPages;
+                var pageStr = template('pageTemplate', currentQuery);
                 document.getElementById('page').innerHTML = pageStr;
+                loading.hide();
             }
         });
     }
@@ -254,26 +260,26 @@
         if ($(this).hasClass("page-item")) {
             if (!$(this).hasClass("active")) {
                 console.log("去到第" + $(this).text() + "页");
-                currentQeury.currentPage = $(this).text() - 1;
-                query(currentQeury);
+                currentQuery.currentPage = $(this).text() - 1;
+                query(currentQuery);
             }
-        } else if ($(this).attr("aria-label") == "Previous" && currentQeury.currentPage > 0) {
+        } else if ($(this).attr("aria-label") == "Previous" && currentQuery.currentPage > 0) {
             console.log("上一页");
-            currentQeury.currentPage -= 1;
-            query(currentQeury);
+            currentQuery.currentPage -= 1;
+            query(currentQuery);
         }
-        else if ($(this).attr("aria-label") == "Next" && currentQeury.currentPage + 1 < currentQeury.totalPages) {
+        else if ($(this).attr("aria-label") == "Next" && currentQuery.currentPage + 1 < currentQuery.totalPages) {
             console.log("下一页");
-            currentQeury.currentPage += 1;
-            query(currentQeury);
+            currentQuery.currentPage += 1;
+            query(currentQuery);
         }
     });
     $('#page').on('click', 'button', function (e) {
         var page = $(this).prev('input').val();
         if (!isNaN(page)) {
-            if (page > 0 && page <= currentQeury.totalPages) {
-                currentQeury.totalPages = page - 1;
-                query(currentQeury);
+            if (page > 0 && page <= currentQuery.totalPages) {
+                currentQuery.totalPages = page - 1;
+                query(currentQuery);
             }
         }
         return false;
@@ -286,8 +292,13 @@
             url: "/deletedPropagandaMaterialsRecipients",
             data: "ids=" + $data,
             success: function (data) {
-                message.add("删除 : " + data, "warning");
-                query(currentQeury);
+                if (data) {
+                    message.add("删除成功","success");
+                    query(currentQuery);
+                } else {
+                    message.add("删除失败，该申请不可以删除" , "warning");
+                    loading.hide();
+                }
             }
         });
     }

@@ -28,6 +28,7 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
     @Autowired
     private PropagandaMaterialsServiceInter propagandaMaterialsService;
 
+    //添加
     @Override
     public PropagandaMaterialsRecipients add(PropagandaMaterialsRecipients propagandaMaterialsRecipients) {
         List<PropagandaMaterials> propagandaMaterialss = propagandaMaterialsRecipients.getPropagandaMaterials();
@@ -43,11 +44,13 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
         return propagandaMaterialsRecipients;
     }
 
+    //根据id获取
     @Override
     public PropagandaMaterialsRecipients getPropagandaMaterialsRecipients(String id) {
         return propagandaMaterialsRecipientsRepository.findOne(id);
     }
 
+    //查询
     @Override
     public Page<PropagandaMaterialsRecipients> getPropagandaMaterialsRecipientsForPage(Integer currentPage, Integer size, String title, String applicant, LocalDate applicationDate, Integer approvalStatus) {
         Sort sort = new Sort(Sort.Direction.fromString("DESC"), "applicationDate");
@@ -140,6 +143,7 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
         return resultMap;
     }
 
+    //删除
     @Override
     public boolean deletedPropagandaMaterialsRecipients(String[] ids) {
         for (String id : ids) {
@@ -180,6 +184,7 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
         return data;
     }
 
+    //归档
     @Override
     public boolean filePropagandaMaterialsRecipients(String[] ids) {
         for (String id : ids) {
