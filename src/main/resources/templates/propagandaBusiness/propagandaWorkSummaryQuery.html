@@ -189,12 +189,12 @@
 
     $("#file-Btn").on('click',
         function () {
+            loading.show();
             var $data = [];
             var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
             $inputs.each(function () {
                 $data.push($(this).attr('data-id'));
             });
-            console.log($data);
             //调用ajax进行删除
             archiveFile($data);
         }
@@ -207,15 +207,20 @@
             url: "/filePropagandaWorkSummary",
             data: "ids=" + $data,
             success: function (data) {
-                message.add("归档 : " + data, "warning");
-                query(currentQuery);
+                if (data) {
+                    message.add("归档成功","success");
+                    query(currentQuery);
+                } else {
+                    message.add("归档失败，总结还没有完成或者已归档" , "warning");
+                    loading.hide();
+                }
             }
         });
     }
 
     $("#del-Btn").on('click',
         function () {
-        loading.show();
+            loading.show();
             var $data = [];
             var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
             $inputs.each(function () {
@@ -233,8 +238,13 @@
             url: "/deletePropagandaWorkSummary",
             data: "ids=" + $data,
             success: function (data) {
-                query(currentQuery);
-                message.add("删除 : " + data, "warning");
+                if (data) {
+                    message.add("删除成功","success");
+                    query(currentQuery);
+                } else {
+                    message.add("删除失败，该文件不可以删除" , "warning");
+                    loading.hide();
+                }
             }
         });
     }
