@@ -224,6 +224,7 @@
     )
 
     function archiveFile($data) {
+        loading.show();
         $.ajax({
             type: "GET",
             url: "/filePropagandaMaterialsRecipients",
@@ -241,6 +242,7 @@
     }
 
     function query($data) {
+        loading.show();
         $.ajax({
             type: "GET",
             url: "/getPropagandaMaterialsRecipientsForPage",
@@ -287,6 +289,7 @@
 
     //调用后台删除方法
     function deleted($data) {
+        loading.show();
         $.ajax({
             type: "GET",
             url: "/deletedPropagandaMaterialsRecipients",
