@@ -68,7 +68,7 @@
 </div>
 <script type="text/javascript" src="/vendor/jquery1.9.min.js"></script>
 <script type="text/javascript" src="/vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/vendor/chart.js"></script>
+<script type="text/javascript" src="/vendor/chart.min.js"></script>
 <script type="text/javascript" src="/vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
 <!--[if IE 8 ]>
 <script type="text/javascript" src="../../vendor/es5-shim/es5-shim.min.js"></script>
@@ -111,23 +111,35 @@
 
     function showStatisticsForm(arr, arr_total_data, arr_data) {
         var ctx = $("#myChart").get(0).getContext("2d");
-        var dataChart = new Chart(ctx);
+        //var dataChart = new Chart(ctx);
+        var colorNum = arr.map(function(){
+            return  "#CCCC66";
+        });
+        var colorDone = arr.map(function(){
+            return  "#66CC66";
+        });
         var data = {
             labels: arr,
             datasets: [
                 {
-                    fillColor: "rgba(24, 116, 205,1)",
-                    strokeColor: "rgba(24, 116, 205,1)",
+                    label: "数量",
+                    backgroundColor:colorNum,
                     data: arr_total_data
                 },
                 {
-                    fillColor: "rgba(0, 154, 205,1)",
-                    strokeColor: "rgba(0, 154, 205,1)",
+                    label: "已完成",
+                    backgroundColor:colorDone,
                     data: arr_data
                 }
             ]
         }
-        dataChart.Bar(data, {});
+        //dataChart.Bar(data, {});
+        var myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+            }
+        });
     }
 
     setBtnQuery(function (data) {

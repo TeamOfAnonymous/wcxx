@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>宣传信息发布统计</title>
     <link rel="stylesheet" href="../../../vendor/bootstrap-3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/public.css"/>
     <link rel="stylesheet" href="../../../css/statisticsPagePublic.css"/>
 </head>
 
@@ -67,7 +68,7 @@
 </div>
 <script type="text/javascript" src="/vendor/jquery1.9.min.js"></script>
 <script type="text/javascript" src="/vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/vendor/chart.js"></script>
+<script type="text/javascript" src="/vendor/chart.min.js"></script>
 <script type="text/javascript" src="/vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
 <script type="text/javascript" src="/js/public.js"></script>
 
@@ -107,23 +108,36 @@
 
     function showStatisticsForm(arr, arr_total_data, arr_data) {
         var ctx = $("#myChart").get(0).getContext("2d");
-        var dataChart = new Chart(ctx);
+        //var dataChart = new Chart(ctx);
+        var colorNum = arr.map(function(){
+           return  "#FF9999";
+        });
+        var colorDone = arr.map(function(){
+            return  "#66CC66";
+        });
         var data = {
             labels: arr,
             datasets: [
                 {
-                    fillColor: "rgba(24, 116, 205,1)",
-                    strokeColor: "rgba(24, 116, 205,1)",
-                    data: arr_total_data
+                    label: "数量",
+                    data: arr_total_data,
+                    backgroundColor: colorNum,
                 },
                 {
-                    fillColor: "rgba(0, 154, 205,1)",
-                    strokeColor: "rgba(0, 154, 205,1)",
-                    data: arr_data
+                    label: "已完成",
+                    data: arr_data,
+                    backgroundColor: colorDone,
                 }
             ]
         }
-        dataChart.Bar(data, {});
+        //dataChart.Bar(data,{});
+
+        var myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+            }
+        });
     }
 
     setBtnQuery(function (data) {
