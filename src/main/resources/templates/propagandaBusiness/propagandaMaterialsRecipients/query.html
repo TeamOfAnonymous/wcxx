@@ -65,39 +65,8 @@
         </table>
     </div>
     <div class="page">
-        <ul class="pagination pagination-sm">
-            <li class="disabled">
-                <span href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </span>
-            </li>
-            <li class="active">
-                <span href="#">1</span>
-            </li>
-            <li>
-                <span href="#">2</span>
-            </li>
-            <li>
-                <span href="#">3</span>
-            </li>
-            <li>
-                <span href="#">4</span>
-            </li>
-            <li>
-                <span href="#">5</span>
-            </li>
-            <li>
-                <span href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </span>
-            </li>
-            <li class="li-page-handle">
-                转到第
-                <input type="text" class="form-control input-sm"/> 页
-                <button type="button" class="btn btn-default btn-sm">
-                    GO
-                </button>
-            </li>
+        <ul class="pagination pagination-sm" id="page">
+
         </ul>
     </div>
 </div>
@@ -154,66 +123,103 @@
     {{/each}}
     </tbody>
 </script>
-<script>
-    $(function () {
-        var data = {
-            "currentPage": "0",
-            "size": "10",
-            "title": "",
-            "applicant": "",
-            "applicationDate": "",
-            "approvalStatus": "100"
-        };
-        //调用ajax进行查询
-        query(data);
-    });
+<script id="pageTemplate" type="text/html">
+    {{if currentPage==0}}
+    <li class="disabled prev">
+        {{else}}
+    <li class="prev">
+        {{/if}}
+        <span href="#" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </span>
+    </li>
 
-    var currentQeury = {};
+    <% for(var i = 1; i <= totalPages; i++){ %>
+    {{if totalPages==i}}
+    <li class="active page-item">
+        {{else}}
+    <li class="page-item">
+        {{/if}}
+        <span href="#"><%= i %></span>
+    </li>
+    <% } %>
+
+    {{if currentPage==totalPages-1}}
+    <li class="disabled next">
+        {{else}}
+    <li class="next">
+        {{/if}}
+        <span href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+         </span>
+    </li>
+    <li class="li-page-handle">
+        转到第
+        <input type="text" class="form-control input-sm"/> 页
+        <button type="button" class="btn btn-default btn-sm">
+            GO
+        </button>
+    </li>
+</script>
+<script>
+    var currentQeury = {
+        "currentPage": "0",
+        "totalPages": "0",
+        "size": "10",
+        "title": "",
+        "applicant": "",
+        "applicationDate": "",
+        "approvalStatus": "100"
+    };
+    //调用ajax进行查询
+    query(currentQeury);
+
+    //var currentQeury = {};
 
     $("#query").on('click',
-        function () {
-            var title = $("#title").val();
-            var applicant = $("#applicant").val();
-            var applicationDate = $("#applicationDate").val();
-            var approvalStatus = $("#approvalStatus").val();
+            function () {
+                var title = $("#title").val();
+                var applicant = $("#applicant").val();
+                var applicationDate = $("#applicationDate").val();
+                var approvalStatus = $("#approvalStatus").val();
 
-            var data = {
-                "currentPage": "0",
-                "size": "10",
-                "title": title,
-                "applicant": applicant,
-                "applicationDate": applicationDate,
-                "approvalStatus": approvalStatus
-            };
-            //调用ajax进行查询
-            query(data);
-        }
+                currentQeury = {
+                    "currentPage": "0",
+                    "size": "10",
+                    "title": title,
+                    "applicant": applicant,
+                    "applicationDate": applicationDate,
+                    "approvalStatus": approvalStatus
+                };
+                //调用ajax进行查询
+                query(currentQeury);
+            }
     )
 
     //点击删除按钮调用的方法
     $("#del-Btn").on('click',
-        function () {
-            var $data = [];
-            var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
-            $inputs.each(function () {
-                $data.push($(this).attr('data-id'));
-            });
-            //调用ajax进行删除
-            deleted($data);
-        }
+            function () {
+                var $data = [];
+                var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
+                $inputs.each(function () {
+                    $data.push($(this).attr('data-id'));
+                });
+                //调用ajax进行删除
+                deleted($data);
+            }
     )
 
     //点击归档按钮调用的方法
     $("#file-Btn").on('click',
-        function () {
-            var $data = [];
-            var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
-            $inputs.each(function () {
-                $data.push($(this).attr('data-id'));
-            });
-            //调用ajax进行删除
-            archiveFile($data);
-        }
+            function () {
+                var $data = [];
+                var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
+                $inputs.each(function () {
+                    $data.push($(this).attr('data-id'));
+                });
+                //调用ajax进行删除
+                archiveFile($data);
+            }
     )
 
     function archiveFile($data) {
@@ -222,7 +228,7 @@
             url: "/filePropagandaMaterialsRecipients",
             data: "ids=" + $data,
             success: function (data) {
-                message.add("归档 : " + data , "warning");
+                message.add("归档 : " + data, "warning");
                 query(currentQeury);
             }
         });
@@ -238,12 +244,40 @@
                 console.log(data);
                 var html = template('data_table', data);
                 document.getElementById('table').innerHTML = html;
-
-                currentQeury = $data;
+                currentQeury.totalPages = data.totalPages;
+                var pageStr = template('pageTemplate', currentQeury);
+                document.getElementById('page').innerHTML = pageStr;
             }
         });
     }
-
+    $('#page').on('click', 'li', function () {
+        if ($(this).hasClass("page-item")) {
+            if (!$(this).hasClass("active")) {
+                console.log("去到第" + $(this).text() + "页");
+                currentQeury.currentPage = $(this).text() - 1;
+                query(currentQeury);
+            }
+        } else if ($(this).attr("aria-label") == "Previous" && currentQeury.currentPage > 0) {
+            console.log("上一页");
+            currentQeury.currentPage -= 1;
+            query(currentQeury);
+        }
+        else if ($(this).attr("aria-label") == "Next" && currentQeury.currentPage + 1 < currentQeury.totalPages) {
+            console.log("下一页");
+            currentQeury.currentPage += 1;
+            query(currentQeury);
+        }
+    });
+    $('#page').on('click', 'button', function (e) {
+        var page = $(this).prev('input').val();
+        if (!isNaN(page)) {
+            if (page > 0 && page <= currentQeury.totalPages) {
+                currentQeury.totalPages = page - 1;
+                query(currentQeury);
+            }
+        }
+        return false;
+    });
 
     //调用后台删除方法
     function deleted($data) {
