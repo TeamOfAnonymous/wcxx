@@ -167,7 +167,7 @@
         approvalStatus: null,
         mainCategories: null
     }
-
+    loading.show();
     $.ajax({
         type: "GET",
         url: "/getPropagandaInformationCategories",
@@ -182,7 +182,7 @@
             });
             var mainCategorySelector = $('#mainCategories');
             mainCategorySelector.html(node);
-            console.log(node);
+            loading.hide();
         }
     });
 
@@ -207,7 +207,7 @@
     function ppgdaInfoSumbit(information) {
 
         var data = dataSetting(information);
-
+        loading.show();
         $.ajax({
             type: "POST",
             url: "/getPropagandaInformationByQueryCondition",
@@ -217,6 +217,7 @@
             success: function (data) {
                 dataProcessing(data);
                 console.log(data);
+                loading.hide();
             }
         });
     }

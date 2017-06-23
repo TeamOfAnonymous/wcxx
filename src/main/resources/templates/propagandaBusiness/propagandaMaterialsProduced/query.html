@@ -248,6 +248,7 @@
     var currentQeury = {};
     // 发送 查询 请求
     function sumbitQuery(query) {
+        loading.show();
         $.ajax({
             type: "POST",
             url: "/propagandaMaterialsProducedQuery",
@@ -260,6 +261,7 @@
                 currentQeury.totalPages = data.totalPages;
                 var pageStr = template('pageTemplate', currentQeury);
                 document.getElementById('page').innerHTML = pageStr;
+                loading.hide();
             }
         });
     }
