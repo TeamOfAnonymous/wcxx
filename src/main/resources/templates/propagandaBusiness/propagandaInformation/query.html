@@ -128,9 +128,9 @@
     {{set temp = 1}}
     {{each content as ppgdaInfo p}}
     <tr>
-        <td><input type="checkbox"/></td>
+        <td><input data-id="{{ppgdaInfo.id}}" type="checkbox"/></td>
         <td>{{temp++}}</td>
-        <td>{{ppgdaInfo.title}}</td>
+        <td><a href="/propagandaBusiness/propagandaInformation/goPropagandaInformationDetails/{{ppgdaInfo.id}}">{{ppgdaInfo.title}}</a></td>
         <td>{{ppgdaInfo.mainCategory}}</td>
         <td>{{ppgdaInfo.subCategory}}</td>
         <td>{{ppgdaInfo.applicant.name}}</td>

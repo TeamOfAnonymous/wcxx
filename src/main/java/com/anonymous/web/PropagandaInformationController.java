@@ -47,8 +47,8 @@ public class PropagandaInformationController {
 
 	@ResponseBody
 	@ApiOperation(value = "通过id获取宣传信息")
-	@RequestMapping(value = "getPropagandaInformationById", method = RequestMethod.GET)
-	public PropagandaInformation getById(@RequestParam String id){
+	@RequestMapping(value = "getPropagandaInformationById/{id}", method = RequestMethod.GET)
+	public PropagandaInformation getById(@PathVariable String id){
 		return  propagandaInformationService.getById(id);
 	}
 
