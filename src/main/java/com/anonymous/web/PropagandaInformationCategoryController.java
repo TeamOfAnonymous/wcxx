@@ -52,8 +52,8 @@ public class PropagandaInformationCategoryController {
     @RequestMapping(value = "getCategoriesOfTree", method = RequestMethod.GET)
     @ApiOperation(value = "获取全部宣传信息类别")
     @ResponseBody
-    public Object[] getCategoriesOfTree(String mainCategory, String medium, String type) {
-        return propagandaInformationCategoryService.getCategoriesOfTree(mainCategory, medium, type);
+    public Object[] getCategoriesOfTree(String mainCategory, String medium) {
+        return propagandaInformationCategoryService.getCategoriesOfTree(mainCategory, medium);
     }
 
     @RequestMapping(value = "getPropagandaInformationCategoriesByPid", method = RequestMethod.GET)
