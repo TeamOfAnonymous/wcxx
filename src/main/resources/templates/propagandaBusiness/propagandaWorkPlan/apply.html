@@ -95,98 +95,46 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="main-body">
                     <script id="editor" type="text/plain" style="width:100%;height:500px;"></script>
-                    </
-                    div >
-                    < div
-                    role = "tabpanel"
-                    class
-                    = "tab-pane"
-                    id = "project" >
-                        < div
-                    class
-                    = "mt-handle-button-group" >
-                        < button
-                    id = "mt-btn-add"
-                    class
-                    = "btn btn-default" > 添加 < / button >
-                        < button
-                    id = "mt-btn-select"
-                    class
-                    = "btn btn-default" > 导入 < / button >
-                        < button
-                    id = "mt-btn-del"
-                    class
-                    = "btn btn-default" > 删除 < / button >
-                        < / div >
-                        < table
-                    class
-                    = "table table-bordered checked-table" >
-                        < thead >
-                        < tr >
-                        < th > < input
-                    type = "checkbox" / > < / th >
-                        < th > No. < / th >
-                        < th > 项目 < / th >
-                        < th > 具体内容 < / th >
-                        < th > 负责人 < / th >
-                        < th > 要求完成时间 < / th >
-                        < / tr >
-                        < / thead >
-                        < tbody >
-                        < tr >
-                        < td > < input
-                    type = "checkbox" / > < / td >
-                        < td > 1 < / td >
-                        < td > < input
-                    type = "text"
-                    class
-                    = "form-control input-sm" / > < / td >
-                        < td > < input
-                    type = "text"
-                    class
-                    = "form-control input-sm" / > < / td >
-                        < td > < input
-                    type = "text"
-                    class
-                    = "form-control input-sm" / > < / td >
-                        < td > < input
-                    type = "text"
-                    class
-                    = "form-control input-sm" / > < / td >
-                        < / tr >
-                        < script
-                    id = "mt-tr"
-                    type = "text/html" >
-                        < tr >
-                        < td > < input
-                    type = "checkbox" / > < / td >
-                        < td > {
-                    {
-                        index
-                    }
-                    }</
-                    td >
-                    < td > < input
-                    type = "text"
-                    class
-                    = "form-control input-sm" / > < / td >
-                        < td > < input
-                    type = "text"
-                    class
-                    = "form-control input-sm" / > < / td >
-                        < td > < input
-                    type = "text"
-                    class
-                    = "form-control input-sm" / > < / td >
-                        < td > < input
-                    type = "text"
-                    class
-                    = "form-control input-sm" / > < / td >
-                        < / tr >
-                    </script>
-                    </tbody>
-                    </table>
-                </div>
+                    </div>
+                    <div role = "tabpanel" class= "tab-pane" id = "project" >
+                        <div class = "mt-handle-button-group" >
+                            <button id = "mt-btn-add" class="btn btn-default" > 添加 </button>
+                            <button id = "mt-btn-select" class="btn btn-default" > 导入 </button>
+                            <button id = "mt-btn-del" class="btn btn-default" > 删除 </button>
+                        </div>
+                        <table class="table table-bordered checked-table">
+                            <thead>
+                                <tr>
+                                    <th> <input type = "checkbox" /></th>
+                                    <th> No. </th>
+                                    <th> 项目 </th>
+                                    <th> 具体内容 </th>
+                                    <th> 负责人 </th>
+                                    <th> 要求完成时间 </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type = "checkbox" />
+                                    <td> 1 </td>
+                                    <td><input type = "text" class= "form-control input-sm" /> </td>
+                                    <td><input type = "text" class= "form-control input-sm" /> </td>
+                                    <td><input type = "text" class= "form-control input-sm" /></td>
+                                    <td><input type = "text" class= "form-control input-sm" /> </td>
+                                </tr>
+                                <script id = "mt-tr" type = "text/html">
+                                    <tr>
+                                        <td><input type = "checkbox" / > </td>
+                                        <td>{{index}}</td>
+                                        <td><input type = "text" class="form-control input-sm" /></td>
+                                        <td><input type = "text" class="form-control input-sm" /></td>
+                                        <td><input type = "text" class="form-control input-sm" /></td>
+                                        <td><input type = "text" class="form-control input-sm" /></td>
+                                    </tr>
+                                </script>
+                            </tbody>
+                        </table>
+                    </div>
             </div>
         </div>
         <table class="table table-bordered">
@@ -222,7 +170,6 @@
             </tr>
             </tbody>
         </table>
-
     </div>
     <div class="form-table-bottom">
         <div class="ft-b-left">
