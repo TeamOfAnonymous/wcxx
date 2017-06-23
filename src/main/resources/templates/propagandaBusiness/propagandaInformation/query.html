@@ -276,33 +276,33 @@
         var my_table = template('template_table', data);
         $('#ppgdaTable').html(my_table);
         customData.totalPages = data.totalPages;
-        var pageStr = template('pageTemplate', currentQeury);
+        var pageStr = template('pageTemplate', customData);
         document.getElementById('page').innerHTML = pageStr;
     }
     $('#page').on('click', 'li', function () {
         if ($(this).hasClass("page-item")) {
             if (!$(this).hasClass("active")) {
                 console.log("去到第" + $(this).text() + "页");
-                currentQeury.currentPage = $(this).text() - 1;
-                sumbitQuery(currentQeury);
+                customData.currentPage = $(this).text() - 1;
+                sumbitQuery(customData);
             }
-        } else if ($(this).attr("aria-label") == "Previous" && currentQeury.currentPage > 0) {
+        } else if ($(this).attr("aria-label") == "Previous" && customData.currentPage > 0) {
             console.log("上一页");
-            currentQeury.currentPage -= 1;
-            sumbitQuery(currentQeury);
+            customData.currentPage -= 1;
+            sumbitQuery(customData);
         }
-        else if ($(this).attr("aria-label") == "Next" && currentQeury.currentPage + 1 < currentQeury.totalPages) {
+        else if ($(this).attr("aria-label") == "Next" && customData.currentPage + 1 < customData.totalPages) {
             console.log("下一页");
-            currentQeury.currentPage += 1;
-            sumbitQuery(currentQeury);
+            customData.currentPage += 1;
+            sumbitQuery(customData);
         }
     });
     $('#page').on('click', 'button', function (e) {
         var page = $(this).prev('input').val();
         if (!isNaN(page)) {
-            if (page > 0 && page <= currentQeury.totalPages) {
-                currentQeury.totalPages = page - 1;
-                sumbitQuery(currentQeury);
+            if (page > 0 && page <= customData.totalPages) {
+                customData.totalPages = page - 1;
+                sumbitQuery(customData);
             }
         }
         return false;
