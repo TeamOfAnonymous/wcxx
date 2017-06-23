@@ -146,16 +146,9 @@
 										<form id="uf-form" method="post" action="/upload" target="uf-frame" encoding="multipart/form-data" enctype="multipart/form-data">
 											<input id="uf-input-upload" type="file" />
 										</form>
-										<iframe id="uf-frame" name="uf-frame" src="" style="visibility:hidden;height: 0;border: 0;"></iframe>
+										<iframe id="uf-frame" name="uf-frame" style="visibility:hidden;height: 0;border: 0;"></iframe>
 									</div>
-									<div class="uf-file-list" data-delUrl="url">
-										<p>广州血液中心.doc
-											<a href="javascript:;">[删除]</a>
-										</p>
-										<p>广州血液中心.doc
-											<a href="javascript:;">[删除]</a>
-										</p>
-									</div>
+									<div class="uf-file-list"> </div>
 								</div>
 							</td>
 						</tr>
@@ -328,7 +321,7 @@
 		<script type="text/javascript" src="../../vendor/jquery1.9.min.js"></script>
 		<script type="text/javascript" src="../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 		<!--[if IE 8 ]>
-			script type="text/javascript" src="../../vendor/es5-shim/es5-shim.min.js"></script>
+			<script type="text/javascript" src="../../vendor/es5-shim/es5-shim.min.js"></script>
 			<script type="text/javascript" src="../../vendor/es5-shim/es5-sham.min.js"></script>
 		 <![endif]-->
 		<script type="text/javascript" src="../../vendor/template-web-min.js"></script>
@@ -348,7 +341,7 @@
 			});
 			//查看流程图
 			$("#readFliwImg").on("click", function() {
-				window.open('../public/flowImg.html', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
+				window.open('/goFlowChart', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
 			});
 			//中间的表格操作
 			var $mid_table = $('.mid-table');

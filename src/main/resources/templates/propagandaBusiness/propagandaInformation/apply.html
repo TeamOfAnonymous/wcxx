@@ -1,309 +1,284 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="UTF-8" />
-		<title>新建宣传信息发布</title>
-		<link rel="stylesheet" href="../../../vendor/bootstrap-3.3.7/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="../../../css/public.css" />
-		<link rel="stylesheet" href="../../../css/publishApply.css" />
-		<link rel="stylesheet" href="../../../vendor/jquery.my-message/css/jquery.my-message.1.1.css" />
-	</head>
+<head>
+    <meta charset="UTF-8"/>
+    <title>新建宣传信息发布</title>
+    <link rel="stylesheet" href="../../../vendor/bootstrap-3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../../css/public.css"/>
+    <link rel="stylesheet" href="../../../css/publishApply.css"/>
+    <link rel="stylesheet" href="../../../vendor/jquery.my-message/css/jquery.my-message.1.1.css"/>
+</head>
 
-	<body>
-		<div class="container-fluid setWidth publish-apply">
-			<div class="form-table">
-				<div class="ft-top">
-					<h3 class="text-center">宣传信息发布申请</h3>
-					<p class="ft-t-state">
-						状态&nbsp;:&nbsp;待审批
-					</p>
-				</div>
-				<table class="table table-bordered">
-					<tbody>
-						<tr>
-							<td>申请部门</td>
-							<td></td>
-							<td >申请时间</td>
-							<td> <input id="fCreateTime"/> </td>
-						</tr>
-						<tr>
-							<td>申请人</td>
-							<td></td>
-							<td>联系电话</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td><span class="font-red">*</span>标题</td>
-							<td colspan="3">
-								<input type="text" class="form-control" id="title" />
-							</td>
-						</tr>
-						<tr>
-							<td><span class="font-red">*</span>类别</td>
-							<td colspan="3" id="mainCategory">
-							</td>
-						</tr>
-						<tr>
-							<td><span class="font-red">*</span>发布媒介(对象)</td>
-							<td colspan="3" id="subCategory">
-							</td>
-						</tr>
-						<tr>
-							<td>信息发布(投放)开始时间</td>
-							<td>
-								<input type="date" class="form-control" id="startDate" />
-							</td>
-							<td>信息发布(投放)结束时间</td>
-							<td>
-								<input type="date" class="form-control" id="endDate" />
-							</td>
-						</tr>
-						<tr>
-							<td>投放平台</td>
-							<td colspan="3">
-								<span>新浪微博</span>
-								<span>微信平台</span>
-								<span>中心网站</span>
-							</td>
-						</tr>
-						<tr>
-							<td>内容</td>
-							<td colspan="3">
-								<textarea class="form-control" rows="3" id="content"></textarea>
-							</td>
-						</tr>
-						<tr>
-							<td>备注</td>
-							<td colspan="3">
-								<textarea class="form-control" rows="3" id="remarks"></textarea>
-							</td>
-						</tr>
-						<tr>
-							<td>附件</td>
-							<td colspan="3">
-								<div class="upload-file">
-									<div class="uf-button">
-										<button id="uf-btn-upload" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span>添加</button>
-										<form id="uf-form" method="post" action="/upload" target="uf-frame" encoding="multipart/form-data" enctype="multipart/form-data">
-											<input id="uf-input-upload" type="file" />
-										</form>
-										<iframe id="uf-frame" name="uf-frame" src="" style="visibility:hidden;height: 0;border: 0;"></iframe>
-									</div>
-									<div class="uf-file-list" data-delUrl="url">
-										<p>广州血液中心.doc
-											<a href="javascript:;">[删除]</a>
-										</p>
-										<p>广州血液中心.doc
-											<a href="javascript:;">[删除]</a>
-										</p>
-									</div>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td>领导审批意见</td>
-							<td colspan="3">
-								<textarea class="form-control" rows="3"></textarea>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="form-table-bottom">
-				<div class="ft-b-left">
-					<div class="ft-b-l-top">
-						<form class="form-inline">
-							<label class="checkbox-inline">选择常用意见&nbsp;:</label>
-							<select name="" class="form-control">
-								<option value="">--------------------------请选择----------------------------</option>
-							</select>
-						</form>
-					</div>
-					<div class="ft-b-l-bottom">
-						<div class="ft-b-l-b-top">
-							填写审批意见&nbsp;:
-							<a href="javascript:;">添加为常用意见</a>
-						</div>
-						<textarea class="form-control" rows="3"></textarea>
-					</div>
+<body>
+<div class="container-fluid setWidth publish-apply">
+    <div class="form-table">
+        <div class="ft-top">
+            <h3 class="text-center">宣传信息发布申请</h3>
+            <p class="ft-t-state">
+                状态&nbsp;:&nbsp;待审批
+            </p>
+        </div>
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <td>申请部门</td>
+                <td></td>
+                <td>申请时间</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>申请人</td>
+                <td></td>
+                <td>联系电话</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span class="font-red">*</span>标题</td>
+                <td colspan="3">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="title"/>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="font-red">*</span>类别</td>
+                <td colspan="3" id="mainCategory">
+                </td>
+            </tr>
+            <tr>
+                <td><span class="font-red">*</span>发布媒介(对象)</td>
+                <td colspan="3" id="subCategory">
+                </td>
+            </tr>
+            <tr>
+                <td>信息发布(投放)开始时间</td>
+                <td>
+                    <input type="date" class="form-control" id="startDate"/>
+                </td>
+                <td>信息发布(投放)结束时间</td>
+                <td>
+                    <input type="date" class="form-control" id="endDate"/>
+                </td>
+            </tr>
+            <tr>
+                <td>投放平台</td>
+                <td colspan="3">
+                    <span>新浪微博</span>
+                    <span>微信平台</span>
+                    <span>中心网站</span>
+                </td>
+            </tr>
+            <tr>
+                <td>内容</td>
+                <td colspan="3">
+                    <textarea class="form-control" rows="3" id="content"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>备注</td>
+                <td colspan="3">
+                    <textarea class="form-control" rows="3" id="remarks"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>附件</td>
+                <td colspan="3">
+                    <div class="upload-file">
+                        <div class="uf-button">
+                            <button id="uf-btn-upload" class="btn btn-default">
+                                <span class="glyphicon glyphicon-plus"></span>添加
+                            </button>
+                            <form id="uf-form" method="post" action="/uploadAnnex" target="uf-frame" encoding="multipart/form-data" enctype="multipart/form-data">
+                                <input id="uf-input-upload" type="file"/>
+                            </form>
+                            <iframe id="uf-frame" name="uf-frame"  style="visibility:hidden;height: 0;border: 0;"></iframe>
+                        </div>
+                        <div class="uf-file-list"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>领导审批意见</td>
+                <td colspan="3">
+                    <textarea class="form-control" rows="3"></textarea>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="form-table-bottom">
+        <div class="ft-b-left">
+            <div class="ft-b-l-top">
+                <form class="form-inline">
+                    <label class="checkbox-inline">选择常用意见&nbsp;:</label>
+                    <select name="" class="form-control">
+                        <option value="">--------------------------请选择----------------------------</option>
+                    </select>
+                </form>
+            </div>
+            <div class="ft-b-l-bottom">
+                <div class="ft-b-l-b-top">
+                    填写审批意见&nbsp;:
+                    <a href="javascript:;">添加为常用意见</a>
+                </div>
+                <textarea class="form-control" rows="3"></textarea>
+            </div>
 
-				</div>
-				<div class="ft-b-right">
-					<div class="ft-b-r-top">
-						功能操作&nbsp;:
-						<label class="checkbox-inline">
-  							<input type="checkbox" value="" /> 同步发送短信通知
-						</label>
-					</div>
-					<div class="ft-b-r-bottom">
-						<div class="ft-b-r-b-left">
-							<button class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span>送科室领导</button>
-							<button class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span>送部门领导</button>
-							<br />
-							<button class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span>送中心领导</button>
-							<button class="btn btn-primary"><span class="glyphicon glyphicon-arrow-left"></span>退回拟稿人</button>
-						</div>
-						<div class="ft-b-r-b-right">
-							<p>
-								<a id="readFliwImg" href="javascript:;">查看流程图</a>
-							</p>
-							<p>
-								<a href="javascript:;">查看流程跟踪</a>
-							</p>
+        </div>
+        <div class="ft-b-right">
+            <div class="ft-b-r-top">
+                功能操作&nbsp;:
+                <label class="checkbox-inline">
+                    <input type="checkbox" value=""/> 同步发送短信通知
+                </label>
+            </div>
+            <div class="ft-b-r-bottom">
+                <div class="ft-b-r-b-left">
+                    <button class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span>送科室领导</button>
+                    <button class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span>送部门领导</button>
+                    <br/>
+                    <button class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span>送中心领导</button>
+                    <button class="btn btn-primary"><span class="glyphicon glyphicon-arrow-left"></span>退回拟稿人</button>
+                </div>
+                <div class="ft-b-r-b-right">
+                    <p>
+                        <a id="readFliwImg" href="javascript:;">查看流程图</a>
+                    </p>
+                    <p>
+                        <a href="javascript:;">查看流程跟踪</a>
+                    </p>
 
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-		<!--{{each categoryInfo.nodes as subCategoryInfo s}}-->
-		<!--<tr>-->
-		<!--<td><input type="checkbox"/></td>-->
-		<!--<td>{{temp++}}</td>-->
-		<!--<td><a href="javascript:;" class="cmt-tree L2">{{subCategoryInfo.text}}</a></td>-->
-		<!--<td>-->
-		<!--{{if subCategoryInfo.status == 0}}-->
-		<!--<span class="font-red">-->
-		<!--{{subCategoryInfo.status}}-->
-		<!--</span>-->
-		<!--{{else}}-->
-		<!--{{subCategoryInfo.status}}-->
-		<!--{{/if}}-->
-		<!--</td>-->
-		<!--<td>{{subCategoryInfo.creator}}</td>-->
-		<!--<td>{{subCategoryInfo.lastModifiedTime}}</td>-->
-		<!--</tr>-->
-		<!--{{each}}-->
+<button id="testSubmit">测试提交</button>
 
-        <button id="testSubmit">测试提交</button>
+<script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
+<script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<!--[if IE 8 ]>
+<script type="text/javascript" src="../../vendor/es5-shim/es5-shim.min.js"></script>
+<script type="text/javascript" src="../../vendor/es5-shim/es5-sham.min.js"></script>
+<![endif]-->
+<script type="text/javascript" src="../../../vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
+<script type="text/javascript" src="../../../js/public.js"></script>
+<script type="text/javascript">
+    var winH = window.screen.height,
+            winW = window.screen.width;
+    $(".ft-b-r-b-left").on("click", "button", function () {
+        window.open('../../public/submitToDealWith.html', '提交办理', 'height=503, width=760, top=' + (winH - 503) / 2 + ', left=' + (winW - 760) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
+    });
+    //查看流程图
+    $("#readFliwImg").on("click", function () {
+        window.open('/goFlowChart', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
+    });
 
-		<script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
-		<script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="../../../vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
-		<script type="text/javascript" src="../../../js/public.js"></script>
-		<script type="text/javascript">
-			var winH = window.screen.height,
-				winW = window.screen.width;
-			$(".ft-b-r-b-left").on("click", "button", function() {
-				window.open('../../public/submitToDealWith.html', '提交办理', 'height=503, width=760, top=' + (winH - 503) / 2 + ', left=' + (winW - 760) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
-			});
-			//查看流程图
-			$("#readFliwImg").on("click", function() {
-				window.open('../../public/flowImg.html', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
-			});
-
-			$(function(){
-				var d = new Date(),str = '';
-				str += d.getFullYear()+'年';
-				str  += d.getMonth() + 1+'月';
-				str  += d.getDate()+'日';
-				str += d.getHours()+'时';
-				str  += d.getMinutes()+'分';
-				str+= d.getSeconds()+'秒';
-				console.log(str);
-				$('#fCreateTime').val(str);
-			});
-
-			//遍历出父节点
-            $.ajax({
-                type: "GET",
-                url: "/getPropagandaInformationCategories",
-                success: function (data) {
-                    var node = "";
-                    data.forEach(function (val, index) {
-                        if(val.name === null) {
-                            alert("null");
-                            return false;
-						}
-						node = node + "<label class='checkbox-inline'> <input type='checkbox' value='" + val.id + "'/>"+ val.name +"</label>"  ;
-                    });
-                    var mainCategorySelector = $('#mainCategory');
-                    mainCategorySelector.append(node);
-                    mainCategorySelector.on('change','input[type="checkbox"]',function (e) {
-						if ($(this).is(':checked'))
-                        	addChildCategory($(this.closest('.checkbox-inline')).text(), this.value);
-						else
-                            delChildCategory(this.value);
-                    });
-                    console.log(data);
+    //遍历出父节点
+    $.ajax({
+        type: "GET",
+        url: "/getPropagandaInformationCategories",
+        success: function (data) {
+            var node = "";
+            data.forEach(function (val, index) {
+                if (val.name === null) {
+                    alert("null");
+                    return false;
                 }
+                node = node + "<label class='checkbox-inline'> <input type='checkbox' value='" + val.id + "'/>" + val.name + "</label>";
             });
+            var mainCategorySelector = $('#mainCategory');
+            mainCategorySelector.append(node);
+            mainCategorySelector.on('change', 'input[type="checkbox"]', function (e) {
+                if ($(this).is(':checked'))
+                    addChildCategory($(this.closest('.checkbox-inline')).text(), this.value);
+                else
+                    delChildCategory(this.value);
+            });
+            console.log(data);
+        }
+    });
 
-			//添加子节点
-			function addChildCategory(categoryName, categoryId) {
-                $.ajax({
-                    type: "GET",
-					data: {'pid':categoryId},
-                    dataType: "json",
-                    url: "/getPropagandaInformationCategoriesByPid",
-                    success: function (data) {
-                        console.log(data);
-                        var node = categoryName + "&nbsp;:&nbsp;";
-                        data.forEach(function (val, index) {
-                            if(val.name === null) {
-                                alert("null");
-                                return false;
-                            }
-                            node = node + "<label class='checkbox-inline'> <input type='checkbox' value='" + val.id + "'/>"+ val.name +"</label>"  ;
-                        });
-                        node = "<div id='"+ categoryId +"'>" + node + "</div>";
-                        $('#subCategory').append(node);
-                        $('#'+categoryId).on('change','input[type="checkbox"]',function (e) {
-                            if ($(this).is(':checked'))
-                                alert("checked");
-                            else
-                                alert("unchecked");
-                        });
+    //添加子节点
+    function addChildCategory(categoryName, categoryId) {
+        $.ajax({
+            type: "GET",
+            data: {'pid': categoryId},
+            dataType: "json",
+            url: "/getPropagandaInformationCategoriesByPid",
+            success: function (data) {
+                console.log(data);
+                var node = categoryName + "&nbsp;:&nbsp;";
+                data.forEach(function (val, index) {
+                    if (val.name === null) {
+                        alert("null");
+                        return false;
                     }
+                    node = node + "<label class='checkbox-inline'> <input type='checkbox' value='" + val.id + "'/>" + val.name + "</label>";
+                });
+                node = "<div id='" + categoryId + "'>" + node + "</div>";
+                $('#subCategory').append(node);
+                $('#' + categoryId).on('change', 'input[type="checkbox"]', function (e) {
+                    if ($(this).is(':checked'))
+                        alert("checked");
+                    else
+                        alert("unchecked");
                 });
             }
+        });
+    }
 
-            //删除子节点
-            function delChildCategory(categoryId) {
-				$("#"+categoryId).remove();
+    //删除子节点
+    function delChildCategory(categoryId) {
+        $("#" + categoryId).remove();
+    }
+    fv.init($('#title'), "标题");
+    $("#testSubmit").click(function (e) {
+        var title = $('#title')[0].value;
+        var content = $('#content')[0].value;
+        var remarks = $('#remarks')[0].value;
+        var startDate = $('#startDate')[0].value;
+        var endDate = $('#endDate')[0].value;
+        if (fv.isNull($('#title'), "标题")) {
+            var information = {
+                title: title,
+                content: content,
+                remarks: remarks,
+                startDate: startDate,
+                endDate: endDate
+            };
+            var propagandaInformationCategories = [];
+            $('input[type="checkbox"]:checked').each(function () {
+                propagandaInformationCategories.push({
+                    id: $(this).val()
+                });//向数组中添加元素
+            });
+            information.propagandaInformationCategories = propagandaInformationCategories;
+            console.log(information);
+            ppgdaInfoSumbit(information);
+        }
+    })
+
+    function ppgdaInfoSumbit(information) {
+        loading.show();
+        $.ajax({
+            type: "POST",
+            url: "/addPropagandaInformation",
+            data: JSON.stringify(information),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (data) {
+                loading.hide();
+                message.add("保存成功");
+                console.log(data);
+                window.location.href="/propagandaBusiness/propagandaInformation/goPropagandaInformationQuery"
             }
-
-            $("#testSubmit").click(function (e) {
-                var title = $('#title')[0].value;
-                var content = $('#content')[0].value;
-                var remarks = $('#remarks')[0].value;
-                var startDate = $('#startDate')[0].value;
-                var endDate = $('#endDate')[0].value;
-                var information = {
-                    title : title,
-                    content : content,
-                    remarks : remarks,
-                    startDate : startDate,
-                    endDate : endDate
-                };
-                var propagandaInformationCategories = [];
-                $('input[type="checkbox"]:checked').each(function(){
-                    propagandaInformationCategories.push({
-                        id : $(this).val()
-                    });//向数组中添加元素
-                });
-                information.propagandaInformationCategories = propagandaInformationCategories;
-                console.log(information);
-                ppgdaInfoSumbit(information);
-            })
-
-            function ppgdaInfoSumbit(information) {
-                $.ajax({
-                    type: "POST",
-                    url: "/addPropagandaInformation" ,
-                    data: JSON.stringify(information) ,
-                    dataType: "json" ,
-                    contentType : "application/json" ,
-                    success: function (data) {
-                        alert("成功");
-                        console.log(data);
-                    }
-                });
-            }
+        });
+    }
 
 
-		</script>
-	</body>
+</script>
+</body>
 </html>

@@ -84,38 +84,7 @@
         </table>
     </div>
     <div class="page">
-        <ul class="pagination pagination-sm">
-            <li class="disabled">
-						<span href="#" aria-label="Previous">
-							<span aria-hidden="true">&laquo;</span>
-						</span>
-            </li>
-            <li class="active">
-                <span href="#">1</span>
-            </li>
-            <li>
-                <span href="#">2</span>
-            </li>
-            <li>
-                <span href="#">3</span>
-            </li>
-            <li>
-                <span href="#">4</span>
-            </li>
-            <li>
-                <span href="#">5</span>
-            </li>
-            <li>
-                <span href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </span>
-            </li>
-            <li class="li-page-handle">
-                转到第
-                <input type="text" class="form-control input-sm"/> 页
-                <button type="button" class="btn btn-default btn-sm">GO</button>
-            </li>
-        </ul>
+        <ul class="pagination pagination-sm" id="page"></ul>
     </div>
 </div>
 <script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
@@ -128,9 +97,10 @@
     {{set temp = 1}}
     {{each content as ppgdaInfo p}}
     <tr>
-        <td><input type="checkbox"/></td>
+        <td><input data-id="{{ppgdaInfo.id}}" type="checkbox"/></td>
         <td>{{temp++}}</td>
-        <td>{{ppgdaInfo.title}}</td>
+        <td><a href="/propagandaBusiness/propagandaInformation/goPropagandaInformationDetails/{{ppgdaInfo.id}}">{{ppgdaInfo.title}}</a>
+        </td>
         <td>{{ppgdaInfo.mainCategory}}</td>
         <td>{{ppgdaInfo.subCategory}}</td>
         <td>{{ppgdaInfo.applicant.name}}</td>
@@ -147,17 +117,57 @@
     </tr>
     {{/each}}
 </script>
+<script id="pageTemplate" type="text/html">
+    {{if page==0}}
+    <li class="disabled prev">
+        {{else}}
+    <li class="prev">
+        {{/if}}
+        <span href="#" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </span>
+    </li>
+
+    <% for(var i = 1; i <= totalPages; i++){ %>
+    {{if totalPages==i}}
+    <li class="active page-item">
+        {{else}}
+    <li class="page-item">
+        {{/if}}
+        <span href="#"><%= i %></span>
+    </li>
+    <% } %>
+
+    {{if page==totalPages-1}}
+    <li class="disabled next">
+        {{else}}
+    <li class="next">
+        {{/if}}
+        <span href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+         </span>
+    </li>
+    <li class="li-page-handle">
+        转到第
+        <input type="text" class="form-control input-sm"/> 页
+        <button type="button" class="btn btn-default btn-sm">
+            GO
+        </button>
+    </li>
+</script>
 
 <script type="text/javascript">
 
     var customData = {
+        "totalPages": "0",
+        "page": "0",
         title: null,
         applicant: null,
         applicationDate: null,
         approvalStatus: null,
         mainCategories: null
     }
-
+    loading.show();
     $.ajax({
         type: "GET",
         url: "/getPropagandaInformationCategories",
@@ -172,7 +182,7 @@
             });
             var mainCategorySelector = $('#mainCategories');
             mainCategorySelector.html(node);
-            console.log(node);
+            loading.hide();
         }
     });
 
@@ -197,7 +207,7 @@
     function ppgdaInfoSumbit(information) {
 
         var data = dataSetting(information);
-
+        loading.show();
         $.ajax({
             type: "POST",
             url: "/getPropagandaInformationByQueryCondition",
@@ -207,6 +217,7 @@
             success: function (data) {
                 dataProcessing(data);
                 console.log(data);
+                loading.hide();
             }
         });
     }
@@ -265,7 +276,38 @@
     function loadTable(data) {
         var my_table = template('template_table', data);
         $('#ppgdaTable').html(my_table);
+        customData.totalPages = data.totalPages;
+        var pageStr = template('pageTemplate', customData);
+        document.getElementById('page').innerHTML = pageStr;
     }
+    $('#page').on('click', 'li', function () {
+        if ($(this).hasClass("page-item")) {
+            if (!$(this).hasClass("active")) {
+                console.log("去到第" + $(this).text() + "页");
+                customData.currentPage = $(this).text() - 1;
+                sumbitQuery(customData);
+            }
+        } else if ($(this).attr("aria-label") == "Previous" && customData.currentPage > 0) {
+            console.log("上一页");
+            customData.currentPage -= 1;
+            sumbitQuery(customData);
+        }
+        else if ($(this).attr("aria-label") == "Next" && customData.currentPage + 1 < customData.totalPages) {
+            console.log("下一页");
+            customData.currentPage += 1;
+            sumbitQuery(customData);
+        }
+    });
+    $('#page').on('click', 'button', function (e) {
+        var page = $(this).prev('input').val();
+        if (!isNaN(page)) {
+            if (page > 0 && page <= customData.totalPages) {
+                customData.totalPages = page - 1;
+                sumbitQuery(customData);
+            }
+        }
+        return false;
+    });
 
 </script>
 

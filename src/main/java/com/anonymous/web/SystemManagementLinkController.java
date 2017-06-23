@@ -3,7 +3,9 @@ package com.anonymous.web;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -27,8 +29,15 @@ public class SystemManagementLinkController {
     }
 
     @GetMapping(value = "goAddUser")
-    @ApiOperation(value = "去到添加用户")
+    @ApiOperation(value = "去到添加用户页面")
     public String goAddUser() {
+        return "systemManagement/addUser";
+    }
+
+    @GetMapping(value = "goEditUser/{id}")
+    @ApiOperation(value = "去到添加用户页面")
+    public String goEditUser(ModelMap modelMap, @PathVariable String id) {
+        modelMap.addAttribute("user_id", id);
         return "systemManagement/addUser";
     }
 

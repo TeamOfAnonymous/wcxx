@@ -36,7 +36,9 @@
             <tr>
                 <td><span class="font-red">*</span>标题</td>
                 <td colspan="3">
-                    <input type="text" class="form-control" id="pmpTitle"/>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="pmpTitle"/>
+                    </div>
                 </td>
             </tr>
 
@@ -71,7 +73,7 @@
                     <td>制作方式</td>
                     <td colspan="3">
                         <label class="radio-inline">
-                            <input type="radio" value="内部制作" selected name="pmcProductionMethod0" checked="checked" />内部制作
+                            <input type="radio" value="内部制作" selected name="pmcProductionMethod0" checked="checked"/>内部制作
                         </label>
                         <label class="radio-inline">
                             <input type="radio" value="广告公司制作" name="pmcProductionMethod0"/> 广告公司制作
@@ -130,7 +132,7 @@
                         <td>制作方式</td>
                         <td colspan="3">
                             <label class="radio-inline">
-                                <input type="radio" value="内部制作" name="pmcProductionMethod{{num}}" checked="checked" />内部制作
+                                <input type="radio" value="内部制作" name="pmcProductionMethod{{num}}" checked="checked"/>内部制作
                             </label>
                             <label class="radio-inline">
                                 <input type="radio" value="广告公司制作" name="pmcProductionMethod{{num}}"/> 广告公司制作
@@ -176,7 +178,7 @@
             <tr>
                 <td>总费用(元)</td>
                 <td>
-                    <input  id="pmpTotalCost" type="text" class="form-control input-sm" disabled="disabled"/>
+                    <input id="pmpTotalCost" type="text" class="form-control input-sm" disabled="disabled"/>
                 </td>
                 <td><input style="opacity: 0;" type="text" class="form-control input-sm"/></td>
             </tr>
@@ -194,21 +196,13 @@
                             <button id="uf-btn-upload" class="btn btn-default"><span
                                     class="glyphicon glyphicon-plus"></span>添加
                             </button>
-                            <form id="uf-form" method="post" action="/upload" target="uf-frame"
+                            <form id="uf-form" method="post" action="/uploadAnnex" target="uf-frame"
                                   encoding="multipart/form-data" enctype="multipart/form-data">
                                 <input id="uf-input-upload" type="file"/>
                             </form>
-                            <iframe id="uf-frame" name="uf-frame" src=""
-                                    style="visibility:hidden;height: 0;border: 0;"></iframe>
+                            <iframe id="uf-frame" name="uf-frame" style="visibility:hidden;height: 0;border: 0;"></iframe>
                         </div>
-                        <div class="uf-file-list" data-delUrl="url">
-                            <p>广州血液中心.doc
-                                <a href="javascript:;">[删除]</a>
-                            </p>
-                            <p>广州血液中心.doc
-                                <a href="javascript:;">[删除]</a>
-                            </p>
-                        </div>
+                        <div class="uf-file-list"></div>
                     </div>
                 </td>
             </tr>
@@ -268,11 +262,11 @@
     </div>
 </div>
 
-<input type="button" id="submitBut" value="测试按钮"/>
-
+<!--<input type="button" id="submitBut" value="测试按钮"/>-->
 <script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
 <script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 <!--[if IE 8 ]>
+<script type="text/javascript" src="../../vendor/es5-shim/es5-shim.min.js"></script>
 <script type="text/javascript" src="../../vendor/es5-shim/es5-sham.min.js"></script>
 <![endif]-->
 <script type="text/javascript" src="../../../vendor/template-web-min.js"></script>
@@ -280,19 +274,19 @@
 <script type="text/javascript" src="../../../js/public.js"></script>
 <script type="text/javascript">
     var winH = window.screen.height,
-        winW = window.screen.width;
-    $(".ft-b-r-b-left").on("click", "button", function () {
-        window.open('../../public/submitToDealWith.html', '提交办理', 'height=503, width=760, top=' + (winH - 503) / 2 + ', left=' + (winW - 760) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
-    });
+            winW = window.screen.width;
+    /*$(".ft-b-r-b-left").on("click", "button", function () {
+     window.open('../../public/submitToDealWith.html', '提交办理', 'height=503, width=760, top=' + (winH - 503) / 2 + ', left=' + (winW - 760) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
+     });*/
     //查看流程图
     $("#readFliwImg").on("click", function () {
-        window.open('../../public/flowImg.html', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
+        window.open('/goFlowChart', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
     });
 
 
     // TODO 初始化时应该要获取登陆用户的信息，填充显示
 
-    $(function(){
+    $(function () {
         listenerForpmcProductionQuantityAndpmcCost();
     });
 
@@ -300,29 +294,29 @@
     function calculatePMPTotalCost() {
         var pmcCosts = $("[name='pmcCost']");
         var pmcProductionQuantitys = $("[name='pmcProductionQuantity']");
-        var pmpTotalCost = 0 ;
-        for(var i = 0 ; i < pmcCosts.length ; i++ ){
-            if( pmcCosts[i].value != "" && pmcProductionQuantitys[i].value != "" ){
-                pmpTotalCost += pmcCosts[i].value * pmcProductionQuantitys[i].value ;
+        var pmpTotalCost = 0;
+        for (var i = 0; i < pmcCosts.length; i++) {
+            if (pmcCosts[i].value != "" && pmcProductionQuantitys[i].value != "") {
+                pmpTotalCost += pmcCosts[i].value * pmcProductionQuantitys[i].value;
             }
         }
-        return pmpTotalCost ;
+        return pmpTotalCost;
     }
 
     // 给 pmc 数量 和 费用 输入框添加 监听
     function listenerForpmcProductionQuantityAndpmcCost() {
         $("[name='pmcProductionQuantity']").change(function () {
             // 显示 总费用
-            $("#pmpTotalCost").val( calculatePMPTotalCost() );
+            $("#pmpTotalCost").val(calculatePMPTotalCost());
         });
         $("[name='pmcCost']").change(function () {
             // 显示 总费用
-            $("#pmpTotalCost").val( calculatePMPTotalCost() );
+            $("#pmpTotalCost").val(calculatePMPTotalCost());
         });
     }
-
+    fv.init($('#pmpTitle'), "标题");
     // 提交按钮点击事件
-    $("#submitBut").click(function () {
+    $(".ft-b-r-b-left").on("click", "button", function () {
         var pmcPromotionalCategorys = $("[name='pmcPromotionalCategory']");
         var pmcNames = $("[name='pmcName']");
 //        var pmcProductionMethods = $("[name='pmcProductionMethod']");
@@ -345,9 +339,9 @@
             if (pmcNames[i].value != "") {
                 pmc.name = pmcNames[i].value;
             }
-            var pmcProductionMethodInputName = "pmcProductionMethod"+i;
-            if ( $('input[name="'+pmcProductionMethodInputName.toString()+'"]:checked ').val() != "") {
-                pmc.productionMethod = $('input[name="'+pmcProductionMethodInputName.toString()+'"]:checked ').val() ;
+            var pmcProductionMethodInputName = "pmcProductionMethod" + i;
+            if ($('input[name="' + pmcProductionMethodInputName.toString() + '"]:checked ').val() != "") {
+                pmc.productionMethod = $('input[name="' + pmcProductionMethodInputName.toString() + '"]:checked ').val();
             }
             if (pmcRequestCompletionTimes[i].value != "") {
                 pmc.requestCompletionTime = pmcRequestCompletionTimes[i].value;
@@ -380,17 +374,17 @@
 
         // 构建 宣传品 开始
         var pmp = {};
-        if( $("#pmpTitle").val() != "" ){
-            pmp.title = $("#pmpTitle").val() ;
+        if ($("#pmpTitle").val() != "") {
+            pmp.title = $("#pmpTitle").val();
         }
         // 由后台计算
 //            if( $("#pmpTotalCost").val() != "" ){
 //                pmp.totalCost = $("#pmpTotalCost").val() ;
 //            }
-        if( $("#pmpRemarks").val() != "" ){
-            pmp.remarks = $("#pmpRemarks").val() ;
+        if ($("#pmpRemarks").val() != "") {
+            pmp.remarks = $("#pmpRemarks").val();
         }
-        pmp.propagandaMaterialsContents = propagandaMaterialsContents ;
+        pmp.propagandaMaterialsContents = propagandaMaterialsContents;
         // 构建宣传品 结束
 
         console.log(pmp);
@@ -400,17 +394,21 @@
 
     // 发送请求
     function sumbitSave(query) {
-        $.ajax({
-            type: "POST",
-            url: "/addPropagandaMaterialsProduced" ,
-            data: JSON.stringify(query) ,
-            dataType: "json" ,
-            contentType : "application/json" ,
-            success: function (data) {
-                alert("成功");
-                console.log(data);
-            }
-        });
+        if (fv.isNull($('#pmpTitle'), "标题")) {
+            loading.show();
+            $.ajax({
+                type: "POST",
+                url: "/addPropagandaMaterialsProduced",
+                data: JSON.stringify(query),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    loading.hide();
+                    message.add("保存成功");
+                    window.location.href = "/propagandaBusiness/propagandaMaterialsRecipients/goPropagandaMaterialsRecipientsQuery";
+                }
+            });
+        }
     }
 
     //添加表格的一行
@@ -419,7 +417,6 @@
         var index = $('#mid-table table').length;
         var mt_tr_html = template("mt-table", {num: index});
         $('.mid-table').append(mt_tr_html);
-
         listenerForpmcProductionQuantityAndpmcCost();
     });
     //删除

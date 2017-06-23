@@ -6,6 +6,19 @@
     <link rel="stylesheet" href="../../vendor/bootstrap-3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="../../css/public.css"/>
     <link rel="stylesheet" href="../../vendor/jquery.my-message/css/jquery.my-message.1.1.css"/>
+    <style>
+        #tree {
+            display: none;
+            position: fixed;
+            margin-left: 75px;
+            border: 1px solid #ddd;
+            background-color: white;
+            z-index: 10;
+        }
+        .list-group{
+            margin-bottom: 0;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid setMinWidth recipients-to-apply-for-list">
@@ -24,8 +37,10 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>所在部门：</label>
-
+                <div class="mt-select">
+                    <label>所在部门：</label> <input type="text" class="form-control input-sm">
+                    <div id="tree"></div>
+                </div>
             </div>
             <div class="form-group">
                 <label>职务:</label>
@@ -125,7 +140,7 @@
     <tr>
         <td><input type="checkbox" data-id="{{index.id}}"/></td>
         <td>{{i+1}}</td>
-        <td>{{index.name}}</td>
+        <td><a href="/systemManagement/goEditUser/{{index.id}}">{{index.name}}</a></td>
         <td>{{index.username}}</td>
         <td>{{index.sex}}</td>
         <td>{{index.post}}</td>
@@ -137,6 +152,40 @@
     </tbody>
 </script>
 <script>
+    var $tree = $("#tree"),
+            $selectInput = $(".mt-select input");
+    $selectInput.on("click", function (e) {
+        console.log(e);
+        $tree.slideToggle(200);
+        return false;
+    });
+    $('body').on('click', function () {
+        $tree.slideUp(200);
+    });
+    loading.show("加载数据中...");
+    $.ajax({
+        type: "GET",
+        url: "/getOrganizationTree",
+        data: {
+            type: "selectTree"
+        },
+        success: function (data) {
+            //console.log(data);
+            $tree.treeview({
+                data: data,
+                showBorder: false,
+            });
+            $tree.on('nodeSelected', function (event, data) {
+                $tree.slideUp(200);
+                $selectInput.val(data.text);
+                $selectInput.data('treeId', data.id)
+            });
+            $tree.on('click', function () {
+                return false;
+            });
+            loading.hide();
+        }
+    });
     $(function () {
         var $data = {
             "currentPage": "0",
@@ -151,26 +200,26 @@
     });
 
     $("#query").on('click',
-        function () {
-            var $name = $("#name").val();
-            var $sex = $("#sex").val();
-            var $organization = $("#organization").val();
-            var $post = $("#post").val();
+            function () {
+                var $name = $("#name").val();
+                var $sex = $("#sex").val();
+                var $organization = $("#organization").val();
+                var $post = $("#post").val();
 
-            var $data = {
-                "currentPage": "0",
-                "size": "10",
-                "name": $name,
-                "sex": $sex,
-                "organization": $selectInput.data('treeId'),
-                "post": $post
-            };
-            //调用ajax进行查询
-            query($data);
-        }
+                var $data = {
+                    "currentPage": "0",
+                    "size": "10",
+                    "name": $name,
+                    "sex": $sex,
+                    "organization": $selectInput.data('treeId'),
+                    "post": $post
+                };
+                //调用ajax进行查询
+                query($data);
+            }
     )
-    
-    $("#deletedUser").on('click',function () {
+
+    $("#deletedUser").on('click', function () {
         var $data = [];
         var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
         $inputs.each(function () {
@@ -187,7 +236,7 @@
     })
 
     // 保存当前的查询条件
-    var currentQuery = {} ;
+    var currentQuery = {};
 
     function query($data) {
         $.ajax({

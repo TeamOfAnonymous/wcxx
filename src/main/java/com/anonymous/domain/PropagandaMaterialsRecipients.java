@@ -27,7 +27,7 @@ public class PropagandaMaterialsRecipients implements Serializable {
     @ManyToOne
     private User applicant;//申请人
 
-    @OneToMany(mappedBy = "propagandaMaterialsRecipients")
+    @OneToMany(mappedBy = "propagandaMaterialsRecipients",fetch = FetchType.EAGER)
     private List<PropagandaMaterials> propagandaMaterials = new ArrayList<>();//宣传物资
 
 

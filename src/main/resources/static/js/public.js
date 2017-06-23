@@ -45,6 +45,7 @@ var loading = {
 
 //上传和删除文件
 $('#uf-btn-upload').on('click', function () {
+    $('#uf-input-upload').val('');
     $('#uf-input-upload').click();
 });
 $('#uf-input-upload').on('change', function (e) {
@@ -52,28 +53,37 @@ $('#uf-input-upload').on('change', function (e) {
         message.add('请选择正确的文件', 'error');
     } else {
         $('#uf-form').submit();
+        console.log("上传文件");
         loading.show("上传文件中...");
     }
 });
 var $uf_f_l = $('.uf-file-list');
 //监听frame的load事件判断是否上传成功
-$('#uf-Frame').on('load', function () {
-    var doc = this.contentWindow.document;
-    var textAreas = doc.getElementsByTagName('textarea');
-    if (textAreas && textAreas.length > 0) {
-        var response = textAreas[0].value;
-        console.log(response);
-        var file_item = '<p>' + response + '<a href="javascript:;"data-id="' + "001" + '">[删除]</a></p>'
-        $uf_f_l.append(file_item);
-        message.add("上传文件成功");
+$('#uf-frame').on('load', function () {
+    var response = $("#uf-frame").contents().find("body").html();
+    console.log(response);
+    if (response.length > 0) {
+        try {
+            response = JSON.parse(response);
+            var file_item = '<p><a target="_blank" href="/' + response.path + '"> ' + response.name + '</a><a class="file-del" href="javascript:;" data-path="' + response.path + '" data-name="' + response.name + '" data-id="' + response.id + '">[删除]</a></p>'
+            $uf_f_l.append(file_item);
+            loading.hide();
+            message.add("上传文件成功","success");
+        } catch (e) {
+            loading.hide();
+            message.add("上传文件失败", "error");
+        }
+    } else {
+        loading.hide();
+        message.add("上传文件失败", "error");
     }
-    return false;
+
 });
-$uf_f_l.on('click', 'a', function () {
+$uf_f_l.on('click', '.file-del', function () {
     var delUrl = $uf_f_l.attr('data-delUrl'),
         fileId = $(this).attr('data-id');
     //code
-    alert('删除文件')
+    $(this).parent("p").remove();
 });
 
 /**
@@ -126,12 +136,12 @@ function mid_table_action(templateId, added_dom, delDom, fnBeforeAdd, fnAfterRem
  * */
 $("#btn-reset").on('click', function () {
     var $form = $('.form-inline');
-    for(var i = 0,l = $form.length;i<l;i++){
+    for (var i = 0, l = $form.length; i < l; i++) {
         $form[i].reset()
     }
 });
 
-function setBtnQuery (fn) {
+function setBtnQuery(fn) {
     $('#btn-query').on('click', function () {
         fn({
             startDate: $('input[name="startDate"]').val(),
@@ -140,4 +150,46 @@ function setBtnQuery (fn) {
             sortWay: $('input[name="sortWay"]').val()
         })
     });
+}
+
+
+/*
+ * 表单验证*/
+var fv = {
+    isNull: function (dom, msg) {
+        /*
+         *验证value是否为空字符串
+         *dom:inout的jquery对象
+         * msg：提示信息
+         * */
+        if (dom.val() == '') {
+            dom.parent('.form-group').addClass('has-error')
+            message.add('请输入' + msg, 'error');
+            return false;
+        } else {
+            return true;
+        }
+    },
+    init: function (dom, msg) {
+        /*
+         *提示某个input的值是否未填
+         *dom:inout的jquery对象
+         * msg：提示信息
+         * */
+        dom.on('blur', function () {
+            if ($(this).val() != '') {
+                if ($(this).parent('.form-group').hasClass('has-error')) {
+                    $(this).parent('.form-group').removeClass('has-error');
+                }
+            } else {
+                $("#title").parent('.form-group').addClass('has-error');
+                message.add('请输入' + msg, 'error');
+            }
+        });
+        dom.on('focus', function () {
+            if ($(this).parent('.form-group').hasClass('has-error')) {
+                $(this).parent('.form-group').removeClass('has-error');
+            }
+        });
+    },
 }

@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Description：enter your comment
@@ -45,8 +47,8 @@ public class PropagandaInformationController {
 
 	@ResponseBody
 	@ApiOperation(value = "通过id获取宣传信息")
-	@RequestMapping(value = "getPropagandaInformationById", method = RequestMethod.GET)
-	public PropagandaInformation getById(@RequestParam String id){
+	@RequestMapping(value = "getPropagandaInformationById/{id}", method = RequestMethod.GET)
+	public PropagandaInformation getById(@PathVariable String id){
 		return  propagandaInformationService.getById(id);
 	}
 
@@ -57,4 +59,6 @@ public class PropagandaInformationController {
 	                                                                  @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
 		return ppgdaInfStatisticsService.getStatisticsData(startDate, endDate);
 	}
+
+
 }

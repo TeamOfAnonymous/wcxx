@@ -4,6 +4,9 @@ import com.anonymous.domain.PropagandaInformation.PpgdaInfQueryCondition;
 import com.anonymous.domain.PropagandaInformation.PpgdaInfStatistics;
 import com.anonymous.domain.PropagandaInformation.PropagandaInformation;
 import com.anonymous.domain.PropagandaInformation.PropagandaInformationCategory;
+import com.anonymous.domain.PropagandaMaterialsProduced.ApprovalStatus;
+import com.anonymous.domain.PropagandaMaterialsProduced.PropagandaMaterialsContent;
+import com.anonymous.domain.PropagandaMaterialsProduced.PropagandaMaterialsProduced;
 import com.anonymous.repository.PpgdaInfStatisticsRepository;
 import com.anonymous.repository.PropagandaInformationCategoryRepository;
 import com.anonymous.repository.PropagandaInformationRepository;
@@ -12,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
 /**
  * Description：宣传信息服务实现类
@@ -100,6 +103,46 @@ public class PropagandaInformationService implements PropagandaInformationServic
 			return this.propagandaInformationRepository.findAll(pageRequest);
 		}
 
+	}
+
+	@Override
+	public List<Map<String, Integer>> getPropagandaInformationByApplicationDate(LocalDate startDate, LocalDate endDate ) {
+		//找出时间间隔内宣传信息发布
+		List<PropagandaInformation> propagandaInformations1 = propagandaInformationRepository.findByApplicationDateBetween(startDate,endDate);
+		//获取宣传信息发布的宣传类别
+		Set<String> propagandaInformationCategories = new HashSet<>();
+		for (PropagandaInformation propagandaInformation : propagandaInformations1){
+			for (PropagandaInformationCategory propagandaInformationCategory : propagandaInformation.getPropagandaInformationCategories()) {
+				propagandaInformationCategories.add(propagandaInformationCategory.getName());
+			}
+		}
+		//根据宣传类别统计宣传信息发布的所有数量
+		Map<String, Integer> statisticsTotalData = statisticsData(propagandaInformations1, propagandaInformationCategories);
+		//获取已经完成的宣传信息发布
+		int approvalStatus = 3;
+		List<PropagandaInformation> propagandaInformations2 = propagandaInformationRepository.findByApplicationDateBetweenAndApprovalStatus(startDate,endDate,approvalStatus);
+		Map<String, Integer> statisticsPracticalData = statisticsData(propagandaInformations2, propagandaInformationCategories);
+		List<Map<String, Integer>> data = new ArrayList<>();
+		data.add(statisticsTotalData);
+		data.add(statisticsPracticalData);
+		System.out.println(data);
+		return data;
+	}
+
+	private Map<String,Integer> statisticsData(List<PropagandaInformation> propagandaInformations, Set<String> propagandaInformationCategories) {
+		Map<String, Integer> statisticsTotalData = new LinkedHashMap<>();
+		for (String category : propagandaInformationCategories) {
+			int total = 0;
+			for (PropagandaInformation propagandaInformation : propagandaInformations) {
+				for (PropagandaInformationCategory propagandaInformationCategory : propagandaInformation.getPropagandaInformationCategories()) {
+					if (category.equals(propagandaInformationCategory.getName())) {
+						total = total + 1;
+					}
+				}
+			}
+			statisticsTotalData.put(category, total);
+		}
+		return statisticsTotalData;
 	}
 
 }
