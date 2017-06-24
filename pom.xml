@@ -85,6 +85,12 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- spring security 认证授权 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
