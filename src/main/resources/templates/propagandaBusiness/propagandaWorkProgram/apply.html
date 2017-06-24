@@ -19,6 +19,7 @@
 						状态&nbsp;:&nbsp;草稿
 					</p>
 				</div>
+				<input id="testAdd" type="button" value="测试保存按钮"/>
 				<table class="table table-bordered">
 					<tbody>
 						<tr>
@@ -36,14 +37,13 @@
 						<tr>
 							<td><span class="font-red">*</span>标题</td>
 							<td colspan="3">
-								<input type="text" class="form-control input-sm" />
+								<input id="pwpTitle" type="text" class="form-control input-sm" />
 							</td>
 						</tr>
 						<tr>
 							<td><span class="font-red">*</span>方案类别</td>
 							<td>
-								<select class="form-control input-sm">
-									<option>普通宣传活动</option>
+								<select id="pwpProgramCategory" class="form-control input-sm">
 								</select>
 							</td>
 							<td></td>
@@ -51,23 +51,23 @@
 						</tr>
 						<tr>
 							<td><span class="font-red">*</span>负责人</td>
-							<td><input type="text" class="form-control input-sm" /></td>
+							<td><input id="pwpPrincipal" type="text" class="form-control input-sm" /></td>
 							<td><span class="font-red">*</span>成员</td>
-							<td><input type="text" class="form-control input-sm" /></td>
+							<td><input id="pwpMembers" type="text" class="form-control input-sm" /></td>
 						</tr>
 						<tr>
 							<td><span class="font-red">*</span>预算（元）</td>
-							<td><input type="text" class="form-control input-sm" /></td>
+							<td><input id="pwpBudget" type="number" class="form-control input-sm" /></td>
 							<td><span class="font-red">*</span>实际费用（元）</td>
-							<td><input type="text" class="form-control input-sm" /></td>
+							<td><input id="pwpActualCost" type="number" class="form-control input-sm" /></td>
 						</tr>
 						<tr>
 							<td><span class="font-red">*</span>执行时间</td>
 							<td colspan="3" class="form-inline">
   								<div class="form-group">
-									<input type="date" class="form-control input-sm" />
+									<input id="pwpStartExecuteTime" type="date" class="form-control input-sm" />
 									至
-									<input type="date" class="form-control input-sm" />
+									<input id="pwpEndExecuteTime" type="date" class="form-control input-sm" />
 								</div>
 							</td>
 						</tr>
@@ -134,7 +134,7 @@
 						<tr>
 							<td>备注</td>
 							<td colspan="3">
-								<textarea class="form-control" rows="3"></textarea>
+								<textarea id="pwpRemarks" class="form-control" rows="3"></textarea>
 							</td>
 						</tr>
 						<tr>
@@ -146,9 +146,16 @@
 										<form id="uf-form" method="post" action="/upload" target="uf-frame" encoding="multipart/form-data" enctype="multipart/form-data">
 											<input id="uf-input-upload" type="file" />
 										</form>
-										<iframe id="uf-frame" name="uf-frame" style="visibility:hidden;height: 0;border: 0;"></iframe>
+										<iframe id="uf-frame" name="uf-frame" src="" style="visibility:hidden;height: 0;border: 0;"></iframe>
 									</div>
-									<div class="uf-file-list"> </div>
+									<div class="uf-file-list" data-delUrl="url">
+										<p>广州血液中心.doc
+											<a href="javascript:;">[删除]</a>
+										</p>
+										<p>广州血液中心.doc
+											<a href="javascript:;">[删除]</a>
+										</p>
+									</div>
 								</div>
 							</td>
 						</tr>
@@ -334,6 +341,96 @@
 		<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
 		<script type="text/javascript" charset="utf-8" src="../../vendor/ueditor-1.4.3.3/dist/utf8-jsp/lang/zh-cn/zh-cn.js"></script>
 		<script>
+
+			$(function(){
+                alert();
+                initPWPCategory();
+			});
+
+			$("#testAdd").click(function(){
+			    var pwpTitle = $("#pwpTitle").val();
+                var pwpProgramCategory = $("#pwpProgramCategory").val();
+                alert(pwpProgramCategory);
+                var pwpPrincipal = $("#pwpPrincipal").val();
+                var pwpMembers = $("#pwpMembers").val();
+                var pwpBudget = $("#pwpBudget").val();
+                var pwpActualCost = $("#pwpActualCost").val();
+                var pwpStartExecuteTime = $("#pwpStartExecuteTime").val();
+                var pwpEndExecuteTime = $("#pwpEndExecuteTime").val();
+                var pwpContent = ue.getAllHtml();
+                var pwpRemarks = $("#pwpRemarks").val();
+                // 构建 pwp
+				var pwp = {} ;
+                if( pwpTitle != null && pwpTitle != "" ){
+                    pwp.title = pwpTitle ;
+				}
+				// 构建 programCategory
+				var programCategory = "" ;
+                if( pwpProgramCategory != null && pwpProgramCategory != "" ){
+                    programCategory.id = pwpProgramCategory ;
+                }
+                pwp.programCategory = programCategory;
+
+                if( pwpPrincipal != null && pwpPrincipal != "" ){
+                    pwp.principal = pwpPrincipal ;
+                }
+                if( pwpMembers != null && pwpMembers != "" ){
+                    pwp.members = pwpMembers ;
+                }
+                if( pwpBudget != null && pwpBudget != "" ){
+                    pwp.budget = pwpBudget ;
+                }
+                if( pwpActualCost != null && pwpActualCost != "" ){
+                    pwp.actualCost = pwpActualCost ;
+                }
+                if( pwpStartExecuteTime != null && pwpStartExecuteTime != "" ){
+                    pwp.startExecuteTime = pwpStartExecuteTime ;
+                }
+                if( pwpEndExecuteTime != null && pwpEndExecuteTime != "" ){
+                    pwp.endExecuteTime = pwpEndExecuteTime ;
+                }
+                if( pwpContent != null && pwpContent != "" ){
+                    pwp.content = pwpContent ;
+                }
+                if( pwpRemarks != null && pwpRemarks != "" ){
+                    pwp.remarks = pwpRemarks ;
+                }
+                console.log(pwp);
+                submitAdd(pwp);
+			});
+
+			// 发送添加请求
+			function submitAdd(pwp){
+                $.ajax({
+                    type: "POST",
+                    url: "/PropagandaWorkProgram/add",
+                    data: JSON.stringify(pwp),
+                    contentType:"application/json",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        loading.hide();
+                    }
+                });
+			}
+
+            // 初始化 宣传工作方案分类
+            function initPWPCategory(){
+                $.ajax({
+                    type: "GET",
+                    url: "/PWPCategory/findAll",
+                    async:false,
+                    dataType: "json",
+                    success: function (data) {
+                        $("#pwpProgramCategory").empty();
+                        for( var i = 0 ; i < data.length ; i++ ){
+							var pwppc = "<option value=\""+data[i].id+"\">" + data[i].name + "</option>";
+                            $("#pwpProgramCategory").append(pwppc);
+						}
+                    }
+                });
+            }
+
 			var winH = window.screen.height,
 				winW = window.screen.width;
 			$(".ft-b-r-b-left").on("click", "button", function() {
@@ -396,7 +493,7 @@
 			//初始化富文本框
 			var ue = UE.getEditor('editor');
 			//获取html
-			//UE.getEditor('editor').getAllHtml()
+			//ue.getAllHtml()
 		</script>
 	</body>
 

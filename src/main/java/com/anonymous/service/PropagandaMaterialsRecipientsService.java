@@ -1,7 +1,6 @@
 package com.anonymous.service;
 
 import com.anonymous.domain.PropagandaMaterials;
-import com.anonymous.domain.PropagandaMaterialsProduced.ApprovalStatus;
 import com.anonymous.domain.PropagandaMaterialsRecipients;
 import com.anonymous.domain.User;
 import com.anonymous.repository.PropagandaMaterialsRecipientsRepository;

@@ -1,14 +1,12 @@
-package com.anonymous.domain.PropagandaMaterialsProduced;
+package com.anonymous.domain.PropagandaWorkProgram;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Created by huangMP on 2017/6/5.
- * decription : 审批状态，0为草稿，1为待审批，2为审核中，3为执行中，4为已完成，5为已归档
+ * Created by huangMP on 2017/6/18.
+ * decription : 宣传工作方案状态
  */
-public enum ApprovalStatus {
+public enum  PWPApprovalStatus {
 
     Draft("草稿"),
     WaitForApproval("待审批"),
@@ -19,7 +17,7 @@ public enum ApprovalStatus {
 
     private String name = "";
 
-    ApprovalStatus(String name){
+    PWPApprovalStatus(String name){
         this.name = name ;
     }
 
