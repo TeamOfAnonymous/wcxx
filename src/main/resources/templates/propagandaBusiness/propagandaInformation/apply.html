@@ -19,19 +19,20 @@
                 状态&nbsp;:&nbsp;待审批
             </p>
         </div>
+        <input id="applicantId" name="applicantId" type="hidden">
         <table class="table table-bordered">
             <tbody>
             <tr>
                 <td>申请部门</td>
-                <td></td>
+                <td id="applicantOrganizationName"></td>
                 <td>申请时间</td>
-                <td id="applicationDate"></td>
+                <td id="applicantDate"></td>
             </tr>
             <tr>
                 <td>申请人</td>
-                <td></td>
+                <td id="applicantName"></td>
                 <td>联系电话</td>
-                <td></td>
+                <td id="applicantPhoneNumber"></td>
             </tr>
             <tr>
                 <td><span class="font-red">*</span>标题</td>
@@ -176,30 +177,80 @@
         window.open('/goFlowChart', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
     });
 
-    //遍历出父节点
-    $.ajax({
-        type: "GET",
-        url: "/getPropagandaInformationCategories",
-        success: function (data) {
-            var node = "";
-            data.forEach(function (val, index) {
-                if (val.name === null) {
-                    alert("null");
-                    return false;
-                }
-                node = node + "<label class='checkbox-inline'> <input type='checkbox' value='" + val.id + "'/>" + val.name + "</label>";
-            });
-            var mainCategorySelector = $('#mainCategory');
-            mainCategorySelector.append(node);
-            mainCategorySelector.on('change', 'input[type="checkbox"]', function (e) {
-                if ($(this).is(':checked'))
-                    addChildCategory($(this.closest('.checkbox-inline')).text(), this.value);
-                else
-                    delChildCategory(this.value);
-            });
-            console.log(data);
-        }
+    $(function () {
+        initApplicantData();
+        initApplication();
+        initCategories();
     });
+
+    // 初始化 申请人信息
+    function initApplication(){
+        getCurrentUser();
+        $("#applicantId").val(_currentUser_.id);
+        $("#applicantName").html(_currentUser_.name);
+        $("#applicantPhoneNumber").html(_currentUser_.phoneNumber);
+        $("#applicantOrganizationName").html(_currentUser_.organization.name);
+    }
+
+    var _currentUser_ = "";
+    var applicationDate = "";
+    // 获取当前登陆用户信息
+    function getCurrentUser(){
+        $.ajax({
+            type: "GET",
+            url: "/getCurrentUser",
+            dataType: "json",
+            contentType: "application/json",
+            async:false ,
+            success: function (data) {
+                _currentUser_ = data ;
+            }
+        });
+    }
+
+    // 初始化申请时间
+    function initApplicantData(){
+        var date_ = new Date();
+        var year = date_.getFullYear();
+        var month = date_.getMonth() + 1;
+        var day = date_.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (day >= 0 && day <= 9) {
+            day = "0" + day;
+        }
+        applicationDate = year + '-' + month + '-' + day;
+        $("#applicantDate").html(applicationDate);
+    }
+
+    function initCategories() {
+        //遍历出父节点
+        $.ajax({
+            type: "GET",
+            url: "/getPropagandaInformationCategories",
+            success: function (data) {
+                var node = "";
+                data.forEach(function (val, index) {
+                    if (val.name === null) {
+                        alert("null");
+                        return false;
+                    }
+                    node = node + "<label class='checkbox-inline'> <input type='checkbox' value='" + val.id + "'/>" + val.name + "</label>";
+                });
+                var mainCategorySelector = $('#mainCategory');
+                mainCategorySelector.append(node);
+                mainCategorySelector.on('change', 'input[type="checkbox"]', function (e) {
+                    if ($(this).is(':checked'))
+                        addChildCategory($(this.closest('.checkbox-inline')).text(), this.value);
+                    else
+                        delChildCategory(this.value);
+                });
+                console.log(data);
+            }
+        });
+    }
+
 
     //添加子节点
     function addChildCategory(categoryName, categoryId) {
@@ -237,6 +288,7 @@
     fv.init($('#title'), "标题");
     $(".ft-b-r-b-left").on("click", "button", function () {
         var title = $('#title')[0].value;
+        var applicantId = $("#applicantId")[0].value;
         var content = $('#content')[0].value;
         var remarks = $('#remarks')[0].value;
         var startDate = $('#startDate')[0].value;
@@ -248,7 +300,10 @@
                 applicationDate: applicationDate,
                 remarks: remarks,
                 startDate: startDate,
-                endDate: endDate
+                endDate: endDate,
+                applicant: {
+                    id: applicantId
+                }
             };
             var propagandaInformationCategories = [];
             $('input[type="checkbox"]:checked').each(function () {
@@ -300,20 +355,6 @@
         }
 
     }
-
-    var date_ = new Date();
-    var year = date_.getFullYear();
-    var month = date_.getMonth() + 1;
-    var day = date_.getDate();
-    if (month >= 1 && month <= 9) {
-        month = "0" + month;
-    }
-    if (day >= 0 && day <= 9) {
-        day = "0" + day;
-    }
-    var applicationDate = year + '-' + month + '-' + day;
-    $("#applicationDate").html(applicationDate);
-
 
 </script>
 </body>
