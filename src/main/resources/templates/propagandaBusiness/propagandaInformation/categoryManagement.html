@@ -17,17 +17,17 @@
         <form class="form-inline">
             <div class="form-group">
                 <label>类别:</label>
-                <input type="text" class="form-control input-sm"/>
+                <input id="category" type="text" class="form-control input-sm"/>
             </div>
             <div class="form-group">
                 <label>媒介:</label>
-                <input type="text" class="form-control input-sm"/>
+                <input id="medium" type="text" class="form-control input-sm"/>
             </div>
-            <button type="button" class="btn btn-default btn-sm">
+            <button type="button" id="query" class="btn btn-default btn-sm">
                 <span class="glyphicon glyphicon-search"></span>
                 查询
             </button>
-            <button type="button" class="btn btn-default btn-sm">
+            <button type="button" id="reset" class="btn btn-default btn-sm">
                 <span class="glyphicon glyphicon-repeat"></span>
                 重置
             </button>
@@ -55,73 +55,7 @@
                 <th>最后修改时间</th>
             </tr>
             </thead>
-            <tbody>
-            <tr>
-                <td><input type="checkbox"/></td>
-                <td>1</td>
-                <td>
-                    <a href="javascript:;" class="cmt-tree L1">电视媒体</a>
-                    <a href="javascript:;" class="cmt-tree L2">广东卫视</a>
-                </td>
-                <td>1114</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox"/></td>
-                <td>2</td>
-                <td>
-                    <a href="javascript:;" class="cmt-tree L1">电视媒体</a>
-                    <a href="javascript:;" class="cmt-tree L2">广东卫视</a>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox"/></td>
-                <td>3</td>
-                <td>
-                    <a href="javascript:;" class="cmt-tree L1">电视媒体</a>
-                    <a href="javascript:;" class="cmt-tree L2">南方卫视</a>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox"/></td>
-                <td>4</td>
-                <td>
-                    <a href="javascript:;" class="cmt-tree L1">电视媒体</a>
-                    <a href="javascript:;" class="cmt-tree L2">南方卫视</a>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox"/></td>
-                <td>5</td>
-                <td>
-                    <a href="javascript:;" class="cmt-tree L1">电视媒体</a>
-                    <a href="javascript:;" class="cmt-tree L2">南方卫视</a>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox"/></td>
-                <td>6</td>
-                <td>
-                    <a href="javascript:;" class="cmt-tree L1">电视媒体</a>
-                    <a href="javascript:;" class="cmt-tree L2">南方卫视</a>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
+            <tbody id="categoryTable">
             </tbody>
         </table>
     </div>
@@ -149,7 +83,7 @@
                                 <span class="font-red">*</span> 排序号
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm"/>
+                                <input id="sortNum" type="text" class="form-control input-sm"/>
                             </td>
                         </tr>
                         <tr>
@@ -157,7 +91,7 @@
                                 <span class="font-red">*</span> 名称(内容)
                             </td>
                             <td colspan="3">
-                                <input type="text" class="form-control input-sm"/>
+                                <input id="categoryName" type="text" class="form-control input-sm"/>
                             </td>
                         </tr>
                         <tr>
@@ -166,10 +100,10 @@
                             </td>
                             <td>
                                 <label class="radio-inline">
-                                    <input checked="true" type="radio" value="" name="inlineRadioOptions"/> 启用
+                                    <input checked="true" type="radio" value="1" name="inlineRadioOptions"/> 启用
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" value="" name="inlineRadioOptions"/> 禁用
+                                    <input type="radio" value="0" name="inlineRadioOptions"/> 禁用
                                 </label>
                             </td>
                             <td></td>
@@ -191,8 +125,53 @@
 <script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../../../vendor/bootstrap-treeview/dist/bootstrap-treeview.min.js"></script>
 <script type="text/javascript" src="../../../vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
+<script type="text/javascript" src="../../../vendor/template-web-min.js"></script>
 <script type="text/javascript" src="../../../js/public.js"></script>
+
+<script id="template_table" type="text/html">
+    {{set temp = 1}}
+    <% for(var i=0; i < array.length; i++) {%>
+        <tr>
+            <td><input type="checkbox"/></td>
+            <td><%= temp++ %></td>
+            <td><a href="javascript:;" class="cmt-tree L1"><%= array[i].text %></a></td>
+            <td>
+                <% if (array[i].status == 0) { %>
+                <span class="font-red">
+                        <%= array[i].status %>
+                    </span>
+                <% } else { %>
+                <%= array[i].status%>
+                <% } %>
+            </td>
+            <td><%= array[i].creator %></td>
+            <td><%= array[i].lastModifiedTime %></td>
+        </tr>
+        <% if (array[i].nodes != null) { %>
+            <% for(var j=0; j < array[i].nodes.length; j++) {%>
+                <tr>
+                    <td><input type="checkbox"/></td>
+                    <td><%= temp++ %></td>
+                    <td><a href="javascript:;" class="cmt-tree L2"><%= array[i].nodes[j].text %></a></td>
+                    <td>
+                        <% if (array[i].nodes[j].status == 0) { %>
+                        <span class="font-red">
+                                    <%= array[i].nodes[j].status %>
+                                </span>
+                        <% } else { %>
+                        <%= array[i].nodes[j].status%>
+                        <% } %>
+                    </td>
+                    <td><%= array[i].nodes[j].creator %></td>
+                    <td><%= array[i].nodes[j].lastModifiedTime %></td>
+                </tr>
+            <% } %>
+        <% } %>
+    <% } %>
+</script>
+
 <script>
+
     var $tree = $("#tree"),
             $selectInput = $(".mt-select input");
     $selectInput.on("click", function () {
@@ -208,17 +187,47 @@
         url: "/getCategoriesOfTree",
         success: function (data) {
             console.log(data);
+            var obj={
+                array : data
+            };
+            var my_table = template('template_table', obj);
+            $('#categoryTable').html(my_table);
         }
+    });
+
+    $('#query').click(function () {
+        var medium = $('#medium').val();
+        var category = $('#category').val();
+        console.log(category);
+        $.ajax({
+            type: "GET",
+            url: "/getCategoriesOfTree",
+            data:{
+              medium : medium,
+              mainCategory : category
+            },
+            success: function (data) {
+                console.log(data);
+                var obj={
+                    array : data
+                };
+                var my_table = template('template_table', obj);
+                $('#categoryTable').html(my_table);
+            }
+        });
     });
 
     $.ajax({
         type: "GET",
         url: "/getCategoriesOfTree",
-        data:{
-            type : "selectTree"
-        },
-        success: function (data) {
+        success: function (mydata) {
            // console.log(data);
+            var data = [{
+                text : "宣传信息类别",
+                id : "",
+            }];
+            data[0].nodes = mydata;
+            console.log(data);
             $tree.treeview({
                 data: data,
                 showBorder: false
@@ -226,11 +235,12 @@
             $tree.on('nodeSelected', function (event, data) {
                 //console.log(data);
                 $selectInput.val(data.text);
-                $selectInput.data('treeId', data.id);
-                if (!data.nodes) {
-                    $tree.slideUp(200);
-                    console.log($selectInput.data('treeId'))
-                }
+                if (data.pid === "")
+                    $selectInput.data('treeId', data.id);
+                else
+                    $selectInput.data('treeId', "");
+                $tree.slideUp(200);
+                console.log($selectInput.data('treeId'))
             });
             $tree.on('click', function () {
                 return false;
@@ -238,12 +248,33 @@
         }
     });
     $('#modal-btn-save').on('click', function () {
-        alert($selectInput.data('treeId'));
+        if ($selectInput.data('treeId') === "") {
+            message.add("请选择一个父节点", "warning");
+            return;
+        }
+        var propagandaInformationCategory = {
+                pid : $selectInput.data('treeId'),
+                sortNum : $('#sortNum').val(),
+                name : $('#categoryName').val(),
+                status : $("input[name='inlineRadioOptions'][checked]").val()
+            };
+        console.log(propagandaInformationCategory);
+        $.ajax({
+            type: "POST",
+            url: "/addPropagandaInformationCategory",
+            data: JSON.stringify(propagandaInformationCategory) ,
+            dataType: "json" ,
+            contentType : "application/json",
+            success: function (data) {
+                console.log(data);
+            }
+        });
+
         $('#modal').modal('hide')
+
     });
 
 
 </script>
 </body>
-
 </html>

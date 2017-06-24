@@ -24,5 +24,5 @@ public interface PropagandaInformationCategoryServiceInter {
      * 获取树形结构的全部字段
      * @return
      */
-    Object[] getCategoriesOfTree(String mainCategory, String medium, String type);
+    Object[] getCategoriesOfTree(String mainCategory, String medium);
 }
