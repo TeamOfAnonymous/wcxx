@@ -58,10 +58,10 @@
         <a href="/propagandaBusiness/propagandaInformation/goPropagandaInformationApply" class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-plus"></span> 新建
         </a>
-        <a href="/propagandaBusiness/propagandaInformation/goPropagandaInformationApply" class="btn btn-default btn-sm">
+        <button type="button" class="btn btn-default btn-sm" id="file-Btn">
             <span class="glyphicon glyphicon-file"></span> 归档
-        </a>
-        <button type="button" class="btn btn-default btn-sm">
+        </button>
+        <button type="button" class="btn btn-default btn-sm" id="del-Btn">
             <span class="glyphicon glyphicon-remove"></span>删除
         </button>
     </div>
@@ -108,10 +108,24 @@
         <td>
             {{if ppgdaInfo.approvalStatus == 0}}
             <span class="font-red">
-                    {{ppgdaInfo.approvalStatus}}
-                </span>
-            {{else}}
-            {{ppgdaInfo.approvalStatus}}
+                            待审批
+                        </span>
+            {{else if ppgdaInfo.approvalStatus == 1}}
+            <span class="font-red">
+                            审核中
+                        </span>
+            {{else if ppgdaInfo.approvalStatus == 2}}
+            <span class="font-red">
+                            执行中
+                        </span>
+            {{else if ppgdaInfo.approvalStatus == 3}}
+            <span class="font-red">
+                            已完成
+                        </span>
+            {{else if ppgdaInfo.approvalStatus == 4}}
+            <span class="font-red">
+                            已归档
+                        </span>
             {{/if}}
         </td>
     </tr>
@@ -285,17 +299,17 @@
             if (!$(this).hasClass("active")) {
                 console.log("去到第" + $(this).text() + "页");
                 customData.currentPage = $(this).text() - 1;
-                sumbitQuery(customData);
+                ppgdaInfoSumbit(customData);
             }
         } else if ($(this).attr("aria-label") == "Previous" && customData.currentPage > 0) {
             console.log("上一页");
             customData.currentPage -= 1;
-            sumbitQuery(customData);
+            ppgdaInfoSumbit(customData);
         }
         else if ($(this).attr("aria-label") == "Next" && customData.currentPage + 1 < customData.totalPages) {
             console.log("下一页");
             customData.currentPage += 1;
-            sumbitQuery(customData);
+            ppgdaInfoSumbit(customData);
         }
     });
     $('#page').on('click', 'button', function (e) {
@@ -303,11 +317,76 @@
         if (!isNaN(page)) {
             if (page > 0 && page <= customData.totalPages) {
                 customData.totalPages = page - 1;
-                sumbitQuery(customData);
+                ppgdaInfoSumbit(customData);
             }
         }
         return false;
     });
+
+    //点击删除按钮调用的方法
+    $("#del-Btn").on('click',
+        function () {
+            loading.show();
+            var $data = [];
+            var $inputs = $("#ppgdaTable").find("input[type='checkbox']:checked");
+            $inputs.each(function () {
+                $data.push($(this).attr('data-id'));
+            });
+            //调用ajax进行删除
+            deleted($data);
+        }
+    )
+
+    //调用后台删除方法
+    function deleted($data) {
+        loading.show();
+        $.ajax({
+            type: "GET",
+            url: "/deletedPropagandaInformation",
+            data: "ids=" + $data,
+            success: function (data) {
+                if (data) {
+                    message.add("删除成功","success");
+                    ppgdaInfoSumbit(customData);
+                } else {
+                    message.add("删除失败，该信息不可以删除" , "warning");
+                    loading.hide();
+                }
+            }
+        });
+    }
+
+    //点击归档按钮调用的方法
+    $("#file-Btn").on('click',
+        function () {
+            loading.show();
+            var $data = [];
+            var $inputs = $("#ppgdaTable").find("input[type='checkbox']:checked");
+            $inputs.each(function () {
+                $data.push($(this).attr('data-id'));
+            });
+            //调用ajax进行删除
+            archiveFile($data);
+        }
+    )
+
+    function archiveFile($data) {
+        loading.show();
+        $.ajax({
+            type: "GET",
+            url: "/filePropagandaInformation",
+            data: "ids=" + $data,
+            success: function (data) {
+                if (data) {
+                    message.add("归档成功","success");
+                    ppgdaInfoSumbit(customData);
+                } else {
+                    message.add("归档失败，申请还没有完成或者已归档" , "warning");
+                    loading.hide();
+                }
+            }
+        });
+    }
 
 </script>
 

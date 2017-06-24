@@ -52,6 +52,20 @@ public class PropagandaInformationController {
 		return  propagandaInformationService.getById(id);
 	}
 
+	@RequestMapping(value = "deletedPropagandaInformation", method = RequestMethod.GET)
+	@ApiOperation(value = "通过id删除宣传信息")
+	@ResponseBody
+	public boolean deletedPropagandaInformation(String[] ids) {
+		return propagandaInformationService.deletedPropagandaInformation(ids);
+	}
+
+	@RequestMapping(value = "filePropagandaInformation", method = RequestMethod.GET)
+	@ApiOperation(value = "通过id归档宣传信息")
+	@ResponseBody
+	public boolean filePropagandaInformation(String[] ids) {
+		return propagandaInformationService.filePropagandaInformation(ids);
+	}
+
 	@ResponseBody
 	@ApiOperation(value = "获取统计信息")
 	@RequestMapping(value = "getStatisticsData", method = RequestMethod.GET)

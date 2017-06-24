@@ -154,13 +154,24 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
             }
         }
         for (String id : ids) {
-            PropagandaMaterialsRecipients propagandaMaterialsRecipients = getPropagandaMaterialsRecipients(id);
+            if (!deleted(id)) {
+                throw new RuntimeException("删除 宣传物资领用 出现异常 ");
+            }
+        }
+        return true;
+    }
+
+    private boolean deleted(String id) {
+        PropagandaMaterialsRecipients propagandaMaterialsRecipients = getPropagandaMaterialsRecipients(id);
+        if (propagandaMaterialsRecipients != null) {
             for (PropagandaMaterials propagandaMaterials : propagandaMaterialsRecipients.getPropagandaMaterials()) {
-                propagandaMaterialsService.delete(propagandaMaterials);
+                if (!propagandaMaterialsService.delete(propagandaMaterials)) {
+                    throw new RuntimeException("删除 宣传物资领用 链接删除 宣传物资内容 出现异常 ");
+                }
             }
             propagandaMaterialsRecipientsRepository.delete(id);
         }
-        return true;
+        return propagandaMaterialsRecipientsRepository.findOne(id) == null ? true : false;
     }
 
     //宣传物资领用统计报表

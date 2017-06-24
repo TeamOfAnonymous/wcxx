@@ -25,7 +25,7 @@
                 <td>申请部门</td>
                 <td></td>
                 <td>申请时间</td>
-                <td></td>
+                <td id="applicationDate"></td>
             </tr>
             <tr>
                 <td>申请人</td>
@@ -245,6 +245,7 @@
             var information = {
                 title: title,
                 content: content,
+                applicationDate: applicationDate,
                 remarks: remarks,
                 startDate: startDate,
                 endDate: endDate
@@ -299,6 +300,19 @@
         }
 
     }
+
+    var date_ = new Date();
+    var year = date_.getFullYear();
+    var month = date_.getMonth() + 1;
+    var day = date_.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (day >= 0 && day <= 9) {
+        day = "0" + day;
+    }
+    var applicationDate = year + '-' + month + '-' + day;
+    $("#applicationDate").html(applicationDate);
 
 
 </script>

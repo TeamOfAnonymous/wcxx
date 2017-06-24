@@ -150,6 +150,7 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
     private boolean delete(String id) {
         PropagandaMaterialsProduced p = pmpRepository.findOne(id);
         if (p != null) {
+            //先判断是否可以删除
             // 删除之前，先把其下属 宣传品内容删除
             List<PropagandaMaterialsContent> pcs = p.getPropagandaMaterialsContents();
             for (PropagandaMaterialsContent pc : pcs) {

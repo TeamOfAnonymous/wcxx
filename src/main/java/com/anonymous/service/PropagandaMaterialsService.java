@@ -22,7 +22,8 @@ public class PropagandaMaterialsService implements PropagandaMaterialsServiceInt
     }
 
     @Override
-    public void delete(PropagandaMaterials propagandaMaterials) {
+    public boolean delete(PropagandaMaterials propagandaMaterials) {
         propagandaMaterialsRepository.delete(propagandaMaterials);
+        return propagandaMaterialsRepository.findOne(propagandaMaterials.getId()) == null ? true : false;
     }
 }
