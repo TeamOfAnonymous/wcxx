@@ -9,8 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -59,5 +66,40 @@ public class UserService implements UserServiceInter {
             userRepository.save(user);
         }
         return true;
+    }
+
+    /**
+     * 用于用户登陆
+     * @param username
+     * @return
+     * @throws UsernameNotFoundException
+     */
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+
+        System.out.println( user );
+
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
+        } else {
+            Collection<GrantedAuthority> authorities = new ArrayList<>();
+            authorities.add( new SimpleGrantedAuthority("admin") );
+            return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),authorities);
+        }
+    }
+
+
+    /**
+     * 获取当前登陆的用户
+     * @return
+     */
+    public User getCurrentUser(){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication() .getPrincipal();
+        if( userDetails == null ){
+            throw new RuntimeException("获取当前登陆用户 出现异常");
+        }
+        User user = userRepository.findByUsername(userDetails.getUsername()) ;
+        return user;
     }
 }

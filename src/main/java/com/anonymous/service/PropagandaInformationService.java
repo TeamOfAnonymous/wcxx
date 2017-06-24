@@ -4,9 +4,6 @@ import com.anonymous.domain.PropagandaInformation.PpgdaInfQueryCondition;
 import com.anonymous.domain.PropagandaInformation.PpgdaInfStatistics;
 import com.anonymous.domain.PropagandaInformation.PropagandaInformation;
 import com.anonymous.domain.PropagandaInformation.PropagandaInformationCategory;
-import com.anonymous.domain.PropagandaMaterialsProduced.ApprovalStatus;
-import com.anonymous.domain.PropagandaMaterialsProduced.PropagandaMaterialsContent;
-import com.anonymous.domain.PropagandaMaterialsProduced.PropagandaMaterialsProduced;
 import com.anonymous.repository.PpgdaInfStatisticsRepository;
 import com.anonymous.repository.PropagandaInformationCategoryRepository;
 import com.anonymous.repository.PropagandaInformationRepository;
@@ -62,6 +59,50 @@ public class PropagandaInformationService implements PropagandaInformationServic
 		}
 		ppgdaInfStatisticsRepository.save(ppgdaInfStatisticsList);
 		return back;
+	}
+
+	//删除
+	@Override
+	public boolean deletedPropagandaInformation(String[] ids) {
+		for (String id : ids) {
+			PropagandaInformation propagandaInformation = getById(id);
+			//判断是否可以删除
+			if (propagandaInformation.getApprovalStatus() > 0) {
+				return false;
+			}
+		}
+		for (String id : ids) {
+			if (!deleted(id)) {
+				throw new RuntimeException("删除 宣传信息 出现异常 ");
+			}
+		}
+		return true;
+	}
+
+	private boolean deleted(String id) {
+		PropagandaInformation propagandaInformation = getById(id);
+		if (propagandaInformation != null) {
+			propagandaInformationRepository.delete(id);
+		}
+		return propagandaInformationRepository.findOne(id) == null ? true : false;
+	}
+
+	//归档
+	@Override
+	public boolean filePropagandaInformation(String[] ids) {
+		for (String id : ids) {
+			PropagandaInformation propagandaInformation = getById(id);
+			//判断是否可以归档
+			if (propagandaInformation.getApprovalStatus() != 3) {
+				return false;
+			}
+		}
+		for (String id : ids) {
+			PropagandaInformation propagandaInformation = getById(id);
+			propagandaInformation.setApprovalStatus(4);
+			propagandaInformationRepository.save(propagandaInformation);
+		}
+		return true;
 	}
 
 	/**

@@ -43,6 +43,4 @@ public class LoginLinkController {
         return "submit";
     }
 
-
-
 }

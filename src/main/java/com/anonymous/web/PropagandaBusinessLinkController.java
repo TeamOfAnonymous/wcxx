@@ -2,11 +2,15 @@ package com.anonymous.web;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ResponseHeader;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.awt.*;
 
 /**
  * Created by WangZK on 2017/6/10.
@@ -38,7 +42,7 @@ public class PropagandaBusinessLinkController {
     @ApiOperation(value = "去到宣传信息发布申请详情页面")
     public String goPropagandaInformationDetails(ModelMap modelMap, @PathVariable String id) {
         modelMap.addAttribute("propagandaInformation_id", id);
-        return "";
+        return "propagandaBusiness/propagandaInformation/details";
     }
 
     @GetMapping(value = "propagandaInformation/goPropagandaInformationQuery")
@@ -69,7 +73,7 @@ public class PropagandaBusinessLinkController {
     @ApiOperation(value = "去到宣传品（资料）制作申请详情页面")
     public String goPropagandaMaterialsProducedDetails(ModelMap modelMap, @PathVariable String id) {
         modelMap.addAttribute("propagandaMaterialsProduced_id", id);
-        return "";
+        return "propagandaBusiness/propagandaMaterialsProduced/details";
     }
 
     @GetMapping(value = "propagandaMaterialsProduced/goPropagandaMaterialsProducedQuery")
@@ -94,7 +98,7 @@ public class PropagandaBusinessLinkController {
     @ApiOperation(value = "去到宣传物资领用申请详情页面")
     public String goPropagandaMaterialsRecipientsDetails(ModelMap modelMap, @PathVariable String id) {
         modelMap.addAttribute("propagandaMaterialsRecipients_id", id);
-        return "";
+        return "propagandaBusiness/propagandaMaterialsRecipients/details";
     }
 
     @GetMapping(value = "propagandaMaterialsRecipients/goPropagandaMaterialsRecipientsQuery")
@@ -119,7 +123,7 @@ public class PropagandaBusinessLinkController {
     @ApiOperation(value = "去到宣传工作总结申请详情页面")
     public String goPropagandaWorkSummaryDetails(ModelMap modelMap, @PathVariable String id) {
         modelMap.addAttribute("propagandaWorkSummary_id", id);
-        return "";
+        return "propagandaBusiness/propagandaWorkSummaryDetails";
     }
 
     @GetMapping(value = "/goPropagandaWorkSummaryQuery")

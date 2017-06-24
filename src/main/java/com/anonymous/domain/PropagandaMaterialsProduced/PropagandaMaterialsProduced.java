@@ -2,8 +2,6 @@ package com.anonymous.domain.PropagandaMaterialsProduced;
 
 import com.anonymous.domain.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -37,7 +35,7 @@ public class PropagandaMaterialsProduced implements Serializable {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private ApprovalStatus approvalStatus;//审批状态
+    private PMPApprovalStatus approvalStatus;//审批状态
 
     @ManyToOne
     private User applicant;//申请人 TODO 应该添加 @NotNull
@@ -99,11 +97,11 @@ public class PropagandaMaterialsProduced implements Serializable {
         this.remarks = remarks;
     }
 
-    public ApprovalStatus getApprovalStatus() {
+    public PMPApprovalStatus getApprovalStatus() {
         return approvalStatus;
     }
 
-    public void setApprovalStatus(ApprovalStatus approvalStatus) {
+    public void setApprovalStatus(PMPApprovalStatus approvalStatus) {
         this.approvalStatus = approvalStatus;
     }
 

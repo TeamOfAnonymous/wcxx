@@ -18,12 +18,12 @@
         <div class="hp-t-right">
             <div class="hp-t-r-top">
                 <span>您好！</span>
-                <span>李建明</span>
-                <span>[血源管理科]</span>
+                <span id="currentUserName"></span>
+                <span id="currentUserOrganizationName" ></span>
             </div>
             <div class="hp-t-r-bottom">
                 <span>修改密码</span>
-                <span>安全退出</span>
+                <a href="/logout"><span style="color:white;">安全退出</span></a>
             </div>
         </div>
     </div>
@@ -113,6 +113,27 @@
 <script type="text/javascript" src="../vendor/jquery1.9.min.js"></script>
 <script type="text/javascript" src="../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 <script>
+
+    $(function(){
+        initApplication();
+    });
+
+    // 初始化 申请人信息
+    function initApplication(){
+        $.ajax({
+            type: "GET",
+            url: "/getCurrentUser",
+            dataType: "json",
+            contentType: "application/json",
+            success: function (data) {
+                $("#currentUserName").html(data.username);
+                $("#currentUserOrganizationName").html( "[" + data.organization.name + "]" );
+            }
+        });
+    }
+
+
+
     var iframeNum = 0; //记录iframe的个数/用于生成id
     var cIframe = { //管理iframe
         newIframe: function (urlStr, nameText, Num) {

@@ -1,6 +1,9 @@
-package com.anonymous.domain;
+package com.anonymous.domain.PropagandaWorkProgram;
+
+import com.anonymous.domain.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -8,42 +11,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by WangZK on 2017/6/3.
- * 宣传工作方案
+ * Created by huangMP on 2017/6/18.
+ * decription : 宣传工作方案
  */
 @Entity
 public class PropagandaWorkProgram implements Serializable {
 
     @Id
     @GeneratedValue(generator = "UUID2_GENERATOR")
-    private String id;//宣传工作方案id
+    private String id ;// id
 
-    private LocalDateTime draftDate;//拟稿时间
+    private LocalDateTime draftDate ;// 拟稿时间
 
-    private String title;//标题
-    private String programCategory;//方案类别
+    private String title ; // 标题
+
+    @OneToOne
+    private PWPCategory programCategory ; // 方案类别
 
     @ManyToOne
-    private User principal;//负责人
+    private User principal ;// 负责人
 
     @ManyToMany
-    private List<User> members;//成员
+    private List<User> members ; // 成员
 
-    private float budget;
-    private float actualCost;
+    private float budget ; // 预算（元）
+    private float actualCost ; // 实际费用（元）
 
-    private LocalDate startExecuteTime;//开始执行时间
-    private LocalDate endExecuteTime;//结束执行时间
+    private LocalDate startExecuteTime ; // 开始执行时间
+    private LocalDate endExecuteTime ; // 结束执行时间
 
     @ManyToOne
-    private User draftMan;//拟稿人
+    private User draftMan ; // 拟稿人
 
-    private String content;//内容
-    private String remarks;//备注
-    private Integer approvalStatus;//审批状态，0为草稿，1为待审批，2为审核中，3为执行中，4为已完成，5为已归档
+    private String content ; // 内容
+    private String remarks ; // 备注
 
-    @OneToMany(mappedBy = "propagandaWorkProgram")
-    private List<ProgramProject> programProjects = new ArrayList<>();//项目列表
+    @Enumerated(EnumType.STRING)
+    private PWPApprovalStatus approvalStatus ; // 审批状态，0为草稿，1为待审批，2为审核中，3为执行中，4为已完成，5为已归档
+
+    @OneToMany(mappedBy = "pwp")
+    private List<PWPProject> pwpprojects = new ArrayList<>();//项目列表
 
     public PropagandaWorkProgram() {
     }
@@ -72,11 +79,11 @@ public class PropagandaWorkProgram implements Serializable {
         this.title = title;
     }
 
-    public String getProgramCategory() {
+    public PWPCategory getProgramCategory() {
         return programCategory;
     }
 
-    public void setProgramCategory(String programCategory) {
+    public void setProgramCategory(PWPCategory programCategory) {
         this.programCategory = programCategory;
     }
 
@@ -152,19 +159,19 @@ public class PropagandaWorkProgram implements Serializable {
         this.remarks = remarks;
     }
 
-    public Integer getApprovalStatus() {
+    public PWPApprovalStatus getApprovalStatus() {
         return approvalStatus;
     }
 
-    public void setApprovalStatus(Integer approvalStatus) {
+    public void setApprovalStatus(PWPApprovalStatus approvalStatus) {
         this.approvalStatus = approvalStatus;
     }
 
-    public List<ProgramProject> getProgramProjects() {
-        return programProjects;
+    public List<PWPProject> getPwpprojects() {
+        return pwpprojects;
     }
 
-    public void setProgramProjects(List<ProgramProject> programProjects) {
-        this.programProjects = programProjects;
+    public void setPwpprojects(List<PWPProject> pwpprojects) {
+        this.pwpprojects = pwpprojects;
     }
 }

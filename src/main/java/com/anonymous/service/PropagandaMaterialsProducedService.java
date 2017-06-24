@@ -1,24 +1,24 @@
 package com.anonymous.service;
 
-import com.anonymous.domain.PropagandaMaterials;
 import com.anonymous.domain.PropagandaMaterialsProduced.*;
 import com.anonymous.domain.PropagandaMaterialsProduced.dto.PropagandaMaterialsProducedDto;
 import com.anonymous.domain.PropagandaMaterialsProduced.dto.PropagandaMaterialsProducedStatisticalDto;
 import com.anonymous.domain.PropagandaMaterialsProduced.query.PropagandaMaterialsProducedStatisticalQuery;
-import com.anonymous.domain.PropagandaMaterialsRecipients;
 import com.anonymous.domain.User;
 import com.anonymous.repository.PropagandaMaterialsProduced.PropagandaMaterialsProducedRepository;
 import com.anonymous.repository.PropagandaMaterialsProduced.PropagandaMaterialsProducedRepositoryCustom;
 import com.anonymous.service.inter.PropagandaMaterialsProducedServiceInter;
 import com.anonymous.domain.PropagandaMaterialsProduced.query.PropagandaMaterialsProducedQuery;
+import com.anonymous.service.inter.UserServiceInter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -29,6 +29,10 @@ import java.util.*;
 @Service
 public class PropagandaMaterialsProducedService implements PropagandaMaterialsProducedServiceInter {
 
+    /**
+     * 用户管理 service
+     */
+    private UserServiceInter userService;
 
     /**
      * 宣传品制作申请 dao
@@ -68,10 +72,12 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
     @Transactional
     public PropagandaMaterialsProduced add(PropagandaMaterialsProduced pm) {
 
+
         //TODO 给该申请添加 申请人
+        //pm.setApplicant(  );
         //TODO 给该申请添加 负责人
         // 给该申请设置 审批状态为0 : 0为草稿，1为待审批，2为审核中，3为执行中，4为已完成，5为已归档
-        pm.setApprovalStatus(ApprovalStatus.Draft);
+        pm.setApprovalStatus(PMPApprovalStatus.Draft);
         //给该申请添加 所属宣传信息申请
 //        PropagandaInformation propagandaInformation = propagandaInformationService.getById( propagandaInformationId );
 //        propagandaMaterialsProduced.setPropagandaInformation(propagandaInformation);
@@ -124,7 +130,7 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
         PropagandaMaterialsProduced propagandaMaterialsProduced = pmpRepository.findOne(id);
 
         // 修改 审批状态为1 : 0为草稿，1为待审批，2为审核中，3为执行中，4为已完成，5为已归档
-        propagandaMaterialsProduced.setApprovalStatus(ApprovalStatus.WaitForApproval);
+        propagandaMaterialsProduced.setApprovalStatus(PMPApprovalStatus.WaitForApproval);
         // 给该申请添加 申请时间
         propagandaMaterialsProduced.setApplicationDate(LocalDateTime.now());
         return pmpRepository.save(propagandaMaterialsProduced);
@@ -150,6 +156,7 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
     private boolean delete(String id) {
         PropagandaMaterialsProduced p = pmpRepository.findOne(id);
         if (p != null) {
+            //先判断是否可以删除
             // 删除之前，先把其下属 宣传品内容删除
             List<PropagandaMaterialsContent> pcs = p.getPropagandaMaterialsContents();
             for (PropagandaMaterialsContent pc : pcs) {
@@ -270,7 +277,7 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
         }
         //根据宣传类别统计宣传资料制作的所有数量
         Map<String, Integer> statisticsTotalData = statisticsData(pmps1, propagandaMaterialsContentCategories);
-        List<PropagandaMaterialsProduced> pmps2 = pmpRepository.findByApplicationDateBetweenAndApprovalStatus(query.getStartTime(), query.getEndTime(), ApprovalStatus.Executed, ApprovalStatus.Pigeonhole);
+        List<PropagandaMaterialsProduced> pmps2 = pmpRepository.findByApplicationDateBetweenAndApprovalStatus(query.getStartTime(), query.getEndTime(), PMPApprovalStatus.Executed, PMPApprovalStatus.Pigeonhole);
         Map<String, Integer> statisticsPracticalData = statisticsData(pmps2, propagandaMaterialsContentCategories);
         List<Map<String, Integer>> data = new ArrayList<>();
         data.add(statisticsTotalData);
@@ -405,12 +412,14 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
         Map pmpsGroupByApplicant = new HashMap<User, List<PropagandaMaterialsProduced>>();
         for (PropagandaMaterialsProduced pItem : pmps) {
             User applicant = pItem.getApplicant();
-            List<PropagandaMaterialsProduced> applicantList = (List<PropagandaMaterialsProduced>) pmpsGroupByApplicant.get(applicant);
-            if (applicantList == null) {
-                applicantList = new ArrayList<>();
+            if( applicant != null ){
+                List<PropagandaMaterialsProduced> applicantList = (List<PropagandaMaterialsProduced>) pmpsGroupByApplicant.get(applicant);
+                if (applicantList == null) {
+                    applicantList = new ArrayList<>();
+                }
+                applicantList.add(pItem);
+                pmpsGroupByApplicant.put(applicant, applicantList);
             }
-            applicantList.add(pItem);
-            pmpsGroupByApplicant.put(applicant, applicantList);
         }
 
         // 构造返回的 二维数组   -- start

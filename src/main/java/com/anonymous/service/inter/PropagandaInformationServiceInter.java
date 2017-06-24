@@ -33,4 +33,7 @@ public interface PropagandaInformationServiceInter {
 	Page<PropagandaInformation> findByQueryCondition(PpgdaInfQueryCondition condition);
 
 	List<Map<String, Integer>> getPropagandaInformationByApplicationDate(LocalDate startDate, LocalDate endDate );
+
+	boolean deletedPropagandaInformation(String[] ids) ;
+	boolean filePropagandaInformation(String[] ids) ;
 }
