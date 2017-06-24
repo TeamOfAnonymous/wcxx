@@ -198,7 +198,7 @@
                             </button>
                             <form id="uf-form" method="post" action="/uploadAnnex" target="uf-frame"
                                   encoding="multipart/form-data" enctype="multipart/form-data">
-                                <input id="uf-input-upload" type="file"/>
+                                <input id="uf-input-upload" type="file" name="file"/>
                             </form>
                             <iframe id="uf-frame" name="uf-frame" style="visibility:hidden;height: 0;border: 0;"></iframe>
                         </div>
@@ -266,6 +266,7 @@
 <script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
 <script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 <!--[if IE 8 ]>
+<script type="text/javascript" src="../../vendor/es5-shim/es5-shim.min.js"></script>
 <script type="text/javascript" src="../../vendor/es5-shim/es5-sham.min.js"></script>
 <![endif]-->
 <script type="text/javascript" src="../../../vendor/template-web-min.js"></script>
@@ -279,7 +280,7 @@
      });*/
     //查看流程图
     $("#readFliwImg").on("click", function () {
-        window.open('../../public/flowImg.html', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
+        window.open('/goFlowChart', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
     });
 
     $(function () {
@@ -439,12 +440,35 @@
                 dataType: "json",
                 contentType: "application/json",
                 success: function (data) {
-                    loading.hide();
-                    message.add("保存成功");
-                    window.location.href = "/propagandaBusiness/propagandaMaterialsRecipients/goPropagandaMaterialsRecipientsQuery";
+                    contactAnnex(data.id);
                 }
             });
         }
+    }
+
+    function contactAnnex(common_id) {
+        var fileMsg = $(".uf-file-list").find('p .file-del');
+        if (fileMsg.length == 0) {
+            loading.hide();
+            window.location.href = "/propagandaBusiness/propagandaMaterialsProduced/goPropagandaMaterialsProducedQuery";
+        } else {
+            var fileIds = [];
+            fileMsg.each(function () {
+                fileIds.push($(this).attr('data-id'));
+            });
+            $.ajax({
+                type: "GET",
+                url: "/contactAnnex",
+                data: "common_id=" + common_id + "&&fileIds=" + fileIds,
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+                    loading.hide();
+                    window.location.href = "/propagandaBusiness/propagandaMaterialsProduced/goPropagandaMaterialsProducedQuery";
+                }
+            })
+        }
+
     }
 
     //添加表格的一行

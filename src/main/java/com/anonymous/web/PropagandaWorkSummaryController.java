@@ -31,10 +31,10 @@ public class PropagandaWorkSummaryController {
         return propagandaWorkSummaryService.add(propagandaWorkSummary);
     }
 
-    @RequestMapping(value = "getPropagandaWorkSummaryById",method = RequestMethod.GET)
+    @RequestMapping(value = "getPropagandaWorkSummaryById/{id}",method = RequestMethod.GET)
     @ApiOperation(value = "通过id获取宣传工作总结")
     @ResponseBody
-    public PropagandaWorkSummary getById(@RequestParam String id){
+    public PropagandaWorkSummary getById(@PathVariable String id){
         return propagandaWorkSummaryService.getById(id);
     }
 

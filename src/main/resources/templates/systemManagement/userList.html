@@ -15,7 +15,8 @@
             background-color: white;
             z-index: 10;
         }
-        .list-group{
+
+        .list-group {
             margin-bottom: 0;
         }
     </style>
@@ -78,39 +79,7 @@
         </table>
     </div>
     <div class="page">
-        <ul class="pagination pagination-sm">
-            <li class="disabled">
-                <span href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </span>
-            </li>
-            <li class="active">
-                <span href="#">1</span>
-            </li>
-            <li>
-                <span href="#">2</span>
-            </li>
-            <li>
-                <span href="#">3</span>
-            </li>
-            <li>
-                <span href="#">4</span>
-            </li>
-            <li>
-                <span href="#">5</span>
-            </li>
-            <li>
-                <span href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </span>
-            </li>
-            <li class="li-page-handle">
-                转到第
-                <input type="text" class="form-control input-sm"/> 页
-                <button type="button" class="btn btn-default btn-sm">
-                    GO
-                </button>
-            </li>
+        <ul class="pagination pagination-sm" id="page">
         </ul>
     </div>
 </div>
@@ -140,7 +109,7 @@
     <tr>
         <td><input type="checkbox" data-id="{{index.id}}"/></td>
         <td>{{i+1}}</td>
-        <td>{{index.name}}</td>
+        <td><a href="/systemManagement/goEditUser/{{index.id}}">{{index.name}}</a></td>
         <td>{{index.username}}</td>
         <td>{{index.sex}}</td>
         <td>{{index.post}}</td>
@@ -151,7 +120,56 @@
     {{/each}}
     </tbody>
 </script>
+<script id="pageTemplate" type="text/html">
+    {{if page==0}}
+    <li class="disabled prev">
+        {{else}}
+    <li class="prev">
+        {{/if}}
+        <span href="#" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </span>
+    </li>
+
+    <% for(var i = 1; i <= totalPages; i++){ %>
+    {{if totalPages==i}}
+    <li class="active page-item">
+        {{else}}
+    <li class="page-item">
+        {{/if}}
+        <span href="#"><%= i %></span>
+    </li>
+    <% } %>
+
+    {{if page==totalPages-1}}
+    <li class="disabled next">
+        {{else}}
+    <li class="next">
+        {{/if}}
+        <span href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+         </span>
+    </li>
+    <li class="li-page-handle">
+        转到第
+        <input type="text" class="form-control input-sm"/> 页
+        <button type="button" class="btn btn-default btn-sm">
+            GO
+        </button>
+    </li>
+</script>
+
 <script>
+    var currentQeury = {
+        "currentPage": "0",
+        "size": "10",
+        "name": "",
+        "sex": "",
+        "organization": "",
+        "post": ""
+    };
+    //调用ajax进行查询
+    query(currentQeury);
     var $tree = $("#tree"),
             $selectInput = $(".mt-select input");
     $selectInput.on("click", function (e) {
@@ -186,18 +204,7 @@
             loading.hide();
         }
     });
-    $(function () {
-        var $data = {
-            "currentPage": "0",
-            "size": "10",
-            "name": "",
-            "sex": "",
-            "organization": "",
-            "post": ""
-        };
-        //调用ajax进行查询
-        query($data);
-    });
+
 
     $("#query").on('click',
             function () {
@@ -235,10 +242,9 @@
         });
     })
 
-    // 保存当前的查询条件
-    var currentQuery = {};
 
     function query($data) {
+        loading.show();
         $.ajax({
             type: "GET",
             url: "/getUsersForPage",
@@ -248,10 +254,42 @@
                 console.log(data);
                 var html = template('data_table', data);
                 document.getElementById('table').innerHTML = html;
-                currentQuery = $data;
+                currentQeury.totalPages = data.totalPages;
+                var pageStr = template('pageTemplate', currentQeury);
+                document.getElementById('page').innerHTML = pageStr;
+                loading.hide();
             }
         });
     }
+    $('#page').on('click', 'li', function () {
+        if ($(this).hasClass("page-item")) {
+            if (!$(this).hasClass("active")) {
+                console.log("去到第" + $(this).text() + "页");
+                currentQeury.currentPage = $(this).text() - 1;
+                query(currentQeury);
+            }
+        } else if ($(this).attr("aria-label") == "Previous" && currentQeury.currentPage > 0) {
+            console.log("上一页");
+            currentQeury.currentPage -= 1;
+            query(currentQeury);
+        }
+        else if ($(this).attr("aria-label") == "Next" && currentQeury.currentPage + 1 < currentQeury.totalPages) {
+            console.log("下一页");
+            currentQeury.currentPage += 1;
+            query(currentQeury);
+        }
+    });
+    $('#page').on('click', 'button', function (e) {
+        var page = $(this).prev('input').val();
+        if (!isNaN(page)) {
+            if (page > 0 && page <= currentQeury.totalPages) {
+                currentQeury.totalPages = page - 1;
+                query(currentQeury);
+            }
+        }
+        return false;
+    });
+
 </script>
 </body>
 </html>

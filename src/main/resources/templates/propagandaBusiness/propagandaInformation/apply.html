@@ -25,7 +25,7 @@
                 <td>申请部门</td>
                 <td></td>
                 <td>申请时间</td>
-                <td></td>
+                <td id="applicationDate"></td>
             </tr>
             <tr>
                 <td>申请人</td>
@@ -86,24 +86,15 @@
                 <td colspan="3">
                     <div class="upload-file">
                         <div class="uf-button">
-                            <button id="uf-btn-upload" class="btn btn-default"><span
-                                    class="glyphicon glyphicon-plus"></span>添加
+                            <button id="uf-btn-upload" class="btn btn-default">
+                                <span class="glyphicon glyphicon-plus"></span>添加
                             </button>
-                            <form id="uf-form" method="post" action="/upload" target="uf-frame"
-                                  encoding="multipart/form-data" enctype="multipart/form-data">
-                                <input id="uf-input-upload" type="file"/>
+                            <form id="uf-form" method="post" action="/uploadAnnex" target="uf-frame" encoding="multipart/form-data" enctype="multipart/form-data">
+                                <input id="uf-input-upload" type="file" name="file"/>
                             </form>
-                            <iframe id="uf-frame" name="uf-frame" src=""
-                                    style="visibility:hidden;height: 0;border: 0;"></iframe>
+                            <iframe id="uf-frame" name="uf-frame"  style="visibility:hidden;height: 0;border: 0;"></iframe>
                         </div>
-                        <div class="uf-file-list" data-delUrl="url">
-                            <p>广州血液中心.doc
-                                <a href="javascript:;">[删除]</a>
-                            </p>
-                            <p>广州血液中心.doc
-                                <a href="javascript:;">[删除]</a>
-                            </p>
-                        </div>
+                        <div class="uf-file-list"></div>
                     </div>
                 </td>
             </tr>
@@ -164,21 +155,25 @@
     </div>
 </div>
 
-<button id="testSubmit">测试提交</button>
+<!--<button id="testSubmit">测试提交</button>-->
 
 <script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
 <script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<!--[if IE 8 ]>
+<script type="text/javascript" src="../../vendor/es5-shim/es5-shim.min.js"></script>
+<script type="text/javascript" src="../../vendor/es5-shim/es5-sham.min.js"></script>
+<![endif]-->
 <script type="text/javascript" src="../../../vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
 <script type="text/javascript" src="../../../js/public.js"></script>
 <script type="text/javascript">
     var winH = window.screen.height,
             winW = window.screen.width;
-    $(".ft-b-r-b-left").on("click", "button", function () {
+    /*$(".ft-b-r-b-left").on("click", "button", function () {
         window.open('../../public/submitToDealWith.html', '提交办理', 'height=503, width=760, top=' + (winH - 503) / 2 + ', left=' + (winW - 760) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
-    });
+    });*/
     //查看流程图
     $("#readFliwImg").on("click", function () {
-        window.open('../../public/flowImg.html', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
+        window.open('/goFlowChart', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
     });
 
     //遍历出父节点
@@ -240,7 +235,7 @@
         $("#" + categoryId).remove();
     }
     fv.init($('#title'), "标题");
-    $("#testSubmit").click(function (e) {
+    $(".ft-b-r-b-left").on("click", "button", function () {
         var title = $('#title')[0].value;
         var content = $('#content')[0].value;
         var remarks = $('#remarks')[0].value;
@@ -250,6 +245,7 @@
             var information = {
                 title: title,
                 content: content,
+                applicationDate: applicationDate,
                 remarks: remarks,
                 startDate: startDate,
                 endDate: endDate
@@ -275,13 +271,48 @@
             dataType: "json",
             contentType: "application/json",
             success: function (data) {
-                loading.hide();
-                message.add("保存成功");
-                console.log(data);
-                window.location.href="/propagandaBusiness/propagandaInformation/goPropagandaInformationQuery"
+                contactAnnex(data.id);
             }
         });
     }
+
+    function contactAnnex(common_id) {
+        var fileMsg = $(".uf-file-list").find('p .file-del');
+        if (fileMsg.length == 0) {
+            loading.hide();
+            window.location.href = "/propagandaBusiness/propagandaInformation/goPropagandaInformationQuery";
+        } else {
+            var fileIds = [];
+            fileMsg.each(function () {
+                fileIds.push($(this).attr('data-id'));
+            });
+            $.ajax({
+                type: "GET",
+                url: "/contactAnnex",
+                data: "common_id=" + common_id + "&&fileIds=" + fileIds,
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+                    loading.hide();
+                    window.location.href = "/propagandaBusiness/propagandaInformation/goPropagandaInformationQuery";
+                }
+            })
+        }
+
+    }
+
+    var date_ = new Date();
+    var year = date_.getFullYear();
+    var month = date_.getMonth() + 1;
+    var day = date_.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (day >= 0 && day <= 9) {
+        day = "0" + day;
+    }
+    var applicationDate = year + '-' + month + '-' + day;
+    $("#applicationDate").html(applicationDate);
 
 
 </script>

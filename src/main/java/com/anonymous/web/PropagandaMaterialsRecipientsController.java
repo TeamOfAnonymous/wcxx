@@ -31,10 +31,10 @@ public class PropagandaMaterialsRecipientsController {
         return propagandaMaterialsRecipientsService.add(propagandaMaterialsRecipients);
     }
 
-    @RequestMapping(value = "getPropagandaMaterialsRecipients", method = RequestMethod.GET)
+    @RequestMapping(value = "getPropagandaMaterialsRecipients/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "通过id获取宣传物资领用")
     @ResponseBody
-    public PropagandaMaterialsRecipients getPropagandaMaterialsRecipients(@RequestParam String id) {
+    public PropagandaMaterialsRecipients getPropagandaMaterialsRecipients(@PathVariable String id) {
         return propagandaMaterialsRecipientsService.getPropagandaMaterialsRecipients(id);
     }
 

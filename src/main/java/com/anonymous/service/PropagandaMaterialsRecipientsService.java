@@ -28,6 +28,7 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
     @Autowired
     private PropagandaMaterialsServiceInter propagandaMaterialsService;
 
+    //添加
     @Override
     public PropagandaMaterialsRecipients add(PropagandaMaterialsRecipients propagandaMaterialsRecipients) {
         List<PropagandaMaterials> propagandaMaterialss = propagandaMaterialsRecipients.getPropagandaMaterials();
@@ -43,11 +44,13 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
         return propagandaMaterialsRecipients;
     }
 
+    //根据id获取
     @Override
     public PropagandaMaterialsRecipients getPropagandaMaterialsRecipients(String id) {
         return propagandaMaterialsRecipientsRepository.findOne(id);
     }
 
+    //查询
     @Override
     public Page<PropagandaMaterialsRecipients> getPropagandaMaterialsRecipientsForPage(Integer currentPage, Integer size, String title, String applicant, LocalDate applicationDate, Integer approvalStatus) {
         Sort sort = new Sort(Sort.Direction.fromString("DESC"), "applicationDate");
@@ -140,6 +143,7 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
         return resultMap;
     }
 
+    //删除
     @Override
     public boolean deletedPropagandaMaterialsRecipients(String[] ids) {
         for (String id : ids) {
@@ -150,13 +154,24 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
             }
         }
         for (String id : ids) {
-            PropagandaMaterialsRecipients propagandaMaterialsRecipients = getPropagandaMaterialsRecipients(id);
+            if (!deleted(id)) {
+                throw new RuntimeException("删除 宣传物资领用 出现异常 ");
+            }
+        }
+        return true;
+    }
+
+    private boolean deleted(String id) {
+        PropagandaMaterialsRecipients propagandaMaterialsRecipients = getPropagandaMaterialsRecipients(id);
+        if (propagandaMaterialsRecipients != null) {
             for (PropagandaMaterials propagandaMaterials : propagandaMaterialsRecipients.getPropagandaMaterials()) {
-                propagandaMaterialsService.delete(propagandaMaterials);
+                if (!propagandaMaterialsService.delete(propagandaMaterials)) {
+                    throw new RuntimeException("删除 宣传物资领用 链接删除 宣传物资内容 出现异常 ");
+                }
             }
             propagandaMaterialsRecipientsRepository.delete(id);
         }
-        return true;
+        return propagandaMaterialsRecipientsRepository.findOne(id) == null ? true : false;
     }
 
     //宣传物资领用统计报表
@@ -180,6 +195,7 @@ public class PropagandaMaterialsRecipientsService implements PropagandaMaterials
         return data;
     }
 
+    //归档
     @Override
     public boolean filePropagandaMaterialsRecipients(String[] ids) {
         for (String id : ids) {

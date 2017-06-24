@@ -39,10 +39,10 @@ public class PropagandaMaterialsProducedController {
         return propagandaMaterialsProducedService.apply(id);
     }
 
-    @GetMapping(value = "getPropagandaMaterialsProduced")
+    @GetMapping(value = "getPropagandaMaterialsProduced/{id}")
     @ApiOperation(value = "通过id查找申请")
     @ResponseBody
-    public PropagandaMaterialsProduced find(@RequestParam String id) {
+    public PropagandaMaterialsProduced find(@PathVariable String id) {
         return propagandaMaterialsProducedService.findById(id);
     }
 

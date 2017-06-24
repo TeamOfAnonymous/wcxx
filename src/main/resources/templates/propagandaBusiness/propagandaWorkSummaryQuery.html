@@ -63,40 +63,7 @@
         </table>
     </div>
     <div class="page">
-        <ul class="pagination pagination-sm">
-            <li class="disabled">
-                <span href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </span>
-            </li>
-            <li class="active">
-                <span href="#">1</span>
-            </li>
-            <li>
-                <span href="#">2</span>
-            </li>
-            <li>
-                <span href="#">3</span>
-            </li>
-            <li>
-                <span href="#">4</span>
-            </li>
-            <li>
-                <span href="#">5</span>
-            </li>
-            <li>
-                <span href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </span>
-            </li>
-            <li class="li-page-handle">
-                转到第
-                <input type="text" class="form-control input-sm"/> 页
-                <button type="button" class="btn btn-default btn-sm">
-                    GO
-                </button>
-            </li>
-            </li>
+        <ul class="pagination pagination-sm" id="page">
         </ul>
     </div>
 </div>
@@ -123,7 +90,7 @@
     <tr>
         <td><input type="checkbox" data-id="{{index.id}}"/></td>
         <td>{{i+1}}</td>
-        <td>{{index.title}}</td>
+        <td><a href="/propagandaBusiness/goPropagandaWorkSummaryDetails/{{index.id}}">{{index.title}}</a></td>
         <td>{{index.draftMan.organization.name}}</td>
         <td>{{index.draftMan.name}}</td>
         <td>{{index.draftDate}}</td>
@@ -150,54 +117,90 @@
     {{/each}}
     </tbody>
 </script>
+<script id="pageTemplate" type="text/html">
+    {{if page==0}}
+    <li class="disabled prev">
+        {{else}}
+    <li class="prev">
+        {{/if}}
+        <span href="#" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </span>
+    </li>
+
+    <% for(var i = 1; i <= totalPages; i++){ %>
+    {{if totalPages==i}}
+    <li class="active page-item">
+        {{else}}
+    <li class="page-item">
+        {{/if}}
+        <span href="#"><%= i %></span>
+    </li>
+    <% } %>
+
+    {{if page==totalPages-1}}
+    <li class="disabled next">
+        {{else}}
+    <li class="next">
+        {{/if}}
+        <span href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+         </span>
+    </li>
+    <li class="li-page-handle">
+        转到第
+        <input type="text" class="form-control input-sm"/> 页
+        <button type="button" class="btn btn-default btn-sm">
+            GO
+        </button>
+    </li>
+</script>
+
 <script>
-    $(function () {
-        var $data = {
-            "currentPage": "0",
-            "size": "10",
-            "title": "",
-            "draftMan": "",
-            "draftDate": "",
-            "approvalStatus": "100"
-        };
+    var currentQeury = {
+        "currentPage": "0",
+        "size": "10",
+        "title": "",
+        "draftMan": "",
+        "draftDate": "",
+        "approvalStatus": "100"
+    };
 
-        //调用ajax进行查询
-        query($data);
-    })
+    //调用ajax进行查询
+    query(currentQeury);
 
-    var currentQuery = {};
 
     $("#query").on('click',
-        function () {
-            var title = $("#title").val();
-            var draftMan = $("#draftMan").val();
-            var draftDate = $("#draftDate").val();
-            var approvalStatus = $("#approvalStatus").val();
+            function () {
+                var title = $("#title").val();
+                var draftMan = $("#draftMan").val();
+                var draftDate = $("#draftDate").val();
+                var approvalStatus = $("#approvalStatus").val();
 
-            var $data = {
-                "currentPage": "0",
-                "size": "10",
-                "title": title,
-                "draftMan": draftMan,
-                "draftDate": draftDate,
-                "approvalStatus": approvalStatus
-            };
-            //调用ajax进行查询
-            query($data);
-        }
+                var $data = {
+                    "currentPage": "0",
+                    "size": "10",
+                    "title": title,
+                    "draftMan": draftMan,
+                    "draftDate": draftDate,
+                    "approvalStatus": approvalStatus
+                };
+                //调用ajax进行查询
+                query($data);
+            }
     )
 
     $("#file-Btn").on('click',
-        function () {
-            var $data = [];
-            var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
-            $inputs.each(function () {
-                $data.push($(this).attr('data-id'));
-            });
-            console.log($data);
-            //调用ajax进行删除
-            archiveFile($data);
-        }
+            function () {
+                loading.show();
+                var $data = [];
+                var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
+                $inputs.each(function () {
+                    $data.push($(this).attr('data-id'));
+                });
+                //调用ajax进行删除
+                archiveFile($data);
+            }
     )
 
     //调用后台归档方法
@@ -207,23 +210,28 @@
             url: "/filePropagandaWorkSummary",
             data: "ids=" + $data,
             success: function (data) {
-                message.add("归档 : " + data, "warning");
-                query(currentQuery);
+                if (data) {
+                    message.add("归档成功", "success");
+                    query(currentQuery);
+                } else {
+                    message.add("归档失败，总结还没有完成或者已归档", "warning");
+                    loading.hide();
+                }
             }
         });
     }
 
     $("#del-Btn").on('click',
-        function () {
-        loading.show();
-            var $data = [];
-            var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
-            $inputs.each(function () {
-                $data.push($(this).attr('data-id'));
-            });
-            //调用ajax进行删除
-            deleted($data);
-        }
+            function () {
+                loading.show();
+                var $data = [];
+                var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
+                $inputs.each(function () {
+                    $data.push($(this).attr('data-id'));
+                });
+                //调用ajax进行删除
+                deleted($data);
+            }
     )
 
     //调用后台删除方法
@@ -233,8 +241,13 @@
             url: "/deletePropagandaWorkSummary",
             data: "ids=" + $data,
             success: function (data) {
-                query(currentQuery);
-                message.add("删除 : " + data, "warning");
+                if (data) {
+                    message.add("删除成功", "success");
+                    query(currentQuery);
+                } else {
+                    message.add("删除失败，该文件不可以删除", "warning");
+                    loading.hide();
+                }
             }
         });
     }
@@ -249,10 +262,41 @@
             success: function (data) {
                 var html = template('data_table', data);
                 document.getElementById('table').innerHTML = html;
-                currentQuery = $data;
+                currentQeury.totalPages = data.totalPages;
+                var pageStr = template('pageTemplate', currentQeury);
+                document.getElementById('page').innerHTML = pageStr;
                 loading.hide();
             }
         });
     }
+    $('#page').on('click', 'li', function () {
+        if ($(this).hasClass("page-item")) {
+            if (!$(this).hasClass("active")) {
+                console.log("去到第" + $(this).text() + "页");
+                currentQeury.currentPage = $(this).text() - 1;
+                sumbitQuery(currentQeury);
+            }
+        } else if ($(this).attr("aria-label") == "Previous" && currentQeury.currentPage > 0) {
+            console.log("上一页");
+            currentQeury.currentPage -= 1;
+            sumbitQuery(currentQeury);
+        }
+        else if ($(this).attr("aria-label") == "Next" && currentQeury.currentPage + 1 < currentQeury.totalPages) {
+            console.log("下一页");
+            currentQeury.currentPage += 1;
+            sumbitQuery(currentQeury);
+        }
+    });
+    $('#page').on('click', 'button', function (e) {
+        var page = $(this).prev('input').val();
+        if (!isNaN(page)) {
+            if (page > 0 && page <= currentQeury.totalPages) {
+                currentQeury.totalPages = page - 1;
+                sumbitQuery(currentQeury);
+            }
+        }
+        return false;
+    });
+
 </script>
 </html>

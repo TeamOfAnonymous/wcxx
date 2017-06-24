@@ -49,10 +49,10 @@ public class UserController {
         return userService.deletedUser(ids);
     }
 
-    @RequestMapping(value = "getUser", method = RequestMethod.GET)
+    @RequestMapping(value = "getUser/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "通过id获取用户人员")
     @ResponseBody
-    public User getUser(@RequestParam String id) {
+    public User getUser(@PathVariable String id) {
         return userService.getUser(id);
     }
 

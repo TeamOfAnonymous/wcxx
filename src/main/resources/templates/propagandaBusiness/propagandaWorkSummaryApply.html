@@ -152,7 +152,7 @@
      });*/
     //查看流程图
     $("#readFliwImg").on("click", function () {
-        window.open('../public/flowImg.html', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
+        window.open('/goFlowChart', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
     });
     //初始化富文本框
     var ue = UE.getEditor('editor');
@@ -188,7 +188,6 @@
     function contactAnnex(common_id) {
         var fileMsg = $(".uf-file-list").find('p .file-del');
         if (fileMsg.length == 0) {
-            console.log('没附件');
             loading.hide();
             window.location.href = "/propagandaBusiness/goPropagandaWorkSummaryQuery";
         } else {

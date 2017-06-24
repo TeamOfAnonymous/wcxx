@@ -68,7 +68,7 @@ $('#uf-frame').on('load', function () {
             var file_item = '<p><a target="_blank" href="/' + response.path + '"> ' + response.name + '</a><a class="file-del" href="javascript:;" data-path="' + response.path + '" data-name="' + response.name + '" data-id="' + response.id + '">[删除]</a></p>'
             $uf_f_l.append(file_item);
             loading.hide();
-            message.add("上传文件成功");
+            message.add("上传文件成功","success");
         } catch (e) {
             loading.hide();
             message.add("上传文件失败", "error");

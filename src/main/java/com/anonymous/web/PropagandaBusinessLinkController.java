@@ -3,7 +3,9 @@ package com.anonymous.web;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -32,6 +34,13 @@ public class PropagandaBusinessLinkController {
         return "propagandaBusiness/propagandaInformation/apply";
     }
 
+    @GetMapping(value = "propagandaInformation/goPropagandaInformationDetails/{id}")
+    @ApiOperation(value = "去到宣传信息发布申请详情页面")
+    public String goPropagandaInformationDetails(ModelMap modelMap, @PathVariable String id) {
+        modelMap.addAttribute("propagandaInformation_id", id);
+        return "propagandaBusiness/propagandaInformation/details";
+    }
+
     @GetMapping(value = "propagandaInformation/goPropagandaInformationQuery")
     @ApiOperation(value = "去到宣传信息发布查询")
     public String goPropagandaInformationQuery() {
@@ -56,6 +65,13 @@ public class PropagandaBusinessLinkController {
         return "propagandaBusiness/propagandaMaterialsProduced/apply";
     }
 
+    @GetMapping(value = "propagandaMaterialsProduced/goPropagandaMaterialsProducedDetails/{id}")
+    @ApiOperation(value = "去到宣传品（资料）制作申请详情页面")
+    public String goPropagandaMaterialsProducedDetails(ModelMap modelMap, @PathVariable String id) {
+        modelMap.addAttribute("propagandaMaterialsProduced_id", id);
+        return "propagandaBusiness/propagandaMaterialsProduced/details";
+    }
+
     @GetMapping(value = "propagandaMaterialsProduced/goPropagandaMaterialsProducedQuery")
     @ApiOperation(value = "去到宣传品（资料）制作查询")
     public String goPropagandaMaterialsProducedQuery() {
@@ -74,6 +90,13 @@ public class PropagandaBusinessLinkController {
         return "propagandaBusiness/propagandaMaterialsRecipients/apply";
     }
 
+    @GetMapping(value = "propagandaMaterialsRecipients/goPropagandaMaterialsRecipientsDetails/{id}")
+    @ApiOperation(value = "去到宣传物资领用申请详情页面")
+    public String goPropagandaMaterialsRecipientsDetails(ModelMap modelMap, @PathVariable String id) {
+        modelMap.addAttribute("propagandaMaterialsRecipients_id", id);
+        return "propagandaBusiness/propagandaMaterialsRecipients/details";
+    }
+
     @GetMapping(value = "propagandaMaterialsRecipients/goPropagandaMaterialsRecipientsQuery")
     @ApiOperation(value = "去到宣传物资领用查询")
     public String goPropagandaMaterialsRecipientsQuery() {
@@ -90,6 +113,13 @@ public class PropagandaBusinessLinkController {
     @ApiOperation(value = "去到宣传工作总结申请")
     public String goPropagandaWorkSummaryApply() {
         return "propagandaBusiness/propagandaWorkSummaryApply";
+    }
+
+    @GetMapping(value = "/goPropagandaWorkSummaryDetails/{id}")
+    @ApiOperation(value = "去到宣传工作总结申请详情页面")
+    public String goPropagandaWorkSummaryDetails(ModelMap modelMap, @PathVariable String id) {
+        modelMap.addAttribute("propagandaWorkSummary_id", id);
+        return "propagandaBusiness/propagandaWorkSummaryDetails";
     }
 
     @GetMapping(value = "/goPropagandaWorkSummaryQuery")

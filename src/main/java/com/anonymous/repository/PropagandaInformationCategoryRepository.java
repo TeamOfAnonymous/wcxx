@@ -22,4 +22,5 @@ public interface PropagandaInformationCategoryRepository extends JpaRepository<P
      */
     List<PropagandaInformationCategory> findByNameLike(String indistinct);
 
+    List<PropagandaInformationCategory> findByNameAndPidNotNull(String name);
 }
