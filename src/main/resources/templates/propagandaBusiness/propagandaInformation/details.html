@@ -41,7 +41,7 @@
             </tr>
             <tr>
                 <td><span class="font-red">*</span>类别</td>
-                <td colspan="3" id="mainCategory">
+                <td colspan="3">
                     {{each propagandaInformationCategories}}
                     {{if $value.pid==null}}
                     {{$value.name}}
@@ -52,7 +52,7 @@
             </tr>
             <tr>
                 <td><span class="font-red">*</span>发布媒介(对象)</td>
-                <td colspan="3" id="subCategory">
+                <td colspan="3">
                     {{each propagandaInformationCategories}}
                     {{if $value.pid!=null}}
                     {{$value.name}}
