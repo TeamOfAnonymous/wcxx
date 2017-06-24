@@ -68,5 +68,12 @@ public class UserController {
         return userService.getUsersForPage(currentPage, size, name, sex, organization, post);
     }
 
+    @GetMapping(value = "getCurrentUser" )
+    @ApiOperation(value = "获取当前登陆用户")
+    @ResponseBody
+    public User getCurrentUser() {
+        return userService.getCurrentUser() ;
+    }
+
 
 }
