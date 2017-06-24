@@ -403,12 +403,35 @@
                 dataType: "json",
                 contentType: "application/json",
                 success: function (data) {
-                    loading.hide();
-                    message.add("保存成功");
-                    window.location.href = "/propagandaBusiness/propagandaMaterialsRecipients/goPropagandaMaterialsRecipientsQuery";
+                    contactAnnex(data.id);
                 }
             });
         }
+    }
+
+    function contactAnnex(common_id) {
+        var fileMsg = $(".uf-file-list").find('p .file-del');
+        if (fileMsg.length == 0) {
+            loading.hide();
+            window.location.href = "/propagandaBusiness/propagandaMaterialsProduced/goPropagandaMaterialsProducedQuery";
+        } else {
+            var fileIds = [];
+            fileMsg.each(function () {
+                fileIds.push($(this).attr('data-id'));
+            });
+            $.ajax({
+                type: "GET",
+                url: "/contactAnnex",
+                data: "common_id=" + common_id + "&&fileIds=" + fileIds,
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+                    loading.hide();
+                    window.location.href = "/propagandaBusiness/propagandaMaterialsProduced/goPropagandaMaterialsProducedQuery";
+                }
+            })
+        }
+
     }
 
     //添加表格的一行
