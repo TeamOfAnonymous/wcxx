@@ -14,9 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by huangMP on 2017/5/27.
@@ -45,7 +42,7 @@ public class PropagandaMaterialsProducedServiceTest {
         PropagandaMaterialsProduced p = new PropagandaMaterialsProduced();
         p.setTitle("title5");
         p.setRemarks("remarks5");
-        p.setApprovalStatus(ApprovalStatus.Draft);
+        p.setApprovalStatus(PMPApprovalStatus.Draft);
         p.setApplicant(userService.getUser("29d3d48d-f9e2-42cc-b362-93c70bf24dc5"));
         p.setPrincipal(userService.getUser("29d3d48d-f9e2-42cc-b362-93c70bf24dc5"));
         System.out.println("size = " + p.getPropagandaMaterialsContents().size());
@@ -87,7 +84,7 @@ public class PropagandaMaterialsProducedServiceTest {
     @Test
     public void testApply() {
         PropagandaMaterialsProduced p = propagandaMaterialsProducedService.apply("00e30cdf-3c80-4555-9c5a-e99a5fdc6921");
-        Assert.assertEquals(ApprovalStatus.WaitForApproval , p.getApprovalStatus() );
+        Assert.assertEquals(PMPApprovalStatus.WaitForApproval , p.getApprovalStatus() );
     }
 
     @Test
@@ -115,7 +112,7 @@ public class PropagandaMaterialsProducedServiceTest {
         p.setApplicant(user);
 
         // 通过 状态
-//        p.setApprovalStatus(ApprovalStatus.Draft);
+//        p.setApprovalStatus(PMPApprovalStatus.Draft);
 
         System.out.println(query.toString());
 
@@ -154,7 +151,7 @@ public class PropagandaMaterialsProducedServiceTest {
         p.setApplicant(user);
 
         // 通过 状态
-//        p.setApprovalStatus(ApprovalStatus.Draft);
+//        p.setApprovalStatus(PMPApprovalStatus.Draft);
 
         System.out.println(query.toString());
 
@@ -192,7 +189,7 @@ public class PropagandaMaterialsProducedServiceTest {
         p.setApplicant(user);
 
         // 通过 状态
-//        p.setApprovalStatus(ApprovalStatus.Draft);
+//        p.setApprovalStatus(PMPApprovalStatus.Draft);
 
         System.out.println(query.toString());
 
