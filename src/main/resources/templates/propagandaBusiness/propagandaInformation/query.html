@@ -99,7 +99,8 @@
     <tr>
         <td><input data-id="{{ppgdaInfo.id}}" type="checkbox"/></td>
         <td>{{temp++}}</td>
-        <td><a href="/propagandaBusiness/propagandaInformation/goPropagandaInformationDetails/{{ppgdaInfo.id}}">{{ppgdaInfo.title}}</a>
+        <td><a class="open-win"
+               href="/propagandaBusiness/propagandaInformation/goPropagandaInformationDetails/{{ppgdaInfo.id}}">{{ppgdaInfo.title}}</a>
         </td>
         <td>{{ppgdaInfo.mainCategory}}</td>
         <td>{{ppgdaInfo.subCategory}}</td>
@@ -308,7 +309,7 @@
         }
         return false;
     });
-
+    goDeatil($("#ppgdaTable"), 'open-win');
 </script>
 
 </html>
