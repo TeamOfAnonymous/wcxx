@@ -23,15 +23,15 @@
             <tbody>
             <tr>
                 <td>申请部门</td>
-                <td></td>
+                <td id="applicatOrganizationName"></td>
                 <td>申请时间</td>
-                <td></td>
+                <td id="applicatDate"></td>
             </tr>
             <tr>
                 <td>申请人</td>
-                <td></td>
+                <td id="applicatName"></td>
                 <td>联系电话</td>
-                <td></td>
+                <td id="applicatPhoneNumber"></td>
             </tr>
             <tr>
                 <td><span class="font-red">*</span>标题</td>
@@ -282,12 +282,49 @@
         window.open('../../public/flowImg.html', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
     });
 
-
-    // TODO 初始化时应该要获取登陆用户的信息，填充显示
-
     $(function () {
+        initApplicatData();
+        initApplication();
         listenerForpmcProductionQuantityAndpmcCost();
     });
+
+    // 初始化申请时间
+    function initApplicatData(){
+        var nowDate = new Date();
+        //获取当前年
+        var year= nowDate.getFullYear();
+        //获取当前月
+        var month= nowDate.getMonth()+1;
+        //获取当前日
+        var date= nowDate.getDate();
+        var now=year+'-'+month+"-"+date;
+        $("#applicatDate").html(now);
+    }
+
+
+    var _currentUser_ = "";
+    // 获取当前登陆用户信息
+    function getCurrentUser(){
+        $.ajax({
+            type: "GET",
+            url: "/getCurrentUser",
+            dataType: "json",
+            contentType: "application/json",
+            async:false ,
+            success: function (data) {
+                _currentUser_ = data ;
+            }
+        });
+    }
+    // 初始化 申请人信息
+    function initApplication(){
+        getCurrentUser();
+        $("#applicatName").html(_currentUser_.username);
+        $("#applicatPhoneNumber").html(_currentUser_.phoneNumber);
+        $("#applicatOrganizationName").html(_currentUser_.organization.name);
+    }
+
+
 
     // 计算总费用
     function calculatePMPTotalCost() {
