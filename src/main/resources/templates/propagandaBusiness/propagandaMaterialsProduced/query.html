@@ -104,7 +104,9 @@
     <tr>
         <td><input name="pmpIds" type="checkbox" value="{{index.pmp.id}}"/></td>
         <td>{{i+1}}</td>
-        <td>{{index.pmp.title}}</td>
+        <td><a class="open-win"
+               href="/propagandaMaterialsProduced/goPropagandaMaterialsProducedDetails/{{index.pmp..id}}">
+            {{index.pmp.title}}</a></td>
         <td>{{index.pmcProductionMethod}}</td>
         <td>{{index.pmp.totalCost}}</td>
         <td>{{index.pmp.applicant.name}}</td>
@@ -293,7 +295,7 @@
         }
         return false;
     });
-
+    goDeatil($("#table"), 'open-win');
 </script>
 </body>
 </html>
