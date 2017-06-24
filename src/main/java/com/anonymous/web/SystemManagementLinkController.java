@@ -35,10 +35,17 @@ public class SystemManagementLinkController {
     }
 
     @GetMapping(value = "goEditUser/{id}")
-    @ApiOperation(value = "去到添加用户页面")
+    @ApiOperation(value = "去到修改用户页面")
     public String goEditUser(ModelMap modelMap, @PathVariable String id) {
         modelMap.addAttribute("user_id", id);
-        return "systemManagement/addUser";
+        return "systemManagement/editUser";
+    }
+
+    @GetMapping(value = "goDetailsUser/{id}")
+    @ApiOperation(value = "去到用户详情页面")
+    public String goDetailsUser(ModelMap modelMap, @PathVariable String id) {
+        modelMap.addAttribute("user_id", id);
+        return "systemManagement/detailsUser";
     }
 
 }

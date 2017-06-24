@@ -38,7 +38,7 @@ public class PropagandaBusinessLinkController {
     @ApiOperation(value = "去到宣传信息发布申请详情页面")
     public String goPropagandaInformationDetails(ModelMap modelMap, @PathVariable String id) {
         modelMap.addAttribute("propagandaInformation_id", id);
-        return "";
+        return "propagandaBusiness/propagandaInformation/details";
     }
 
     @GetMapping(value = "propagandaInformation/goPropagandaInformationQuery")
@@ -69,7 +69,7 @@ public class PropagandaBusinessLinkController {
     @ApiOperation(value = "去到宣传品（资料）制作申请详情页面")
     public String goPropagandaMaterialsProducedDetails(ModelMap modelMap, @PathVariable String id) {
         modelMap.addAttribute("propagandaMaterialsProduced_id", id);
-        return "";
+        return "propagandaBusiness/propagandaMaterialsProduced/details";
     }
 
     @GetMapping(value = "propagandaMaterialsProduced/goPropagandaMaterialsProducedQuery")
@@ -94,7 +94,7 @@ public class PropagandaBusinessLinkController {
     @ApiOperation(value = "去到宣传物资领用申请详情页面")
     public String goPropagandaMaterialsRecipientsDetails(ModelMap modelMap, @PathVariable String id) {
         modelMap.addAttribute("propagandaMaterialsRecipients_id", id);
-        return "";
+        return "propagandaBusiness/propagandaMaterialsRecipients/details";
     }
 
     @GetMapping(value = "propagandaMaterialsRecipients/goPropagandaMaterialsRecipientsQuery")
@@ -119,7 +119,7 @@ public class PropagandaBusinessLinkController {
     @ApiOperation(value = "去到宣传工作总结申请详情页面")
     public String goPropagandaWorkSummaryDetails(ModelMap modelMap, @PathVariable String id) {
         modelMap.addAttribute("propagandaWorkSummary_id", id);
-        return "";
+        return "propagandaBusiness/propagandaWorkSummaryDetails";
     }
 
     @GetMapping(value = "/goPropagandaWorkSummaryQuery")
