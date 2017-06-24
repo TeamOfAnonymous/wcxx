@@ -89,10 +89,12 @@
                             <button id="uf-btn-upload" class="btn btn-default">
                                 <span class="glyphicon glyphicon-plus"></span>添加
                             </button>
-                            <form id="uf-form" method="post" action="/uploadAnnex" target="uf-frame" encoding="multipart/form-data" enctype="multipart/form-data">
+                            <form id="uf-form" method="post" action="/uploadAnnex" target="uf-frame"
+                                  encoding="multipart/form-data" enctype="multipart/form-data">
                                 <input id="uf-input-upload" type="file"/>
                             </form>
-                            <iframe id="uf-frame" name="uf-frame"  style="visibility:hidden;height: 0;border: 0;"></iframe>
+                            <iframe id="uf-frame" name="uf-frame"
+                                    style="visibility:hidden;height: 0;border: 0;"></iframe>
                         </div>
                         <div class="uf-file-list"></div>
                     </div>
@@ -155,7 +157,7 @@
     </div>
 </div>
 
-<button id="testSubmit">测试提交</button>
+<!--<button id="testSubmit">测试提交</button>-->
 
 <script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
 <script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
@@ -168,9 +170,9 @@
 <script type="text/javascript">
     var winH = window.screen.height,
             winW = window.screen.width;
-    $(".ft-b-r-b-left").on("click", "button", function () {
-        window.open('../../public/submitToDealWith.html', '提交办理', 'height=503, width=760, top=' + (winH - 503) / 2 + ', left=' + (winW - 760) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
-    });
+    /*$(".ft-b-r-b-left").on("click", "button", function () {
+     window.open('../../public/submitToDealWith.html', '提交办理', 'height=503, width=760, top=' + (winH - 503) / 2 + ', left=' + (winW - 760) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
+     });*/
     //查看流程图
     $("#readFliwImg").on("click", function () {
         window.open('/goFlowChart', '查看流程图', 'height=525, width=840, top=' + (window.screen.height - 525) / 2 + ', left=' + (window.screen.width - 840) / 2 + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
@@ -235,7 +237,7 @@
         $("#" + categoryId).remove();
     }
     fv.init($('#title'), "标题");
-    $("#testSubmit").click(function (e) {
+    $(".ft-b-r-b-left").on("click", "button", function (e) {
         var title = $('#title')[0].value;
         var content = $('#content')[0].value;
         var remarks = $('#remarks')[0].value;
@@ -273,7 +275,7 @@
                 loading.hide();
                 message.add("保存成功");
                 console.log(data);
-                window.location.href="/propagandaBusiness/propagandaInformation/goPropagandaInformationQuery"
+                window.location.href = "/propagandaBusiness/propagandaInformation/goPropagandaInformationQuery"
             }
         });
     }
