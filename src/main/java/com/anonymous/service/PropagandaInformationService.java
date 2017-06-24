@@ -40,6 +40,7 @@ public class PropagandaInformationService implements PropagandaInformationServic
 	 */
 	@Override
 	public PropagandaInformation save(PropagandaInformation propagandaInformation) {
+		propagandaInformation.setApprovalStatus(0);
 		PropagandaInformation back = propagandaInformationRepository.save(propagandaInformation);
 		back = propagandaInformationRepository.findOne(back.getId());
 		// --- 得到分类id的list ----
