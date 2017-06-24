@@ -18,7 +18,18 @@
         <div class="ft-top">
             <h3 class="text-center">查看宣传信息</h3>
             <p class="ft-t-state">
-                状态&nbsp;:&nbsp;<span class="font-red">待审批</span>
+                状态&nbsp;:&nbsp;
+                {{if approvalStatus==0}}
+                待审批
+                {{else if approvalStatus==1}}
+                审核中
+                {{else if approvalStatus==2}}
+                执行中
+                {{else if approvalStatus==3}}
+                已完成
+                {{else if approvalStatus==4}}
+                <span class="font-red">已归档</span>
+                {{/if}}
             </p>
         </div>
         <table class="table table-bordered">
@@ -37,7 +48,7 @@
             </tr>
             <tr>
                 <td><span class="font-red">*</span>标题</td>
-                <td colspan="3">title</td>
+                <td colspan="3">{{title}}</td>
             </tr>
             <tr>
                 <td><span class="font-red">*</span>类别</td>
