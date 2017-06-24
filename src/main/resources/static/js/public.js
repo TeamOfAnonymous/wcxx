@@ -68,7 +68,7 @@ $('#uf-frame').on('load', function () {
             var file_item = '<p><a target="_blank" href="/' + response.path + '"> ' + response.name + '</a><a class="file-del" href="javascript:;" data-path="' + response.path + '" data-name="' + response.name + '" data-id="' + response.id + '">[删除]</a></p>'
             $uf_f_l.append(file_item);
             loading.hide();
-            message.add("上传文件成功","success");
+            message.add("上传文件成功", "success");
         } catch (e) {
             loading.hide();
             message.add("上传文件失败", "error");
@@ -192,4 +192,18 @@ var fv = {
             }
         });
     },
+}
+
+function goDeatil($dom, a_Class) {
+    $dom.on('click', 'a.' + a_Class, function () {
+        var winH = window.screen.height,
+            winW = window.screen.width,
+            width = 1024,
+            height = winH - 200,
+            top = (winH - 100 - height) / 2,
+            left = (winW - width) / 2;
+        console.log($(this).attr('href'));
+        window.open($(this).attr('href'), '查看详情', 'height=' + height + ', width=' + width + ', top=' + top + ', left=' + left + ', toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
+        return false;
+    });
 }
