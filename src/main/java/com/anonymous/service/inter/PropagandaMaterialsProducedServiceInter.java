@@ -35,4 +35,6 @@ public interface PropagandaMaterialsProducedServiceInter {
     Page findBySpecification(PropagandaMaterialsProducedQuery query) ;
 
     List<Map<String, Integer>> getPropagandaMaterialsProducedByApplicationDate(PropagandaMaterialsProducedStatisticalQuery query);
+
+    boolean files(String[] pmpIds);
 }

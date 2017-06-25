@@ -13,8 +13,6 @@ import com.anonymous.service.inter.UserServiceInter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.*;
@@ -51,10 +49,12 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
 
     public PropagandaMaterialsProducedService(@Autowired PropagandaMaterialsProducedRepository propagandaMaterialsProducedRepository,
                                               @Autowired PropagandaMaterialsContentService propagandaMaterialsContentService,
-                                              @Autowired PropagandaMaterialsProducedRepositoryCustom propagandaMaterialsProducedRepositoryCustom) {
+                                              @Autowired PropagandaMaterialsProducedRepositoryCustom propagandaMaterialsProducedRepositoryCustom ,
+                                              @Autowired UserServiceInter userService ) {
         this.pmpRepository = propagandaMaterialsProducedRepository;
         this.pmcService = propagandaMaterialsContentService;
         this.propagandaMaterialsProducedRepositoryCustom = propagandaMaterialsProducedRepositoryCustom;
+        this.userService = userService ;
     }
 
     @Override
@@ -72,10 +72,10 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
     @Transactional
     public PropagandaMaterialsProduced add(PropagandaMaterialsProduced pm) {
 
-
-        //TODO 给该申请添加 申请人
-        //pm.setApplicant(  );
-        //TODO 给该申请添加 负责人
+        // 给该申请添加 申请人
+        pm.setApplicant(userService.getCurrentUser());
+        // 给该申请添加 完成人
+        pm.setPrincipal(userService.getCurrentUser());
         // 给该申请设置 审批状态为0 : 0为草稿，1为待审批，2为审核中，3为执行中，4为已完成，5为已归档
         pm.setApprovalStatus(PMPApprovalStatus.Draft);
         //给该申请添加 所属宣传信息申请
@@ -83,8 +83,13 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
 //        propagandaMaterialsProduced.setPropagandaInformation(propagandaInformation);
 
 
+        System.out.println(pm);
         // 先保存，目的是为了得到 id ，PropagandaMaterialsContent 保存时才能维护两者的关系
         pm = pmpRepository.save(pm);
+
+
+        System.out.println( "============================" );
+        System.out.println( pm.getApprovalStatus() == PMPApprovalStatus.Draft );
 
         // 初始化总费用
         float totalCost = 0;
@@ -143,6 +148,7 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
      * @return
      */
     @Override
+    @Transactional
     public boolean delete(String[] ids) {
         // 遍历 id集合 一个一个删除
         for (String id : ids) {
@@ -153,9 +159,15 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
         return true;
     }
 
+    @Transactional
     private boolean delete(String id) {
         PropagandaMaterialsProduced p = pmpRepository.findOne(id);
-        if (p != null) {
+        System.out.println(( p.getApprovalStatus() == PMPApprovalStatus.Draft || p.getApprovalStatus() == PMPApprovalStatus.WaitForApproval ));
+        System.out.println( p.getApprovalStatus() == PMPApprovalStatus.WaitForApproval );
+        System.out.println( p.getApprovalStatus() == PMPApprovalStatus.Draft );
+
+        if (p != null &&
+                ( p.getApprovalStatus() == PMPApprovalStatus.Draft || p.getApprovalStatus() == PMPApprovalStatus.WaitForApproval ) ) {
             //先判断是否可以删除
             // 删除之前，先把其下属 宣传品内容删除
             List<PropagandaMaterialsContent> pcs = p.getPropagandaMaterialsContents();
@@ -284,6 +296,37 @@ public class PropagandaMaterialsProducedService implements PropagandaMaterialsPr
         data.add(statisticsPracticalData);
         System.out.println(data);
         return data;
+    }
+
+    /**
+     * 批量归档
+     * @param ids
+     * @return
+     */
+    @Override
+    public boolean files(String[] ids) {
+        // 遍历 id集合 一个一个归档
+        for (String id : ids) {
+            if (!file(id)) {
+                throw new RuntimeException("归档 宣传制作时 出现异常 只能对已完成的申请进行归档 ");
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 单个归档
+     * @param id
+     * @return
+     */
+    private boolean file(String id) {
+        PropagandaMaterialsProduced p = pmpRepository.findOne(id);
+        // 只有 已完成 的才能被归档
+        if (p != null && p.getApprovalStatus() == PMPApprovalStatus.Executed) {
+            p.setApprovalStatus( PMPApprovalStatus.Pigeonhole );
+            pmpRepository.save( p );
+        }
+        return pmpRepository.findOne(id).getApprovalStatus() == PMPApprovalStatus.Pigeonhole ? true : false;
     }
 
     private Map<String, Integer> statisticsData(List<PropagandaMaterialsProduced> propagandaMaterialsProduceds, Set<String> propagandaMaterialsContentCategories) {

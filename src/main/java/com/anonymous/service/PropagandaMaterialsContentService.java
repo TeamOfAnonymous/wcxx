@@ -6,6 +6,8 @@ import com.anonymous.service.inter.PropagandaMaterialsContentServiceInter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 /**
  * Created by huangMP on 2017/5/26.
  * decription : 宣传品内容 Service层实现
@@ -34,6 +36,7 @@ public class PropagandaMaterialsContentService implements PropagandaMaterialsCon
      * @return
      */
     @Override
+    @Transactional
     public PropagandaMaterialsContent add(PropagandaMaterialsContent propagandaMaterialsContent ) {
         return pmcRepository.save(propagandaMaterialsContent);
 
@@ -51,6 +54,7 @@ public class PropagandaMaterialsContentService implements PropagandaMaterialsCon
     }
 
     @Override
+    @Transactional
     public boolean delete(String id) {
         pmcRepository.delete( id );
         return pmcRepository.findOne( id ) == null ? true : false ;
