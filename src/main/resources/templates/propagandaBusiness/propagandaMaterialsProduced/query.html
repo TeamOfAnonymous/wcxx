@@ -62,10 +62,10 @@
            class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-plus"></span> 新建
         </a>
-        <a href="/propagandaBusiness/propagandaMaterialsProduced/goPropagandaMaterialsProducedApply"
-           class="btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-file"></span> 归档
-        </a>
+        <button id="fileBtn" type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-file"></span>
+            归档
+        </button>
         <button id="deleteBtn" type="button" class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-remove"></span>
             删除
@@ -104,7 +104,8 @@
     <tr>
         <td><input name="pmpIds" type="checkbox" value="{{index.pmp.id}}"/></td>
         <td>{{i+1}}</td>
-        <td><a class="open-win"  href="/propagandaBusiness/propagandaMaterialsProduced/goPropagandaMaterialsProducedDetails/{{index.pmp.id}}">
+        <td><a class="open-win"
+               href="/propagandaBusiness/propagandaMaterialsProduced/goPropagandaMaterialsProducedDetails/{{index.pmp.id}}">
             {{index.pmp.title}}</a></td>
         <td>{{index.pmcProductionMethod}}</td>
         <td>{{index.pmp.totalCost}}</td>
@@ -155,7 +156,7 @@
 </script>
 
 <script>
-    var currentQeury = {
+    var defaultQeury = {
         "minTotalCost": "0.0",
         /*"maxTotalCost": "100.0",*/
         "totalPages": "0",
@@ -170,10 +171,24 @@
          }
          }*/
     };
-    // 发送请求
-    sumbitQuery(currentQeury);
+
+    $(function () {
+        sumbitQuery(defaultQeury);
+    });
     // 删除按钮点击事件
     $("#deleteBtn").click(function () {
+        var pmpIdsBtn = $('input:checkbox[name=pmpIds]:checked');
+        // 构建 要删除的 pmp id集合
+        var pmpIds = new Array();
+        pmpIdsBtn.each(function () {
+            pmpIds.push($(this).val());
+        });
+        // 发送请求
+        sumbitDelete(pmpIds);
+    });
+    // 归档按钮点击事件
+    $("#fileBtn").click(function () {
+        alert();
         var pmpIdsBtn = $('input:checkbox[name=pmpIds]:checked');
         console.log(pmpIdsBtn);
         // 构建 要删除的 pmp id集合
@@ -182,7 +197,7 @@
             pmpIds.push($(this).val());
         });
         // 发送请求
-        sumbitDelete(pmpIds);
+        sumbitFile(pmpIds);
     });
 
     // 查询按钮点击事件
@@ -242,7 +257,21 @@
                 sumbitQuery(currentQeury);
             }
         });
-
+    }
+    // 发送 归档 请求
+    function sumbitFile(pmpIds) {
+        $.ajax({
+            type: "POST",
+            contentType: "application/x-www-form-urlencoded",
+            url: "/filePropagandaMaterialsProduced",
+            data: {"pmpIds": pmpIds.toString()},
+            success: function (data) {
+                message.add("归档 : " + data, "success");
+                // 更新数据
+                console.log(currentQeury);
+                sumbitQuery(currentQeury);
+            }
+        });
     }
 
     // 保存当前的查询条件
@@ -259,7 +288,7 @@
             success: function (data) {
                 var html = template('data_table', data);
                 document.getElementById('table').innerHTML = html;
-                currentQeury.totalPages = data.totalPages;
+                currentQeury = query ;
                 var pageStr = template('pageTemplate', currentQeury);
                 document.getElementById('page').innerHTML = pageStr;
                 loading.hide();
