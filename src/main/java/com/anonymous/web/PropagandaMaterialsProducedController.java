@@ -101,4 +101,15 @@ public class PropagandaMaterialsProducedController {
         return propagandaMaterialsProducedService.delete(pmpIds);
     }
 
+    /**
+     * @param pmpIds
+     * @return
+     */
+    @PostMapping(value = "filePropagandaMaterialsProduced")
+    @ApiOperation(value = "通过id归档申请 , 删除成功返回 true ，否则返回 false")
+    @ResponseBody
+    public boolean files(@RequestParam(value = "pmpIds") String[] pmpIds) {
+        return propagandaMaterialsProducedService.files(pmpIds);
+    }
+
 }
