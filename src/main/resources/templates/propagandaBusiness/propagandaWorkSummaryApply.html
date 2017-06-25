@@ -19,7 +19,7 @@
                 状态&nbsp;:&nbsp;草稿
             </p>
         </div>
-        <input id="draftManId" name="draftManId" type="hidden" value="a911e744-d064-4381-95ee-21e431ddbfd4">
+        <input id="draftManId" name="draftManId" type="hidden">
         <table class="table table-bordered">
             <tbody>
             <tr>
@@ -185,6 +185,52 @@
         }
     })
 
+    $(function () {
+        initApplicantData();
+        initApplication();
+    });
+
+    // 初始化 申请人信息
+    function initApplication(){
+        getCurrentUser();
+        $("#draftManId").val(_currentUser_.id);
+        $("#draftMan").html(_currentUser_.name);
+        $("#draftManPhone").html(_currentUser_.phoneNumber);
+        $("#draftManOrganization").html(_currentUser_.organization.name);
+    }
+
+    var _currentUser_ = "";
+    var draftDate = "";
+    // 获取当前登陆用户信息
+    function getCurrentUser(){
+        $.ajax({
+            type: "GET",
+            url: "/getCurrentUser",
+            dataType: "json",
+            contentType: "application/json",
+            async:false ,
+            success: function (data) {
+                _currentUser_ = data ;
+            }
+        });
+    }
+
+    // 初始化申请时间
+    function initApplicantData(){
+        var date_ = new Date();
+        var year = date_.getFullYear();
+        var month = date_.getMonth() + 1;
+        var day = date_.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (day >= 0 && day <= 9) {
+            day = "0" + day;
+        }
+        draftDate = year + '-' + month + '-' + day;
+        $("#draftDate").html(draftDate);
+    }
+
     function contactAnnex(common_id) {
         var fileMsg = $(".uf-file-list").find('p .file-del');
         if (fileMsg.length == 0) {
@@ -210,19 +256,6 @@
 
     }
 
-
-    var date_ = new Date();
-    var year = date_.getFullYear();
-    var month = date_.getMonth() + 1;
-    var day = date_.getDate();
-    if (month >= 1 && month <= 9) {
-        month = "0" + month;
-    }
-    if (day >= 0 && day <= 9) {
-        day = "0" + day;
-    }
-    var draftDate = year + '-' + month + '-' + day;
-    $("#draftDate").html(draftDate);
 </script>
 </body>
 
