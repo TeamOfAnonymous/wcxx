@@ -20,7 +20,7 @@
         <button id="btn-add" class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-plus"></span> 新建
         </button>
-        <button class="btn btn-default btn-sm">
+        <button id="btn-edit" class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-file"></span> 修改
         </button>
         <button id="btn-del" type="button" class="btn btn-default btn-sm">
@@ -82,9 +82,9 @@
 <script type="text/javascript" src="../../js/public.js"></script>
 <script>
     var $tree = $("#tree"),
-        $selectInput = $(".mt-select input"),
-        $newOrganization = $('#newOrganization'),
-        node_checked_arr = [];
+            $selectInput = $(".mt-select input"),
+            $newOrganization = $('#newOrganization'),
+            node_checked_arr = [];
     var modalTree = null, tableTree = null;
     $selectInput.on("click", function () {
         $tree.slideToggle(200);
@@ -124,34 +124,59 @@
 
     $('#modal-btn-save').on('click', function () {
         var pid = $selectInput.data('treeId');
+        pText = $selectInput.val();
+        pid = pText == "" ? '' : pid;
         var newOrganization = $("#newOrganization").val();
-        if (pid == undefined || pid == '') {
-            message.add("请先选择上级组织机构", "warning");
-            return false;
-        }
+        var id = $newOrganization.attr('data-id') || null;
+        /*if (pid == undefined || pid == '') {
+         message.add("请先选择上级组织机构", "warning");
+         return false;
+         }*/
         if (newOrganization == '') {
             message.add("请先填写新的组织机构名称", "warning");
             return false;
         }
         var $data = {
-            "id": null,
+            "id": id,
             "name": newOrganization,
             "pid": pid
         };
         $('#modal').modal('hide');
         loading.show();
-        $.ajax({
-            type: "POST",
-            url: "/addOrganization",
-            data: JSON.stringify($data),
-            contentType: "application/json",
-            dataType: "json",
-            success: function (data) {
+        if (editNode == null) {//添加
+            $.ajax({
+                type: "POST",
+                url: "/addOrganization",
+                data: JSON.stringify($data),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+                    loading.hide();
+                    message.add("添加成功");
+                    getData();
+                }
+            })
+        } else {//修改
+            if ($data.id == $data.pid) {
+                $.ajax({
+                    type: "POST",
+                    url: "/editOrganization",
+                    data: JSON.stringify($data),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        loading.hide();
+                        message.add("修改成功");
+                        getData();
+                    }
+                });
+            } else {
                 loading.hide();
-                message.add("添加成功");
-                getData();
+                message.add("修改失败，不能选择自身为父节点", "error");
             }
-        })
+        }
+
     });
     function getData() {
         loading.show("加载数据中...");
@@ -165,6 +190,8 @@
                 console.log(data);
                 renderTree(data);
                 loading.hide();
+                node_checked_arr = [];
+                editNode = null;
             }
         });
     }
@@ -188,6 +215,7 @@
             selectedColor: '#000',
             onNodeChecked: function (event, node) {
                 node_checked_arr.push(node.id);
+                editNode = node;
             },
             onNodeUnchecked: function (event, node) {
                 for (var i = 0, l = node_checked_arr.length; i < l; i++) {
@@ -200,6 +228,19 @@
             }
         });
     }
+    var editNode = null;
+    $('#btn-edit').on('click', function () {
+        if (node_checked_arr.length == 1) {
+            console.log(editNode);
+            $selectInput.val("");
+            $selectInput.data('treeId', editNode.parentId);
+            $newOrganization.val(editNode.text);
+            $newOrganization.attr('data-id', editNode.id);
+            $('#modal').modal('show');
+        } else {
+            message.add("请选择一条信息", "warning");
+        }
+    });
 </script>
 </body>
 </html>
