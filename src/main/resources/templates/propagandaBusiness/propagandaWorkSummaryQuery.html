@@ -72,7 +72,6 @@
 <script type="text/javascript" src="../../vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
 <script type="text/javascript" src="../../../vendor/template-web-min.js"></script>
 <script type="text/javascript" src="../../js/public.js"></script>
-</body>
 <script id="data_table" type="text/html">
     <thead>
     <tr>
@@ -90,27 +89,22 @@
     <tr>
         <td><input type="checkbox" data-id="{{index.id}}"/></td>
         <td>{{i+1}}</td>
-        <td><a href="/propagandaBusiness/goPropagandaWorkSummaryDetails/{{index.id}}">{{index.title}}</a></td>
+        <td><a class="open-win"
+               href="/propagandaBusiness/goPropagandaWorkSummaryDetails/{{index.id}}">{{index.title}}</a></td>
         <td>{{index.draftMan.organization.name}}</td>
         <td>{{index.draftMan.name}}</td>
         <td>{{index.draftDate}}</td>
         <td>
             {{if index.approvalStatus == 0}}
-            <span class="font-red">
-                            拟稿中
-                        </span>
+            拟稿中
             {{else if index.approvalStatus == 1}}
-            <span class="font-red">
-                            审核中
-                        </span>
+            审核中
             {{else if index.approvalStatus == 2}}
-            <span class="font-red">
-                            已完成
-                        </span>
+            已完成
             {{else if index.approvalStatus == 3}}
             <span class="font-red">
                             已归档
-                        </span>
+             </span>
             {{/if}}
         </td>
     </tr>
@@ -155,7 +149,6 @@
         </button>
     </li>
 </script>
-
 <script>
     var currentQeury = {
         "currentPage": "0",
@@ -297,6 +290,7 @@
         }
         return false;
     });
-
+    goDeatil($("#table"), 'open-win');
 </script>
+</body>
 </html>
