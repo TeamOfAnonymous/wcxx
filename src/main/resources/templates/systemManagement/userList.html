@@ -109,7 +109,7 @@
     <tr>
         <td><input type="checkbox" data-id="{{index.id}}"/></td>
         <td>{{i+1}}</td>
-        <td><a href="/systemManagement/goEditUser/{{index.id}}">{{index.name}}</a></td>
+        <td><a class="open-win" href="/systemManagement/goDetailsUser/{{index.id}}">{{index.name}}</a></td>
         <td>{{index.username}}</td>
         <td>{{index.sex}}</td>
         <td>{{index.post}}</td>
@@ -289,7 +289,7 @@
         }
         return false;
     });
-
+    goDeatil($("#table"), 'open-win');
 </script>
 </body>
 </html>
