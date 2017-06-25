@@ -128,8 +128,8 @@
             type: "get",
             url: '/getPropagandaWorkSummaryById/' + id,
             success: function (data) {
-                loading.hide();
                 console.log(data);
+                loading.hide();
                 var pageStr = template('template', data);
                 document.getElementById('render-area').innerHTML = pageStr;
             }
