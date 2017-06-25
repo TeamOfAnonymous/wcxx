@@ -108,12 +108,17 @@
         <td>{{ppgdaInfo.applicationDate}}</td>
         <td>
             {{if ppgdaInfo.approvalStatus == 0}}
-            <span class="font-red">
-                    {{ppgdaInfo.approvalStatus}}
-                </span>
-            {{else}}
-            {{ppgdaInfo.approvalStatus}}
+            待审批
+            {{else if ppgdaInfo.approvalStatus == 1}}
+            审核中
+            {{else if ppgdaInfo.approvalStatus == 2}}
+            执行中
+            {{else if ppgdaInfo.approvalStatus == 3}}
+            已完成
+            {{else if ppgdaInfo.approvalStatus == 4}}
+            <span class="font-red">已归档</span>
             {{/if}}
+
         </td>
     </tr>
     {{/each}}
@@ -309,7 +314,7 @@
         }
         return false;
     });
-    //打开详细
+    //
     goDeatil($("#ppgdaTable"), 'open-win');
 </script>
 

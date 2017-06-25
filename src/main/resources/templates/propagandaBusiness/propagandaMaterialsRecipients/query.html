@@ -92,31 +92,23 @@
     <tr>
         <td><input type="checkbox" data-id="{{index.id}}"/></td>
         <td>{{i+1}}</td>
-        <td><a href="/propagandaBusiness/propagandaMaterialsRecipients/goPropagandaMaterialsRecipientsDetails/{{index.id}}">{{index.title}}</a></td>
+        <td><a class="open-win"
+               href="/propagandaBusiness/propagandaMaterialsRecipients/goPropagandaMaterialsRecipientsDetails/{{index.id}}">{{index.title}}</a>
+        </td>
         <td>{{index.applicant.organization.name}}</td>
         <td>{{index.applicant.name}}</td>
         <td>{{index.applicationDate}}</td>
         <td>
             {{if index.approvalStatus == 0}}
-            <span class="font-red">
-                            待审批
-                        </span>
+            待审批
             {{else if index.approvalStatus == 1}}
-            <span class="font-red">
-                            审核中
-                        </span>
+            审核中
             {{else if index.approvalStatus == 2}}
-            <span class="font-red">
-                            执行中
-                        </span>
+            执行中
             {{else if index.approvalStatus == 3}}
-            <span class="font-red">
-                            已完成
-                        </span>
+            已完成
             {{else if index.approvalStatus == 4}}
-            <span class="font-red">
-                            已归档
-                        </span>
+            <span class="font-red">已归档</span>
             {{/if}}
         </td>
     </tr>
@@ -197,30 +189,30 @@
 
     //点击删除按钮调用的方法
     $("#del-Btn").on('click',
-        function () {
-            loading.show();
-            var $data = [];
-            var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
-            $inputs.each(function () {
-                $data.push($(this).attr('data-id'));
-            });
-            //调用ajax进行删除
-            deleted($data);
-        }
+            function () {
+                loading.show();
+                var $data = [];
+                var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
+                $inputs.each(function () {
+                    $data.push($(this).attr('data-id'));
+                });
+                //调用ajax进行删除
+                deleted($data);
+            }
     )
 
     //点击归档按钮调用的方法
     $("#file-Btn").on('click',
-        function () {
-            loading.show();
-            var $data = [];
-            var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
-            $inputs.each(function () {
-                $data.push($(this).attr('data-id'));
-            });
-            //调用ajax进行删除
-            archiveFile($data);
-        }
+            function () {
+                loading.show();
+                var $data = [];
+                var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
+                $inputs.each(function () {
+                    $data.push($(this).attr('data-id'));
+                });
+                //调用ajax进行删除
+                archiveFile($data);
+            }
     )
 
     function archiveFile($data) {
@@ -231,10 +223,10 @@
             data: "ids=" + $data,
             success: function (data) {
                 if (data) {
-                    message.add("归档成功","success");
+                    message.add("归档成功", "success");
                     query(currentQuery);
                 } else {
-                    message.add("归档失败，申请还没有完成或者已归档" , "warning");
+                    message.add("归档失败，申请还没有完成或者已归档", "warning");
                     loading.hide();
                 }
             }
@@ -296,16 +288,16 @@
             data: "ids=" + $data,
             success: function (data) {
                 if (data) {
-                    message.add("删除成功","success");
+                    message.add("删除成功", "success");
                     query(currentQuery);
                 } else {
-                    message.add("删除失败，该申请不可以删除" , "warning");
+                    message.add("删除失败，该申请不可以删除", "warning");
                     loading.hide();
                 }
             }
         });
     }
-
+    goDeatil($("#table"), 'open-win');
 </script>
 </body>
 

@@ -320,7 +320,7 @@
     // 初始化 申请人信息
     function initApplication(){
         getCurrentUser();
-        $("#applicatName").html(_currentUser_.username);
+        $("#applicatName").html(_currentUser_.name);
         $("#applicatPhoneNumber").html(_currentUser_.phoneNumber);
         $("#applicatOrganizationName").html(_currentUser_.organization.name);
     }

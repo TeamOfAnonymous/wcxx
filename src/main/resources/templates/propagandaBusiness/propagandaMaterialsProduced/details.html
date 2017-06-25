@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>查看宣传品（资料）制作申请</title>
+    <link rel="stylesheet" href="../../../vendor/bootstrap-3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../../css/public.css"/>
+    <link rel="stylesheet" href="../../../css/makeToApplyFor.css"/>
+    <link rel="stylesheet" href="../../../vendor/jquery.my-message/css/jquery.my-message.1.1.css"/>
+</head>
+<body>
+
+<div class="container-fluid make-to-apply-for" id="render-area">
+
+</div>
+<script id="template" type="text/html">
+    <div class="form-table">
+        <div class="ft-top">
+            <h3 class="text-center">查看宣传品（资料）制作申请</h3>
+            <p class="ft-t-state">
+                状态&nbsp;:&nbsp;
+                {{approvalStatus}}
+            </p>
+        </div>
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <td>申请部门</td>
+                <td>{{applicant.organization.name}}</td>
+                <td>申请时间</td>
+                <td>{{applicationDate}}</td>
+            </tr>
+            <tr>
+                <td>申请人</td>
+                <td>
+                    {{applicant.name}}
+                </td>
+                <td>联系电话</td>
+                <td>{{applicant.phoneNumber}}</td>
+            </tr>
+            <tr>
+                <td><span class="font-red">*</span>标题</td>
+                <td colspan="3">
+                    {{title}}
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+        <div class="form-table mid-table" id="mid-table">
+            <div class="mt-title">
+                <h4>需要领用的宣传物资</h4>
+            </div>
+            {{each propagandaMaterialsContents}}
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td rowspan="7">{{$index+1}}</td>
+                    <td>宣传类别</td>
+                    <td>
+                        {{$value.promotionalCategory}}
+                    </td>
+                    <td>宣传品名称</td>
+                    <td>{{$value.name}}</td>
+                </tr>
+                <tr>
+                    <td>制作方式</td>
+                    <td colspan="3">
+                        {{$value.productionMethod}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>要求完成时间</td>
+                    <td>{{$value.requestCompletionTime}}</td>
+                    <td>规格</td>
+                    <td>{{$value.specification}}</td>
+                </tr>
+                <tr>
+                    <td>单位</td>
+                    <td>{{$value.unit}}</td>
+                    <td>制作数量</td>
+                    <td>
+                        {{$value.productionQuantity}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>广告公司名称</td>
+                    <td colspan="3">
+                        {{$value.advertisingCompanyName}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>广告公司联系人</td>
+                    <td>{{$value.advertisingCompanyContactPerson}}</td>
+                    <td>广告公司联系方式</td>
+                    <td>{{$value.advertisingCompanyContactInformation}}</td>
+                </tr>
+                <tr>
+                    <td>费用（元）</td>
+                    <td> {{$value.cost}}</td>
+                    <td style="background-color: white;" colspan="2"></td>
+                </tr>
+
+                </tbody>
+            </table>
+    {{/each}}
+        </div>
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <td>总费用(元)</td>
+                <td>
+                    {{totalCost}}
+                </td>
+                <td><input style="opacity: 0;" type="text" class="form-control input-sm"/></td>
+            </tr>
+            <tr>
+                <td>备注</td>
+                <td colspan="3">
+                    {{remarks}}
+                </td>
+            </tr>
+            <tr>
+                <td>附件</td>
+                <td colspan="3">
+                    <div class="uf-file-list"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>领导审批意见</td>
+                <td colspan="3"></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</script>
+
+<!--<input type="button" id="submitBut" value="测试按钮"/>-->
+<script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
+<script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<!--[if IE 8 ]>
+<script type="text/javascript" src="../../vendor/es5-shim/es5-shim.min.js"></script>
+<script type="text/javascript" src="../../vendor/es5-shim/es5-sham.min.js"></script>
+<![endif]-->
+<script type="text/javascript" src="../../../vendor/template-web-min.js"></script>
+<script type="text/javascript" src="../../../vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
+<script type="text/javascript" src="../../../js/public.js"></script>
+<script type="text/javascript">
+    window.onload = function () {
+        var urlStr = location.href,
+                id = urlStr.substring(urlStr.lastIndexOf('/') + 1);
+        loading.show();
+        $.ajax({
+            type: "get",
+            url: ' /getPropagandaMaterialsProduced/' + id,
+            success: function (data) {
+                console.log(data);
+                var pageStr = template('template', data);
+                document.getElementById('render-area').innerHTML = pageStr;
+                loading.hide();
+            }
+        })
+    }
+
+</script>
+</body>
+
+</html>

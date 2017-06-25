@@ -3,20 +3,23 @@
 
 <head>
     <meta charset="UTF-8"/>
-    <title>查看宣传信息</title>
+    <title>查看宣传物资领用申请</title>
     <link rel="stylesheet" href="../../../vendor/bootstrap-3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="../../../css/public.css"/>
-    <link rel="stylesheet" href="../../../css/publishApply.css"/>
+    <link rel="stylesheet" href="../../../css/recipientsToApplyFor.css"/>
     <link rel="stylesheet" href="../../../vendor/jquery.my-message/css/jquery.my-message.1.1.css"/>
+
 </head>
 
 <body>
-<div class="container-fluid publish-apply" id="render-area">
+
+<div class="container-fluid recipients-to-apply-for" id="render-area">
+
 </div>
 <script id="template" type="text/html">
     <div class="form-table">
         <div class="ft-top">
-            <h3 class="text-center">查看宣传信息</h3>
+            <h3 class="text-center">查看宣传物资领用申请</h3>
             <p class="ft-t-state">
                 状态&nbsp;:&nbsp;
                 {{if approvalStatus==0}}
@@ -32,6 +35,7 @@
                 {{/if}}
             </p>
         </div>
+        <input id="applicantId" value="29d3d48d-f9e2-42cc-b362-93c70bf24dc5" name="applicantId" type="hidden">
         <table class="table table-bordered">
             <tbody>
             <tr>
@@ -50,48 +54,49 @@
                 <td><span class="font-red">*</span>标题</td>
                 <td colspan="3">{{title}}</td>
             </tr>
-            <tr>
-                <td><span class="font-red">*</span>类别</td>
-                <td colspan="3">
-                    {{each propagandaInformationCategories}}
-                    {{if $value.pid==null}}
-                    {{$value.name}}
-                    {{/if}}
-                    {{/each}}
-                    &nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td><span class="font-red">*</span>发布媒介(对象)</td>
-                <td colspan="3">
-                    {{each propagandaInformationCategories}}
-                    {{if $value.pid!=null}}
-                    {{$value.name}}
-                    {{/if}}
-                    {{/each}}
-                </td>
-            </tr>
-            <tr>
-                <td>信息发布(投放)开始时间</td>
-                <td>{{startDate}}</td>
-                <td>信息发布(投放)结束时间</td>
-                <td>{{endDate}}</td>
-            </tr>
-            <tr>
-                <td>投放平台</td>
-                <td colspan="3">
-                    <span>新浪微博</span>
-                    <span>微信平台</span>
-                    <span>中心网站</span>
-                </td>
-            </tr>
-            <tr>
-                <td>内容</td>
-                <td colspan="3">{{content}}</td>
-            </tr>
+
+            </tbody>
+        </table>
+        <div class="data-table mid-table">
+            <div class="mt-title">
+                <h4>需要领用的宣传物资</h4>
+            </div>
+            <table class="table table-bordered checked-table" id="propaganda_materials">
+                <thead>
+                <tr>
+                    <th>
+
+                    </th>
+                    <th>名称</th>
+                    <th>单位</th>
+                    <th>数量</th>
+                    <th>使用方向</th>
+                    <th>其它</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{each propagandaMaterials}}
+                <tr>
+                    <td>{{$index+1}}</td>
+                    <td>{{$value.name}}</td>
+                    <td>{{$value.unit}}</td>
+                    <td>{{$value.quantity}}</td>
+                    <td>
+                        {{$value.useDirection}}
+                    </td>
+                    <td>{{$value.remarks}}</td>
+                </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <table class="table table-bordered">
+            <tbody>
             <tr>
                 <td>备注</td>
-                <td colspan="3">{{remarks}}</td>
+                <td colspan="3">
+                    {{remarks}}
+                </td>
             </tr>
             <tr>
                 <td>附件</td>
@@ -107,25 +112,29 @@
             </tr>
             </tbody>
         </table>
+
     </div>
+
 </script>
+
 <script type="text/javascript" src="../../../vendor/jquery1.9.min.js"></script>
 <script type="text/javascript" src="../../../vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 <!--[if IE 8 ]>
 <script type="text/javascript" src="../../vendor/es5-shim/es5-shim.min.js"></script>
 <script type="text/javascript" src="../../vendor/es5-shim/es5-sham.min.js"></script>
 <![endif]-->
+<script type="text/javascript" src="../../../vendor/template-web-min.js"></script>
 <script type="text/javascript" src="../../../vendor/jquery.my-message/js/jquery.my-message.1.1.js"></script>
 <script type="text/javascript" src="../../../js/public.js"></script>
-<script type="text/javascript" src="../../../vendor/template-web-min.js"></script>
 <script type="text/javascript">
+
     window.onload = function () {
         var urlStr = location.href,
                 id = urlStr.substring(urlStr.lastIndexOf('/') + 1);
         loading.show();
         $.ajax({
             type: "get",
-            url: ' /getPropagandaInformationById/' + id,
+            url: ' /getPropagandaMaterialsRecipients/' + id,
             success: function (data) {
                 console.log(data);
                 var pageStr = template('template', data);
@@ -136,4 +145,5 @@
     }
 </script>
 </body>
+
 </html>
