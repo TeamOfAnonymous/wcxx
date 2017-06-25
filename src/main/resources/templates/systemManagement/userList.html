@@ -65,10 +65,9 @@
            class="btn btn-default btn-sm">
             <span class="glyphicon glyphicon-plus"></span> 新建
         </a>
-        <a href="/systemManagement/goAddUser"
-           class="btn btn-default btn-sm">
+        <button type="button" class="btn btn-default btn-sm" id="editUser">
             <span class="glyphicon glyphicon-file"></span> 修改
-        </a>
+        </button>
         <button type="button" class="btn btn-default btn-sm" id="deletedUser">
             <span class="glyphicon glyphicon-remove"></span>
             删除
@@ -210,7 +209,6 @@
             function () {
                 var $name = $("#name").val();
                 var $sex = $("#sex").val();
-                var $organization = $("#organization").val();
                 var $post = $("#post").val();
 
                 var $data = {
@@ -225,6 +223,15 @@
                 query($data);
             }
     )
+
+    $("#editUser").on('click', function () {
+        var $data = [];
+        var $inputs = $("#table").find("tbody input[type='checkbox']:checked");
+        $inputs.each(function () {
+            $data.push($(this).attr('data-id'));
+        });
+        window.location.href = "/systemManagement/goEditUser/" + $data[0];
+    })
 
     $("#deletedUser").on('click', function () {
         var $data = [];
