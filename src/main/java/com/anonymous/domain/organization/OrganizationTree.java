@@ -10,6 +10,7 @@ public class OrganizationTree {
 
     private String id;
     private String text;
+    private String pid;
     private List<OrganizationTree> nodes;
 
     public OrganizationTree() {
@@ -19,6 +20,7 @@ public class OrganizationTree {
     public OrganizationTree(Organization organization) {
         this.id = organization.getId();
         this.text = organization.getName();
+        this.pid = organization.getPid();
     }
 
     public String getId() {
@@ -35,6 +37,14 @@ public class OrganizationTree {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
     }
 
     public List<OrganizationTree> getNodes() {
