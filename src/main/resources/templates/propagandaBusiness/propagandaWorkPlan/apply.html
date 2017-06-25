@@ -19,31 +19,33 @@
                 状态&nbsp;:&nbsp;草稿
             </p>
         </div>
+        <input id="applicantId" name="applicantId" type="hidden">
         <table class="table table-bordered">
             <tbody>
             <tr>
-                <td>拟稿部门</td>
-                <td></td>
-                <td>拟稿时间</td>
-                <td></td>
+                <td>申请部门</td>
+                <td id="applicantOrganizationName"></td>
+                <td>申请时间</td>
+                <td id="applicantDate"></td>
             </tr>
             <tr>
-                <td>拟稿人</td>
-                <td></td>
+                <td>申请人</td>
+                <td id="applicantName"></td>
                 <td>联系电话</td>
-                <td></td>
+                <td id="applicantPhoneNumber"></td>
             </tr>
             <tr>
                 <td><span class="font-red">*</span>标题</td>
                 <td colspan="3">
-                    <input type="text" class="form-control input-sm"/>
+                    <input id="title" type="text" class="form-control input-sm"/>
                 </td>
             </tr>
             <tr>
                 <td><span class="font-red">*</span>计划类别</td>
                 <td>
-                    <select class="form-control input-sm">
-                        <option>普通宣传活动</option>
+                    <select id="planCategory" class="form-control input-sm">
+                        <option value="月度">月度</option>
+                        <option value="年度">年度</option>
                     </select>
                 </td>
                 <td></td>
@@ -52,31 +54,41 @@
             <tr>
                 <td><span class="font-red">*</span>小组名称</td>
                 <td>
-                    <select class="form-control input-sm">
+                    <select id="groupName" class="form-control input-sm">
                         <option>宣传组</option>
+                        <option>招募组</option>
+                        <option>服务组</option>
+                        <option>维护组</option>
+                        <option>质监组</option>
                     </select>
                 </td>
                 <td>计划事务类别</td>
                 <td>
-                    <select class="form-control input-sm">
+                    <select id="planTransactionCategory" class="form-control input-sm">
+                        <option>宣传计划</option>
+                        <option>招募计划</option>
+                        <option>采血计划</option>
                         <option>经费预算计划</option>
+                        <option>纪念品采购计划</option>
+                        <option>物料计划</option>
+                        <option>活动计划</option>
                     </select>
                 </td>
             </tr>
             <tr>
                 <td><span class="font-red">*</span>负责人</td>
-                <td><input type="text" class="form-control input-sm"/></td>
+                <td><input id="principal" type="text" class="form-control input-sm"/></td>
                 <td><span class="font-red">*</span>成员</td>
-                <td><input type="text" class="form-control input-sm"/></td>
+                <td><input id="members" type="text" class="form-control input-sm"/></td>
             </tr>
             <tr>
                 <td><span class="font-red">*</span>计划执行开始时间</td>
                 <td>
-                    <input type="date" class="form-control input-sm"/>
+                    <input id="startExecuteTime" type="date" class="form-control input-sm"/>
                 </td>
                 <td><span class="font-red">*</span>计划执行结束时间</td>
                 <td>
-                    <input type="date" class="form-control input-sm"/>
+                    <input id="endExecuteTime" type="date" class="form-control input-sm"/>
                 </td>
             </tr>
             </tbody>
@@ -117,19 +129,19 @@
                                 <tr>
                                     <td><input type = "checkbox" />
                                     <td> 1 </td>
-                                    <td><input type = "text" class= "form-control input-sm" /> </td>
-                                    <td><input type = "text" class= "form-control input-sm" /> </td>
-                                    <td><input type = "text" class= "form-control input-sm" /></td>
-                                    <td><input type = "text" class= "form-control input-sm" /> </td>
+                                    <td><input name = "planProjectName" type = "text" class= "form-control input-sm" /> </td>
+                                    <td><input name = "planProjectContent" type = "text" class= "form-control input-sm" /> </td>
+                                    <td><input name = "planProjectPrincipal" type = "text" class= "form-control input-sm" /></td>
+                                    <td><input name = "planProjectDeadline" type = "date" class= "form-control input-sm" /> </td>
                                 </tr>
                                 <script id = "mt-tr" type = "text/html">
                                     <tr>
                                         <td><input type = "checkbox" / > </td>
                                         <td>{{index}}</td>
-                                        <td><input type = "text" class="form-control input-sm" /></td>
-                                        <td><input type = "text" class="form-control input-sm" /></td>
-                                        <td><input type = "text" class="form-control input-sm" /></td>
-                                        <td><input type = "text" class="form-control input-sm" /></td>
+                                        <td><input name = "planProjectName" type = "text" class="form-control input-sm" /></td>
+                                        <td><input name = "planProjectContent" type = "text" class="form-control input-sm" /></td>
+                                        <td><input name = "planProjectPrincipal" type = "text" class="form-control input-sm" /></td>
+                                        <td><input name = "planProjectDeadline" type = "date" class="form-control input-sm" /></td>
                                     </tr>
                                 </script>
                             </tbody>
@@ -142,7 +154,7 @@
             <tr>
                 <td>备注</td>
                 <td colspan="3">
-                    <textarea class="form-control" rows="3"></textarea>
+                    <textarea id="remarks" class="form-control" rows="3"></textarea>
                 </td>
             </tr>
             <tr>
@@ -270,6 +282,155 @@
     var ue = UE.getEditor('editor');
     //获取html
     //UE.getEditor('editor').getAllHtml()
+
+    $(function () {
+        initApplicantData();
+        initApplication();
+    });
+
+    // 初始化 申请人信息
+    function initApplication(){
+        getCurrentUser();
+        $("#applicantId").val(_currentUser_.id);
+        $("#applicantName").html(_currentUser_.name);
+        $("#applicantPhoneNumber").html(_currentUser_.phoneNumber);
+        $("#applicantOrganizationName").html(_currentUser_.organization.name);
+    }
+
+    var _currentUser_ = "";
+    var applicationDate = "";
+    // 获取当前登陆用户信息
+    function getCurrentUser(){
+        $.ajax({
+            type: "GET",
+            url: "/getCurrentUser",
+            dataType: "json",
+            contentType: "application/json",
+            async:false ,
+            success: function (data) {
+                _currentUser_ = data ;
+            }
+        });
+    }
+
+    // 初始化申请时间
+    function initApplicantData(){
+        var date_ = new Date();
+        var year = date_.getFullYear();
+        var month = date_.getMonth() + 1;
+        var day = date_.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (day >= 0 && day <= 9) {
+            day = "0" + day;
+        }
+        applicationDate = year + '-' + month + '-' + day;
+        $("#applicantDate").html(applicationDate);
+    }
+
+    //修改
+
+    fv.init($('#title'), "标题");
+    $(".ft-b-r-b-left").on("click", "button", function () {
+        var title = $('#title')[0].value;
+        var applicantId = $("#applicantId")[0].value;
+        var content = UE.getEditor('editor').getAllHtml();
+        var planCategory = $('#planCategory')[0].value;
+        var groupName = $('#groupName')[0].value;
+        var principal = $('#principal')[0].value;
+        var planTransactionCategory = $('#planTransactionCategory')[0].value;
+        var remarks = $('#remarks')[0].value;
+        var startExecuteTime = $('#startExecuteTime')[0].value;
+        var endExecuteTime = $('#endExecuteTime')[0].value;
+        var members = $('#members')[0].value;
+        if (fv.isNull($('#title'), "标题")) {
+            var information = {
+                title: title,
+                content: content,
+                approvalStatus: 0,
+                planCategory: planCategory,
+                groupName: groupName,
+                principal: principal,
+                planTransactionCategory: planTransactionCategory,
+                draftDate: applicationDate,
+                remarks: remarks,
+                startExecuteTime: startExecuteTime,
+                endExecuteTime: endExecuteTime,
+                members : members,
+                draftMan: {
+                    id: applicantId
+                }
+            };
+            information.planProjects = addPlanProject();
+            console.log(information);
+            ppgdaInfoSumbit(information);
+        }
+    });
+
+    function addPlanProject() {
+        var planProjectNames = $("[name='planProjectName']");
+        var planProjectContents = $("[name='planProjectContent']");
+        var planProjectPrincipals = $("[name='planProjectPrincipal']");
+        var planProjectDeadlines = $("[name='planProjectDeadline']");
+        var planProject = new Array();
+        for (var i = 0; i < planProjectNames.length; i++) {
+            var planProjectEach = {};
+            if (planProjectNames[i].value != "") {
+                planProjectEach.name = planProjectNames[i].value;
+            }
+            if (planProjectPrincipals[i].value != "") {
+                planProjectEach.principal = planProjectPrincipals[i].value;
+            }
+            if (planProjectContents[i].value != "") {
+                planProjectEach.content = planProjectContents[i].value;
+            }
+            if (planProjectDeadlines[i].value != "") {
+                planProjectEach.deadline = planProjectDeadlines[i].value;
+            }
+            planProject.push(planProjectEach);
+        }
+        return planProject;
+    }
+
+    function ppgdaInfoSumbit(information) {
+        loading.show();
+        $.ajax({
+            type: "POST",
+            url: "/addPropagandaWorkPlan",
+            data: JSON.stringify(information),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (data) {
+                contactAnnex(data.id);
+            }
+        });
+    }
+
+    function contactAnnex(common_id) {
+        var fileMsg = $(".uf-file-list").find('p .file-del');
+        if (fileMsg.length == 0) {
+            loading.hide();
+            window.location.href = "/propagandaBusiness/propagandaWorkPlan/goPropagandaWorkPlanQuery";
+        } else {
+            var fileIds = [];
+            fileMsg.each(function () {
+                fileIds.push($(this).attr('data-id'));
+            });
+            $.ajax({
+                type: "GET",
+                url: "/contactAnnex",
+                data: "common_id=" + common_id + "&&fileIds=" + fileIds,
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+                    loading.hide();
+                    window.location.href = "/propagandaBusiness/propagandaWorkPlan/goPropagandaWorkPlanQuery";
+                }
+            })
+        }
+    }
+
 </script>
 </body>
 

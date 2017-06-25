@@ -18,29 +18,30 @@ public class PropagandaWorkPlan implements Serializable {
     @GeneratedValue(generator = "UUID2_GENERATOR")
     private String id;//宣传工作计划id
 
-    private LocalDateTime draftDate;//拟稿时间
+    private LocalDate draftDate;//拟稿时间
 
     private String title;//标题
     private String planCategory;//计划类别
 
     private String groupName;//小组名称
 
-    @ManyToOne
-    private User principal;//负责人
+    private String principal;//负责人
 
     private String planTransactionCategory;//计划事务类别
 
     private LocalDate startExecuteTime;//开始执行时间
     private LocalDate endExecuteTime;//结束执行时间
 
-    @ManyToMany
-    private List<User> members;//成员
+    private String members;//成员
 
     @ManyToOne
     private User draftMan;//拟稿人
 
+    @Column(length = 16777216)
     private String content;//内容
+
     private String remarks;//备注
+
     private Integer approvalStatus;//审批状态，0为草稿，1为待审批，2为审核中，3为执行中，4为已完成，5为已归档
 
     @OneToMany(mappedBy = "propagandaWorkPlan")
@@ -57,11 +58,11 @@ public class PropagandaWorkPlan implements Serializable {
         this.id = id;
     }
 
-    public LocalDateTime getDraftDate() {
+    public LocalDate getDraftDate() {
         return draftDate;
     }
 
-    public void setDraftDate(LocalDateTime draftDate) {
+    public void setDraftDate(LocalDate draftDate) {
         this.draftDate = draftDate;
     }
 
@@ -89,11 +90,11 @@ public class PropagandaWorkPlan implements Serializable {
         this.groupName = groupName;
     }
 
-    public User getPrincipal() {
+    public String getPrincipal() {
         return principal;
     }
 
-    public void setPrincipal(User principal) {
+    public void setPrincipal(String principal) {
         this.principal = principal;
     }
 
@@ -121,11 +122,11 @@ public class PropagandaWorkPlan implements Serializable {
         this.endExecuteTime = endExecuteTime;
     }
 
-    public List<User> getMembers() {
+    public String getMembers() {
         return members;
     }
 
-    public void setMembers(List<User> members) {
+    public void setMembers(String members) {
         this.members = members;
     }
 

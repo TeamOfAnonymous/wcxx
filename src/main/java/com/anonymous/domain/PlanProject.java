@@ -2,6 +2,7 @@ package com.anonymous.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +20,7 @@ public class PlanProject implements Serializable {
     private String name;//项目名称
     private String content;//项目内容
 
-    @ManyToOne
-    private User principal;//负责人
+    private String principal;//负责人
 
     private Integer completionStatus;//完成状态，0为未完成，1为已完成
 
@@ -29,6 +29,8 @@ public class PlanProject implements Serializable {
 
     @ManyToOne
     private PropagandaWorkPlan propagandaWorkPlan;//所属工作计划
+
+    private LocalDate deadline;
 
     public PlanProject() {
     }
@@ -57,11 +59,11 @@ public class PlanProject implements Serializable {
         this.content = content;
     }
 
-    public User getPrincipal() {
+    public String getPrincipal() {
         return principal;
     }
 
-    public void setPrincipal(User principal) {
+    public void setPrincipal(String principal) {
         this.principal = principal;
     }
 
@@ -87,5 +89,13 @@ public class PlanProject implements Serializable {
 
     public void setPropagandaWorkPlan(PropagandaWorkPlan propagandaWorkPlan) {
         this.propagandaWorkPlan = propagandaWorkPlan;
+    }
+
+    public LocalDate getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(LocalDate deadline) {
+        this.deadline = deadline;
     }
 }
