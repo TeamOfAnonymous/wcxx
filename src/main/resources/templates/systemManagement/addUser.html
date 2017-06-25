@@ -168,21 +168,65 @@
                 "sex": $("input[name='sex']:checked").val(),
                 "username": $("#username").val()
             }
+            if (userData == null) {
+                $.ajax({
+                    type: "POST",
+                    url: "/addUser",
+                    data: JSON.stringify($data),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        loading.hide();
+                        self.location.href = "/systemManagement/goUserList";
+                    }
+                });
+            } else {
+                $data.id = userData.id;
+                $.ajax({
+                    type: "POST",
+                    url: "/editUser",
+                    data: JSON.stringify($data),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        loading.hide();
+                        self.location.href = "/systemManagement/goUserList";
+                    }
+                });
+            }
 
-            $.ajax({
-                type: "POST",
-                url: "/addUser",
-                data: JSON.stringify($data),
-                contentType: "application/json",
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                    loading.hide();
-                    self.location.href = "/systemManagement/goUserList";
-                }
-            });
         }
     });
+    var userData = null;
+    window.onload = function () {
+        var urlStr = location.href,
+                id = urlStr.substring(urlStr.lastIndexOf('/') + 1);
+        if (id != "goAddUser") {
+            $('.ft-top h3').text("修改用户信息");
+            loading.show();
+            $.ajax({
+                type: "get",
+                url: ' /getUser/' + id,
+                success: function (data) {
+                    console.log(data);
+                    userData = data;
+                    $('#username').val(data.username);
+                    $('#password').val(data.password);
+                    $('#name').val(data.name);
+                    $('#post').val(data.post);
+                    $('#phoneNumber').val(data.phoneNumber);
+                    $('#email').val(data.email);
+                    $('#department').val(data.organization.name);
+                    $('#department').data('treeId', data.organization.id)
+                    $('input[value="sex"]').attr("checked", false);
+                    $("input[type='radio'][name='sex'][value='" + data.sex + "']").attr("checked", true);
+                    loading.hide();
+                }
+            })
+        }
+    }
 </script>
 
 </html>
