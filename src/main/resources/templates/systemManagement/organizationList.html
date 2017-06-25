@@ -157,7 +157,7 @@
                 }
             })
         } else {//修改
-            if ($data.id == $data.pid) {
+            if ($data.id != $data.pid) {
                 $.ajax({
                     type: "POST",
                     url: "/editOrganization",
@@ -232,10 +232,12 @@
     $('#btn-edit').on('click', function () {
         if (node_checked_arr.length == 1) {
             console.log(editNode);
-            $selectInput.val("");
-            $selectInput.data('treeId', editNode.parentId);
             $newOrganization.val(editNode.text);
             $newOrganization.attr('data-id', editNode.id);
+            var searchNode = $('#tree').treeview('getParent', editNode);
+            $selectInput.val(searchNode.text);
+            $selectInput.data('treeId', searchNode.id);
+            console.log(searchNode)
             $('#modal').modal('show');
         } else {
             message.add("请选择一条信息", "warning");
