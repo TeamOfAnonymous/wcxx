@@ -1,6 +1,7 @@
 package com.anonymous.domain.PropagandaInformation;
 
 import com.anonymous.domain.PropagandaInformation.PropagandaInformation;
+import com.anonymous.domain.PropagandaWorkPlan;
 
 /**
  * Description：enter your comment
@@ -15,6 +16,8 @@ public class PpgdaInfQueryCondition {
 	private String sortName;
 
 	private PropagandaInformation propagandaInformation;
+
+	private PropagandaWorkPlan propagandaWorkPlan;
 
 	public PropagandaInformation getPropagandaInformation() {
 		return propagandaInformation;
@@ -46,5 +49,13 @@ public class PpgdaInfQueryCondition {
 
 	public void setSortName(String sortName) {
 		this.sortName = sortName;
+	}
+
+	public PropagandaWorkPlan getPropagandaWorkPlan() {
+		return propagandaWorkPlan;
+	}
+
+	public void setPropagandaWorkPlan(PropagandaWorkPlan propagandaWorkPlan) {
+		this.propagandaWorkPlan = propagandaWorkPlan;
 	}
 }
